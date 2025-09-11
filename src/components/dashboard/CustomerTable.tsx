@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const topCustomers = [
-  { name: "Jane Doe", rewards: "$350" },
-  { name: "John Smith", rewards: "$275" },
-  { name: "Mary Johnson", rewards: "$150" },
+  { name: 'Jane Doe', rewards: '$350' },
+  { name: 'John Smith', rewards: '$275' },
+  { name: 'Mary Johnson', rewards: '$150' },
 ];
 
 export const CustomerTable = () => {
@@ -18,10 +18,12 @@ export const CustomerTable = () => {
             <div>Customer</div>
             <div>Rewards Issued</div>
           </div>
-          {topCustomers.map((customer) => (
+          {topCustomers.map(customer => (
             <div key={customer.name} className="grid grid-cols-2 gap-4 text-sm">
               <div className="text-foreground">{customer.name}</div>
-              <div className="text-foreground font-medium">{customer.rewards}</div>
+              <div className="text-foreground font-medium">
+                {customer.rewards}
+              </div>
             </div>
           ))}
         </div>

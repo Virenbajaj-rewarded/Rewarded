@@ -1,5 +1,5 @@
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { BalanceCards } from "@/components/balance/BalanceCards";
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { BalanceCards } from '@/components/balance/BalanceCards';
 
 const Balances = () => {
   return (
@@ -11,7 +11,7 @@ const Balances = () => {
             Manage your USD and USDC balances
           </p>
         </div>
-        
+
         <BalanceCards />
       </div>
     </DashboardLayout>

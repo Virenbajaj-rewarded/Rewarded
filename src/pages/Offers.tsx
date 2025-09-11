@@ -1,5 +1,5 @@
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { OffersManager } from "@/components/offers/OffersManager";
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { OffersManager } from '@/components/offers/OffersManager';
 
 const Offers = () => {
   return (
@@ -11,7 +11,7 @@ const Offers = () => {
             Create and send targeted offers to your customers
           </p>
         </div>
-        
+
         <OffersManager />
       </div>
     </DashboardLayout>

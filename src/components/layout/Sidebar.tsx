@@ -1,27 +1,27 @@
-import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
-import { 
-  BarChart3, 
-  QrCode, 
-  Gift, 
-  Wallet, 
-  Users, 
-  Settings,
+import { cn } from '@/lib/utils';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  BarChart3,
   CreditCard,
-  TrendingUp
-} from "lucide-react";
+  Gift,
+  QrCode,
+  Settings,
+  TrendingUp,
+  Users,
+  Wallet,
+} from 'lucide-react';
 
 const navigation = [
-  { name: "Analytics", href: "/", icon: BarChart3 },
-  { name: "My Business QR Code", href: "/qr-codes", icon: QrCode },
-  { name: "My Business Profile", href: "/profile", icon: Settings },
-  { name: "Customer Analytics", href: "/customers", icon: Users },
-  { name: "Scan Customer QR", href: "/scan", icon: QrCode },
-  { name: "Balances", href: "/balances", icon: Wallet },
-  { name: "Rewards Program", href: "/rewards-program", icon: Gift },
-  { name: "Rewards Analytics", href: "/rewards-analytics", icon: TrendingUp },
-  { name: "Send Offers", href: "/offers", icon: Gift },
-  { name: "Request Payment", href: "/payment", icon: CreditCard },
+  { name: 'Analytics', href: '/', icon: BarChart3 },
+  { name: 'My Business QR Code', href: '/qr-codes', icon: QrCode },
+  { name: 'My Business Profile', href: '/profile', icon: Settings },
+  { name: 'Customer Analytics', href: '/customers', icon: Users },
+  { name: 'Scan Customer QR', href: '/scan', icon: QrCode },
+  { name: 'Balances', href: '/balances', icon: Wallet },
+  { name: 'Rewards Program', href: '/rewards-program', icon: Gift },
+  { name: 'Rewards Analytics', href: '/rewards-analytics', icon: TrendingUp },
+  { name: 'Send Offers', href: '/offers', icon: Gift },
+  { name: 'Request Payment', href: '/payment', icon: CreditCard },
 ];
 
 export const Sidebar = () => {
@@ -45,7 +45,7 @@ export const Sidebar = () => {
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
             <li>
               <ul role="list" className="-mx-2 space-y-1">
-                {navigation.map((item) => {
+                {navigation.map(item => {
                   const isActive = location.pathname === item.href;
                   return (
                     <li key={item.name}>
@@ -60,7 +60,9 @@ export const Sidebar = () => {
                       >
                         <item.icon
                           className={cn(
-                            isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground',
+                            isActive
+                              ? 'text-primary-foreground'
+                              : 'text-muted-foreground group-hover:text-foreground',
                             'h-5 w-5 shrink-0'
                           )}
                           aria-hidden="true"

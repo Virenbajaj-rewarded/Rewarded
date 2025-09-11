@@ -1,5 +1,5 @@
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { AnalyticsDashboard } from "@/components/dashboard/AnalyticsDashboard";
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
+import { AnalyticsDashboard } from '@/components/dashboard/AnalyticsDashboard';
 
 const Index = () => {
   return (
