@@ -77,14 +77,26 @@ export function RewardProgramCard({
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <div className="text-muted-foreground">Cap Per Transaction</div>
-            <div className="font-medium text-foreground">
-              {program.capPerTransaction ?? '-'}
+            <div className="font-medium text-foreground flex items-center gap-1">
+              {program.capPerTransaction != null ? (
+                <>
+                  <span>${program.capPerTransaction}</span>
+                </>
+              ) : (
+                '-'
+              )}
             </div>
           </div>
           <div>
             <div className="text-muted-foreground">Max Monthly Budget</div>
-            <div className="font-medium text-foreground">
-              {program.maxMonthlyBudget ?? '-'}
+            <div className="font-medium text-foreground flex items-center gap-1">
+              {program.maxMonthlyBudget != null ? (
+                <>
+                  <span>${program.maxMonthlyBudget}</span>
+                </>
+              ) : (
+                '-'
+              )}
             </div>
           </div>
         </div>

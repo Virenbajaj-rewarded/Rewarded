@@ -1,22 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+  Dialog, DialogContent, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { rewardsApi, RewardStrategy } from '@/lib/rewardsApi';
 import { toast } from 'sonner';
+import { DateTimePicker } from '@/components/ui/datetime-picker.tsx';
 
 type Program = {
   id?: string;
@@ -39,11 +33,8 @@ function numOrUndefined(v: string) {
 }
 
 export function RewardProgramModal({
-  open,
-  onClose,
-  program,
-  onUpdated,
-}: {
+                                     open, onClose, program, onUpdated,
+                                   }: {
   open: boolean;
   onClose: () => void;
   program?: Program;
@@ -51,27 +42,15 @@ export function RewardProgramModal({
 }) {
   const isEdit = !!program?.id;
 
-  const [strategy, setStrategy] = useState<RewardStrategy>(
-    program?.strategy ?? 'PERCENT_BACK'
-  );
+  const [strategy, setStrategy] = useState<RewardStrategy>(program?.strategy ?? 'PERCENT_BACK');
   const [name, setName] = useState(program?.name ?? '');
-  const [percentBack, setPercentBack] = useState(
-    program?.percentBack?.toString() ?? ''
-  );
-  const [spendThreshold, setSpendThreshold] = useState(
-    program?.spendThreshold?.toString() ?? ''
-  );
-  const [rewardPercent, setRewardPercent] = useState(
-    program?.rewardPercent?.toString() ?? ''
-  );
-  const [capPerTransaction, setCapPerTransaction] = useState(
-    program?.capPerTransaction?.toString() ?? ''
-  );
-  const [maxMonthlyBudget, setMaxMonthlyBudget] = useState(
-    program?.maxMonthlyBudget?.toString() ?? ''
-  );
-  const [startsAt, setStartsAt] = useState(program?.startsAt ?? '');
-  const [endsAt, setEndsAt] = useState(program?.endsAt ?? '');
+  const [percentBack, setPercentBack] = useState(program?.percentBack?.toString() ?? '');
+  const [spendThreshold, setSpendThreshold] = useState(program?.spendThreshold?.toString() ?? '');
+  const [rewardPercent, setRewardPercent] = useState(program?.rewardPercent?.toString() ?? '');
+  const [capPerTransaction, setCapPerTransaction] = useState(program?.capPerTransaction?.toString() ?? '');
+  const [maxMonthlyBudget, setMaxMonthlyBudget] = useState(program?.maxMonthlyBudget?.toString() ?? '');
+  const [startsAt, setStartsAt] = useState<string | null>(program?.startsAt ?? null);
+  const [endsAt, setEndsAt] = useState<string | null>(program?.endsAt ?? null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -83,13 +62,12 @@ export function RewardProgramModal({
     setRewardPercent(program?.rewardPercent?.toString() ?? '');
     setCapPerTransaction(program?.capPerTransaction?.toString() ?? '');
     setMaxMonthlyBudget(program?.maxMonthlyBudget?.toString() ?? '');
-    setStartsAt(program?.startsAt ?? '');
-    setEndsAt(program?.endsAt ?? '');
+    setStartsAt(program?.startsAt ?? null);
+    setEndsAt(program?.endsAt ?? null);
   }, [open, program]);
 
   const fieldsValid = useMemo(() => {
     if (!name.trim()) return false;
-
     if (strategy === 'PERCENT_BACK') {
       const pb = numOrUndefined(percentBack);
       if (!pb || pb <= 0 || pb > 100) return false;
@@ -99,7 +77,6 @@ export function RewardProgramModal({
       if (!th || th <= 0) return false;
       if (!rp || rp <= 0 || rp > 100) return false;
     }
-
     return true;
   }, [name, strategy, percentBack, spendThreshold, rewardPercent]);
 
@@ -109,10 +86,9 @@ export function RewardProgramModal({
       strategy,
       capPerTransaction: numOrUndefined(capPerTransaction),
       maxMonthlyBudget: numOrUndefined(maxMonthlyBudget),
-      startsAt: startsAt || undefined,
-      endsAt: endsAt || undefined,
+      startsAt: startsAt ?? undefined,
+      endsAt: endsAt ?? undefined,
     };
-
     if (strategy === 'PERCENT_BACK') {
       payload.percentBack = numOrUndefined(percentBack);
       payload.spendThreshold = undefined;
@@ -122,7 +98,6 @@ export function RewardProgramModal({
       payload.spendThreshold = numOrUndefined(spendThreshold);
       payload.rewardPercent = numOrUndefined(rewardPercent);
     }
-
     return payload;
   };
 
@@ -143,9 +118,8 @@ export function RewardProgramModal({
       }
       onUpdated();
       onClose();
-    } catch (e: any) {
-      console.error(e);
-      toast.error(e?.response?.data?.message || 'Failed to save program');
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to save program');
     } finally {
       setSaving(false);
     }
@@ -155,27 +129,18 @@ export function RewardProgramModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>
-            {isEdit ? 'Configure Program' : 'Create Program'}
-          </DialogTitle>
+          <DialogTitle>{isEdit ? 'Configure Program' : 'Create Program'}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           <div>
             <Label>Program Name</Label>
-            <Input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="Instant Cashback"
-            />
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Instant Cashback" />
           </div>
 
           <div>
             <Label>Strategy</Label>
-            <Select
-              value={strategy}
-              onValueChange={v => setStrategy(v as RewardStrategy)}
-            >
+            <Select value={strategy} onValueChange={(v) => setStrategy(v as RewardStrategy)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select strategy" />
               </SelectTrigger>
@@ -194,7 +159,7 @@ export function RewardProgramModal({
                   inputMode="decimal"
                   placeholder="e.g. 5"
                   value={percentBack}
-                  onChange={e => setPercentBack(e.target.value)}
+                  onChange={(e) => setPercentBack(e.target.value)}
                 />
               </div>
             </div>
@@ -202,12 +167,16 @@ export function RewardProgramModal({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label>Spend Threshold</Label>
-                <Input
-                  inputMode="decimal"
-                  placeholder="e.g. 100"
-                  value={spendThreshold}
-                  onChange={e => setSpendThreshold(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    inputMode="decimal"
+                    placeholder="e.g. 100"
+                    value={spendThreshold}
+                    onChange={(e) => setSpendThreshold(e.target.value)}
+                    className="pr-6"
+                  />
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                </div>
               </div>
               <div>
                 <Label>Reward Percent (%)</Label>
@@ -215,7 +184,7 @@ export function RewardProgramModal({
                   inputMode="decimal"
                   placeholder="e.g. 5"
                   value={rewardPercent}
-                  onChange={e => setRewardPercent(e.target.value)}
+                  onChange={(e) => setRewardPercent(e.target.value)}
                 />
               </div>
             </div>
@@ -224,41 +193,45 @@ export function RewardProgramModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label>Cap per Transaction</Label>
-              <Input
-                inputMode="decimal"
-                placeholder="e.g. 25"
-                value={capPerTransaction}
-                onChange={e => setCapPerTransaction(e.target.value)}
-              />
+              <div className="relative">
+                <Input
+                  inputMode="decimal"
+                  placeholder="e.g. 25"
+                  value={capPerTransaction}
+                  onChange={(e) => setCapPerTransaction(e.target.value)}
+                  className="pr-6"
+                />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              </div>
             </div>
             <div>
               <Label>Max Monthly Budget</Label>
-              <Input
-                inputMode="decimal"
-                placeholder="e.g. 750"
-                value={maxMonthlyBudget}
-                onChange={e => setMaxMonthlyBudget(e.target.value)}
-              />
+              <div className="relative">
+                <Input
+                  inputMode="decimal"
+                  placeholder="e.g. 750"
+                  value={maxMonthlyBudget}
+                  onChange={(e) => setMaxMonthlyBudget(e.target.value)}
+                  className="pr-6"
+                />
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label>Starts At (ISO)</Label>
-              <Input
-                placeholder="2025-10-01T00:00:00.000Z"
-                value={startsAt ?? ''}
-                onChange={e => setStartsAt(e.target.value)}
-              />
-            </div>
-            <div>
-              <Label>Ends At (ISO)</Label>
-              <Input
-                placeholder="2026-03-31T23:59:59.000Z"
-                value={endsAt ?? ''}
-                onChange={e => setEndsAt(e.target.value)}
-              />
-            </div>
+            <DateTimePicker
+              label="Starts At"
+              value={startsAt}
+              onChange={setStartsAt}
+              placeholder="Select start"
+            />
+            <DateTimePicker
+              label="Ends At"
+              value={endsAt}
+              onChange={setEndsAt}
+              placeholder="Select end"
+            />
           </div>
 
           <Button className="w-full" onClick={onSubmit} disabled={saving}>
