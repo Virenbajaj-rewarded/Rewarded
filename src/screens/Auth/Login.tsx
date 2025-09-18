@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Paths } from '@/navigation/paths';
 import { useTheme } from '@/theme';
 
-import { AssetByVariant, IconByVariant } from '@/components/atoms';
+import { IconByVariant } from '@/components/atoms';
 import { SafeScreen } from '@/components/templates';
 import AuthTextInput from '@/components/auth/AuthTextInput';
 import PrimaryButton from '@/components/auth/PrimaryButton';
@@ -101,6 +101,15 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
               autoCapitalize="none"
               keyboardType="email-address"
               autoCorrect={false}
+              onBlur={() => {
+                const result = loginSchema.pick({ email: true }).safeParse({ email });
+                if (!result.success) {
+                  const err = result.error.flatten().fieldErrors.email?.[0];
+                  setEmailError(err);
+                } else {
+                  setEmailError(undefined);
+                }
+              }}
               style={emailError ? { borderColor: colors.red500 } : undefined}
             />
             {emailError ? (
