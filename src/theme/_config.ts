@@ -8,13 +8,13 @@ export const enum Variant {
 
 const colorsLight = {
   gray100: '#DFDFDF',
-  gray200: '#A1A1A1',
+  gray200: '#171f26',
   gray400: '#4D4D4D',
-  gray50: '#EFEFEF',
+  gray50: '#171f24',
   gray800: '#303030',
-  purple100: '#E1E1EF',
+  purple100: '#0c141b',
   purple50: '#1B1A23',
-  purple500: '#44427D',
+  purple500: '#3c83f6',
   red500: '#C13333',
   skeleton: '#A1A1A1',
 } as const;

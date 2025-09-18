@@ -6,21 +6,26 @@ type Props = TextInputProps & {
   testID?: string;
 };
 
-export default function AuthTextInput(props: Props) {
+export default function AuthTextInput({ style, ...rest }: Props) {
   const { colors } = useTheme();
 
   return (
     <TextInput
       placeholderTextColor={colors.gray400}
-      style={{
-        borderWidth: 1,
-        borderColor: colors.gray200,
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 12,
-        color: colors.gray800,
-      }}
-      {...props}
+      style={[
+        {
+          borderWidth: 1,
+          borderColor: colors.gray200,
+          paddingHorizontal: 12,
+          paddingVertical: 12,
+          height: 48,
+          borderRadius: 12,
+          marginBottom: 12,
+          color: '#FFFFFF',
+        },
+        style,
+      ]}
+      {...rest}
     />
   );
 }

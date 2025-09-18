@@ -22,7 +22,7 @@ export default function PrimaryButton({ label, onPress, style, disabled, testID 
       disabled={disabled}
       style={[
         {
-          backgroundColor: disabled ? colors.gray200 : colors.purple500,
+          backgroundColor: disabled ? '#232c34' : colors.purple500,
           paddingVertical: 12,
           borderRadius: 8,
           alignItems: 'center',
@@ -30,7 +30,7 @@ export default function PrimaryButton({ label, onPress, style, disabled, testID 
         style,
       ]}
     >
-      <Text style={[fonts.size_16, { color: colors.gray50 }]}>{label}</Text>
+      <Text style={[fonts.size_16, { color: '#ffffff' }]}>{label}</Text>
     </TouchableOpacity>
   );
 }
