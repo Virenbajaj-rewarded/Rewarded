@@ -24,23 +24,23 @@ const QRCodes = () => {
 
   const loadQrs = async () => {
     try {
-      const { data } = await api.get<QrAllResponse>('/merchants/qr-codes');
+      const { data } = await api.get<QrAllResponse>('/qr-codes/merchant');
       setData(data);
 
       if (!data.earn) {
-        await api.post('/merchants/qr-codes/regenerate', null, {
+        await api.post('/qr-codes/merchant/regenerate', null, {
           params: { type: 'EARN' },
         });
       }
       if (!data.redeem) {
-        await api.post('/merchants/qr-codes/regenerate', null, {
+        await api.post('/qr-codes/merchant/regenerate', null, {
           params: { type: 'REDEEM' },
         });
       }
 
       if (!data.earn || !data.redeem) {
         const { data: updated } = await api.get<QrAllResponse>(
-          '/merchants/qr-codes'
+          '/qr-codes'
         );
         setData(updated);
       }

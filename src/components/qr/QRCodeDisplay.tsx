@@ -37,7 +37,7 @@ export const QRCodeDisplay = ({
     const fetchSvg = async () => {
       if (!record) return;
       try {
-        const res = await api.get(`/merchants/qr-codes/download/svg`, {
+        const res = await api.get(`/qr-codes/merchant/download/svg`, {
           params: { type },
           responseType: 'text',
         });
@@ -52,7 +52,7 @@ export const QRCodeDisplay = ({
   const handleRegenerate = async () => {
     try {
       setIsRegenerating(true);
-      await api.post(`/merchants/qr-codes/regenerate`, null, {
+      await api.post(`/qr-codes/merchant/regenerate`, null, {
         params: { type },
       });
       await onRegenerate();
@@ -76,7 +76,7 @@ export const QRCodeDisplay = ({
   const downloadFile = async (fmt: 'png' | 'svg') => {
     setDownloading(fmt);
     try {
-      const res = await api.get(`/merchants/qr-codes/download/${fmt}`, {
+      const res = await api.get(`/qr-codes/merchant/download/${fmt}`, {
         params: { type },
         responseType: fmt === 'png' ? 'blob' : 'text',
       });
