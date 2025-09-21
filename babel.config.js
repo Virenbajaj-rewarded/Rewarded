@@ -1,18 +1,22 @@
 module.exports = {
   plugins: [
     [
-      'module-resolver',
+      "module-resolver",
       {
         alias: {
-          '@': './src',
+          "@": "./src",
         },
-        extensions: ['.js', '.json'],
-        root: ['./src'],
+        extensions: [".js", ".json"],
+        root: ["./src"],
       },
     ],
-    'inline-dotenv',
-    '@babel/plugin-transform-export-namespace-from',
-    'react-native-worklets/plugin', // need to be the last plugin
+    "inline-dotenv",
+    "@babel/plugin-transform-export-namespace-from",
+    "react-native-paper/babel",
+    "react-native-worklets/plugin", // need to be the last plugin
   ],
-  presets: ['module:@react-native/babel-preset'],
+  presets: [
+    "module:@react-native/babel-preset",
+    "module:metro-react-native-babel-preset",
+  ],
 };

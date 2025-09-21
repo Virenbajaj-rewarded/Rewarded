@@ -60,7 +60,6 @@ function SkeletonLoader({
             },
             props.style,
           ]}
-          testID="skeleton-loader"
         />
       ) : (
         children

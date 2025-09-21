@@ -1,10 +1,15 @@
-import { AppRegistry } from 'react-native';
+import { AppRegistry } from "react-native";
 
-import { name as appName } from './app.json';
-import App from './src/App';
+import { name as appName } from "./app.json";
+import App from "./src/App";
+import { PaperProvider } from "react-native-paper";
 
-// if (__DEV__) {
-//   void import('@/reactotron.config');
-// }
+export default function Main() {
+  return (
+    <PaperProvider>
+      <App />
+    </PaperProvider>
+  );
+}
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => Main);

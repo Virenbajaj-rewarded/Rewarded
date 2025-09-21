@@ -1,39 +1,39 @@
 import type {
   FulfilledThemeConfiguration,
   Variant,
-} from '@/theme/types/config';
-import type { ComponentTheme, Theme } from '@/theme/types/theme';
-import type { PropsWithChildren } from 'react';
-import type { MMKV } from 'react-native-mmkv';
+} from "@/theme/types/config";
+import type { ComponentTheme, Theme } from "@/theme/types/theme";
+import type { PropsWithChildren } from "react";
+import type { MMKV } from "react-native-mmkv";
 
-import { DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import {
   createContext,
   useCallback,
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
 import {
   generateBackgrounds,
   staticBackgroundStyles,
-} from '@/theme/backgrounds';
+} from "@/theme/backgrounds";
 import {
   generateBorderColors,
   generateBorderRadius,
   generateBorderWidths,
   staticBorderStyles,
-} from '@/theme/borders';
-import componentsGenerator from '@/theme/components';
+} from "@/theme/borders";
+import componentsGenerator from "@/theme/components";
 import {
   generateFontColors,
   generateFontSizes,
   staticFontStyles,
-} from '@/theme/fonts';
-import { generateGutters, staticGutterStyles } from '@/theme/gutters';
-import layout from '@/theme/layout';
-import generateConfig from '@/theme/ThemeProvider/generateConfig';
+} from "@/theme/fonts";
+import { generateGutters, staticGutterStyles } from "@/theme/gutters";
+import layout from "@/theme/layout";
+import generateConfig from "@/theme/ThemeProvider/generateConfig";
 
 type Context = {
   changeTheme: (variant: Variant) => void;
@@ -46,29 +46,27 @@ type Properties = PropsWithChildren<{
 }>;
 
 function ThemeProvider({ children = false, storage }: Properties) {
-  // Current theme variant
   const [variant, setVariant] = useState(
-    (storage.getString('theme') ?? 'default') as Variant,
+    (storage.getString("theme") ?? "default") as Variant,
   );
 
   // Initialize theme at default if not defined
   useEffect(() => {
-    const appHasThemeDefined = storage.contains('theme');
+    const appHasThemeDefined = storage.contains("theme");
     if (!appHasThemeDefined) {
-      storage.set('theme', 'default');
-      setVariant('default');
+      storage.set("theme", "default");
+      setVariant("default");
     }
   }, [storage]);
 
   const changeTheme = useCallback(
     (nextVariant: Variant) => {
       setVariant(nextVariant);
-      storage.set('theme', nextVariant);
+      storage.set("theme", nextVariant);
     },
     [storage],
   );
 
-  // Flatten config with current variant
   const fullConfig = useMemo(() => {
     return generateConfig(variant) satisfies FulfilledThemeConfiguration;
   }, [variant]);
@@ -105,7 +103,7 @@ function ThemeProvider({ children = false, storage }: Properties) {
   }, [fullConfig]);
 
   const navigationTheme = useMemo(() => {
-    if (variant === 'dark') {
+    if (variant === "dark") {
       return {
         ...DarkTheme,
         colors: fullConfig.navigationColors,
