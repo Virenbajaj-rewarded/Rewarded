@@ -2267,6 +2267,16 @@
     use-latest-callback "^0.2.4"
     use-sync-external-store "^1.5.0"
 
+"@react-navigation/drawer@^7.5.8":
+  version "7.5.8"
+  resolved "https://registry.npmjs.org/@react-navigation/drawer/-/drawer-7.5.8.tgz"
+  integrity sha512-x3yWHxNxEv1e3w0e72WpEVUq1g8DYQOfZnbdCcuYbLZtp6Glyk0r2rkPzpddFOby3tp05KDgwZfAZKpr3j6+6w==
+  dependencies:
+    "@react-navigation/elements" "^2.6.4"
+    color "^4.2.3"
+    react-native-drawer-layout "^4.1.13"
+    use-latest-callback "^0.2.4"
+
 "@react-navigation/elements@^2.6.4":
   version "2.6.4"
   resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-2.6.4.tgz"
@@ -6919,7 +6929,14 @@ react-native-bootsplash@^6.3.11:
     ts-dedent "^2.2.0"
     xml-formatter "^3.6.5"
 
-react-native-gesture-handler@^2.27.2:
+react-native-drawer-layout@^4.1.13:
+  version "4.1.13"
+  resolved "https://registry.npmjs.org/react-native-drawer-layout/-/react-native-drawer-layout-4.1.13.tgz"
+  integrity sha512-WeTBUmPJ/ss2r2+Tuxr8Xl3u6/AM5vTg1mlt/+/4qu6vQM+szwR6RQXchB4wxI1OLROBiqYxKlmaZ2tooCZGog==
+  dependencies:
+    use-latest-callback "^0.2.4"
+
+react-native-gesture-handler@^2.27.2, "react-native-gesture-handler@>= 2.0.0":
   version "2.27.2"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.27.2.tgz"
   integrity sha512-+kNaY2m7uQu5+5ls8os6z92DTk9expsEAYsaPv30n08mrqX2r64G8iVGDwNWzZcId54+P7RlDnhyszTql0sQ0w==
@@ -6947,10 +6964,10 @@ react-native-paper@^5.14.5:
     color "^3.1.2"
     use-latest-callback "^0.2.3"
 
-react-native-reanimated@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-4.0.1.tgz"
-  integrity sha512-SZmIpxVd1yijV1MA8KB9S9TUj6JpdU4THjVB0WCkfV9p6F8oR3YxO4e+GRKbNci3mODp7plW095LhjaCB9bqZQ==
+react-native-reanimated@^4.1.1, "react-native-reanimated@>= 2.0.0":
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-4.1.1.tgz"
+  integrity sha512-QWe8EJJFOQW92b/sl551u3uPeLT5TUx2eAXkga8Kcj2w+Qs/Yh6fsz5sN8iyNO6zcoSNFqYQLICD6dvBIFGzbg==
   dependencies:
     react-native-is-edge-to-edge "^1.2.1"
     semver "7.7.2"
@@ -6988,10 +7005,10 @@ react-native-svg@^15.12.1, react-native-svg@>=12.0.0:
     css-tree "^1.1.3"
     warn-once "0.1.1"
 
-react-native-worklets@^0.4.1, react-native-worklets@>=0.3.0:
-  version "0.4.1"
-  resolved "https://registry.npmjs.org/react-native-worklets/-/react-native-worklets-0.4.1.tgz"
-  integrity sha512-QXAMZ8jz0sLEoNrc3ej050z6Sd+UJ/Gef4SACeMuoLRinwHIy4uel7XtMPJZMqKhFerkwXZ7Ips5vIjnNyPDBA==
+react-native-worklets@^0.5.1, react-native-worklets@>=0.5.0:
+  version "0.5.1"
+  resolved "https://registry.npmjs.org/react-native-worklets/-/react-native-worklets-0.5.1.tgz"
+  integrity sha512-lJG6Uk9YuojjEX/tQrCbcbmpdLCSFxDK1rJlkDhgqkVi1KZzG7cdcBFQRqyNOOzR9Y0CXNuldmtWTGOyM0k0+w==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
     "@babel/plugin-transform-class-properties" "^7.0.0-0"
@@ -7003,6 +7020,7 @@ react-native-worklets@^0.4.1, react-native-worklets@>=0.3.0:
     "@babel/plugin-transform-unicode-regex" "^7.0.0-0"
     "@babel/preset-typescript" "^7.16.7"
     convert-source-map "^2.0.0"
+    semver "7.7.2"
 
 react-native@*, react-native@>=0.57, react-native@>=0.59.0, react-native@0.80.2:
   version "0.80.2"

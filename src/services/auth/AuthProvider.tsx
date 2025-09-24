@@ -23,34 +23,42 @@ type AuthContextShape = {
 const AuthContext = createContext<AuthContextShape>({} as AuthContextShape);
 export const useAuth = () => useContext(AuthContext);
 
+//TODO Refactor this screen
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { useFetchProfileQuery, invalidateQuery } = useUser();
 
+  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   const [bootSplashHidden, setBootSplashHidden] = useState(false);
 
   const {
     data: profile,
     isLoading,
-    isFetched,
+    isPending,
     refetch,
   } = useFetchProfileQuery();
 
   useEffect(() => {
-    if (!isFetched && !bootSplashHidden) {
+    if (!isPending && !isLoading && !bootSplashHidden) {
+      setCurrentUser(profile);
       BootSplash.hide({ fade: true }).then(() => {
         console.log("BootSplash hidden");
         setBootSplashHidden(true);
       });
     }
-  }, [isFetched]);
+  }, [isLoading, isPending]);
 
   const signInWithEmail = async (email: string, password: string) => {
     await auth().signInWithEmailAndPassword(email.trim(), password);
+    const res = await refetch();
+
+    setCurrentUser(res.data);
   };
 
   const signUpWithEmail = async (email: string, password: string) => {
     await auth().createUserWithEmailAndPassword(email.trim(), password);
-    await refetch();
+    const res = await refetch();
+
+    setCurrentUser(res.data);
   };
 
   const signOut = async () => {
@@ -58,10 +66,11 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       invalidateQuery([UserQueryKey.fetchUserProfile]),
       auth().signOut(),
     ]);
+    setCurrentUser(undefined);
   };
 
   const value: AuthContextShape = {
-    user: profile,
+    user: currentUser,
     loading: isLoading,
     signInWithEmail,
     signUpWithEmail,

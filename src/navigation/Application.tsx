@@ -7,10 +7,19 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
-import { Home, Login, SignUp } from "@/screens";
+import { Login, SignUp } from "@/screens";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
+import React from "react";
+import {
+  DiscoverEarnScreen,
+  MySpendingScreen,
+  MyStoresScreen,
+  MyWalletScreen,
+} from "@/screens/Drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator();
 
 function ApplicationNavigator() {
   const { navigationTheme, variant } = useTheme();
@@ -19,18 +28,29 @@ function ApplicationNavigator() {
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
-          {user ? (
-            <>
-              <Stack.Screen component={Home} name={Paths.Home} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen component={Login} name={Paths.Login} />
-              <Stack.Screen component={SignUp} name={Paths.SignUp} />
-            </>
-          )}
-        </Stack.Navigator>
+        {user ? (
+          <Drawer.Navigator
+            key={variant}
+            screenOptions={{
+              headerShown: true,
+              drawerType: "front",
+              swipeEnabled: true,
+            }}
+          >
+            <Drawer.Screen name="My Wallet" component={MyWalletScreen} />
+            <Drawer.Screen name="My Stores" component={MyStoresScreen} />
+            <Drawer.Screen
+              name="Discover & Earn"
+              component={DiscoverEarnScreen}
+            />
+            <Drawer.Screen name="My Spending" component={MySpendingScreen} />
+          </Drawer.Navigator>
+        ) : (
+          <Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
+            <Stack.Screen component={Login} name={Paths.Login} />
+            <Stack.Screen component={SignUp} name={Paths.SignUp} />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </SafeAreaProvider>
   );
