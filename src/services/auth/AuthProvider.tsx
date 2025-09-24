@@ -5,13 +5,15 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import auth from "@react-native-firebase/auth";
 import BootSplash from "react-native-bootsplash";
 
-import FirebaseUser = FirebaseAuthTypes.User;
+import { useUser } from "@/hooks";
+import { User } from "@/hooks/domain/user/schema.ts";
+import { UserQueryKey } from "@/hooks/domain/user/useUser.ts";
 
 type AuthContextShape = {
-  user: FirebaseUser | null;
+  user: User | undefined;
   loading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -22,17 +24,25 @@ const AuthContext = createContext<AuthContextShape>({} as AuthContextShape);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { useFetchProfileQuery, invalidateQuery } = useUser();
+
+  const [bootSplashHidden, setBootSplashHidden] = useState(false);
+
+  const {
+    data: profile,
+    isLoading,
+    isFetched,
+    refetch,
+  } = useFetchProfileQuery();
 
   useEffect(() => {
-    const init = async () => {};
-
-    init().finally(async () => {
-      await BootSplash.hide({ fade: true });
-      console.log("BootSplash has been hidden successfully");
-    });
-  }, []);
+    if (!isFetched && !bootSplashHidden) {
+      BootSplash.hide({ fade: true }).then(() => {
+        console.log("BootSplash hidden");
+        setBootSplashHidden(true);
+      });
+    }
+  }, [isFetched]);
 
   const signInWithEmail = async (email: string, password: string) => {
     await auth().signInWithEmailAndPassword(email.trim(), password);
@@ -40,15 +50,19 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const signUpWithEmail = async (email: string, password: string) => {
     await auth().createUserWithEmailAndPassword(email.trim(), password);
+    await refetch();
   };
 
   const signOut = async () => {
-    await auth().signOut();
+    await Promise.all([
+      invalidateQuery([UserQueryKey.fetchUserProfile]),
+      auth().signOut(),
+    ]);
   };
 
   const value: AuthContextShape = {
-    user: firebaseUser,
-    loading,
+    user: profile,
+    loading: isLoading,
     signInWithEmail,
     signUpWithEmail,
     signOut,

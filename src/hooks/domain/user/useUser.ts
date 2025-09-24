@@ -1,18 +1,16 @@
-import type { User } from "./schema";
-
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { UserServices } from "./userService";
 
-const enum UserQueryKey {
-  fetchOne = "fetchOneUser",
+export const enum UserQueryKey {
+  fetchUserProfile = "fetchUserProfile",
 }
 
-const useFetchOneQuery = (currentId: User["id"]) =>
+const useFetchProfileQuery = () =>
   useQuery({
-    enabled: currentId >= 0,
     queryFn: () => UserServices.fetchProfile(),
-    queryKey: [UserQueryKey.fetchOne, currentId],
+    queryKey: [UserQueryKey.fetchUserProfile],
+    staleTime: 0,
   });
 
 export const useUser = () => {
@@ -25,6 +23,6 @@ export const useUser = () => {
 
   return {
     invalidateQuery,
-    useFetchOneQuery,
+    useFetchProfileQuery,
   };
 };

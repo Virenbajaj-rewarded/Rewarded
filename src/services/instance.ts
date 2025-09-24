@@ -1,7 +1,7 @@
 import ky from "ky";
-import { getIdToken, peekIdToken } from "@/services/auth.ts";
+import { getIdToken, peekIdToken } from "@/services/auth";
 
-const prefixUrl = `${process.env.API_URL ?? ""}/`;
+const prefixUrl = `https://bk-xvaf.onrender.com/`;
 
 export const instance = ky.extend({
   headers: {
@@ -19,7 +19,10 @@ export const instance = ky.extend({
     beforeRequest: [
       async (request) => {
         const token = peekIdToken() ?? (await getIdToken());
-        if (token) request.headers.set("Authorization", `Bearer ${token}`);
+
+        if (token) {
+          request.headers.set("Authorization", `Bearer ${token}`);
+        }
       },
     ],
     afterResponse: [

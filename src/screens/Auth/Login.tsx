@@ -1,47 +1,38 @@
-import type { RootScreenProps } from '@/navigation/types';
+import type { RootScreenProps } from "@/navigation/types";
 
-import { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { z } from 'zod';
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { z } from "zod";
 
-import { Paths } from '@/navigation/paths';
-import { useTheme } from '@/theme';
+import { Paths } from "@/navigation/paths";
+import { useTheme } from "@/theme";
 
-import { IconByVariant } from '@/components/atoms';
-import { SafeScreen } from '@/components/templates';
-import AuthTextInput from '@/components/auth/AuthTextInput';
-import PrimaryButton from '@/components/auth/PrimaryButton';
-
-const VALID_EMAIL = 'v.yuskiv@sda.company';
-const VALID_PASSWORD = 'qwerty';
+import { IconByVariant } from "@/components/atoms";
+import { SafeScreen } from "@/components/templates";
+import AuthTextInput from "@/components/auth/AuthTextInput";
+import PrimaryButton from "@/components/auth/PrimaryButton";
+import { useAuth } from "@/services/auth/AuthProvider.tsx";
 
 const loginSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, { error: 'Email is required' })
-    .email({ error: 'Enter a valid email address' }),
-  password: z
-    .string()
-    .min(1, { error: 'Password is required' }),
+  email: z.email().min(1, { error: "Email is required" }),
+  password: z.string().min(1, { error: "Password is required" }),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
 
 function Login({ navigation }: RootScreenProps<Paths.Login>) {
   const { gutters, layout, fonts, colors } = useTheme();
-  const [email, setEmail] = useState<LoginForm['email']>('');
-  const [password, setPassword] = useState<LoginForm['password']>('');
+  const { signInWithEmail } = useAuth();
+  const [email, setEmail] = useState<LoginForm["email"]>("");
+  const [password, setPassword] = useState<LoginForm["password"]>("");
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
   const [authError, setAuthError] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
 
-  // Derived validity state: enable button only when form is valid per Zod schema
   const isFormValid = loginSchema.safeParse({ email, password }).success;
 
-  const onLogin = () => {
-    // Reset errors first
+  const onLogin = async () => {
     setEmailError(undefined);
     setPasswordError(undefined);
     setAuthError(undefined);
@@ -59,25 +50,30 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
 
     const { email: validEmail, password: validPassword } = result.data;
 
-    // Simulate request delay similar to Startup screen behavior
-    setLoading(true);
-    setTimeout(() => {
-      if (validEmail === VALID_EMAIL && validPassword === VALID_PASSWORD) {
-        navigation.reset({ index: 0, routes: [{ name: Paths.Home }] });
-      } else {
-        setAuthError('Invalid email or password');
-      }
+    try {
+      setLoading(true);
+      await signInWithEmail(validEmail, validPassword);
+    } catch (e) {
+      console.log("Error logging in: ", e);
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (
     <SafeScreen>
-      <View style={[layout.flex_1, layout.itemsCenter, layout.justifyCenter, gutters.padding_16]}>
+      <View
+        style={[
+          layout.flex_1,
+          layout.itemsCenter,
+          layout.justifyCenter,
+          gutters.padding_16,
+        ]}
+      >
         {/* Card container */}
         <View
           style={{
-            width: '100%',
+            width: "100%",
             maxWidth: 420,
             borderRadius: 12,
             padding: 20,
@@ -85,8 +81,20 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
           }}
         >
           <View style={[layout.itemsCenter, gutters.marginBottom_16]}>
-            <IconByVariant path="droplet"  width={55} height={55}  stroke={colors.purple500}/>
-            <Text style={[fonts.size_32, { fontWeight: '800', color: '#FFFFFF', marginTop: 8 }]}>Rewarded</Text>
+            <IconByVariant
+              path="droplet"
+              width={55}
+              height={55}
+              stroke={colors.purple500}
+            />
+            <Text
+              style={[
+                fonts.size_32,
+                { fontWeight: "800", color: "#FFFFFF", marginTop: 8 },
+              ]}
+            >
+              Rewarded
+            </Text>
           </View>
 
           <View style={{ marginBottom: 8 }}>
@@ -102,7 +110,9 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
               keyboardType="email-address"
               autoCorrect={false}
               onBlur={() => {
-                const result = loginSchema.pick({ email: true }).safeParse({ email });
+                const result = loginSchema
+                  .pick({ email: true })
+                  .safeParse({ email });
                 if (!result.success) {
                   const err = result.error.flatten().fieldErrors.email?.[0];
                   setEmailError(err);
@@ -113,7 +123,14 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
               style={emailError ? { borderColor: colors.red500 } : undefined}
             />
             {emailError ? (
-              <Text style={[fonts.size_12, { color: colors.red500, marginTop: -8, marginBottom: 8 }]}>{emailError}</Text>
+              <Text
+                style={[
+                  fonts.size_12,
+                  { color: colors.red500, marginTop: -8, marginBottom: 8 },
+                ]}
+              >
+                {emailError}
+              </Text>
             ) : undefined}
           </View>
 
@@ -130,17 +147,34 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
               style={passwordError ? { borderColor: colors.red500 } : undefined}
             />
             {passwordError ? (
-              <Text style={[fonts.size_12, { color: colors.red500, marginTop: -8, marginBottom: 0 }]}>{passwordError}</Text>
+              <Text
+                style={[
+                  fonts.size_12,
+                  { color: colors.red500, marginTop: -8, marginBottom: 0 },
+                ]}
+              >
+                {passwordError}
+              </Text>
             ) : undefined}
 
-              {authError ? (
-                  <Text style={[fonts.size_12, { color: colors.red500, marginBottom: 8 }]}>{authError}</Text>
-              ) : undefined}
+            {authError ? (
+              <Text
+                style={[
+                  fonts.size_12,
+                  { color: colors.red500, marginBottom: 8 },
+                ]}
+              >
+                {authError}
+              </Text>
+            ) : undefined}
           </View>
 
-
-
-          <PrimaryButton label={loading ? 'Logging in...' : 'Log in'} onPress={onLogin} disabled={loading || !isFormValid} style={{ marginBottom: 12 }} />
+          <PrimaryButton
+            label={loading ? "Logging in..." : "Log in"}
+            onPress={onLogin}
+            disabled={loading || !isFormValid}
+            style={{ marginBottom: 12 }}
+          />
 
           {/* Google button */}
           <TouchableOpacity
@@ -148,27 +182,35 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
             onPress={() => {}}
             style={{
               borderWidth: 1,
-              borderColor:'#19222a',
+              borderColor: "#19222a",
               paddingVertical: 12,
               borderRadius: 8,
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'center',
+              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
             }}
           >
             <View style={{ marginRight: 8 }}>
               <IconByVariant path="google" width={20} height={20} />
             </View>
-            <Text style={[fonts.size_16, { color: '#FFFFFF' }]}>Continue with Google</Text>
+            <Text style={[fonts.size_16, { color: "#FFFFFF" }]}>
+              Continue with Google
+            </Text>
           </TouchableOpacity>
 
           {/* Bottom links */}
-          <View style={[layout.row, layout.justifyBetween, gutters.marginTop_16]}>
+          <View
+            style={[layout.row, layout.justifyBetween, gutters.marginTop_16]}
+          >
             <TouchableOpacity onPress={() => navigation.navigate(Paths.SignUp)}>
-              <Text style={[fonts.size_12, { color: '#FFFFFF' }]}>Create account</Text>
+              <Text style={[fonts.size_12, { color: "#FFFFFF" }]}>
+                Create account
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {}}>
-              <Text style={[fonts.size_12, { color: '#FFFFFF' }]}>Forgot password?</Text>
+              <Text style={[fonts.size_12, { color: "#FFFFFF" }]}>
+                Forgot password?
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

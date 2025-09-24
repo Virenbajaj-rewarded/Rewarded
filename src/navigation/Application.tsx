@@ -8,19 +8,28 @@ import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
 import { Home, Login, SignUp } from "@/screens";
+import { useAuth } from "@/services/auth/AuthProvider.tsx";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function ApplicationNavigator() {
   const { navigationTheme, variant } = useTheme();
+  const { user } = useAuth();
 
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={navigationTheme}>
         <Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
-          <Stack.Screen component={Login} name={Paths.Login} />
-          <Stack.Screen component={SignUp} name={Paths.SignUp} />
-          <Stack.Screen component={Home} name={Paths.Home} />
+          {user ? (
+            <>
+              <Stack.Screen component={Home} name={Paths.Home} />
+            </>
+          ) : (
+            <>
+              <Stack.Screen component={Login} name={Paths.Login} />
+              <Stack.Screen component={SignUp} name={Paths.SignUp} />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
