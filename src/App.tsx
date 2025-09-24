@@ -8,6 +8,11 @@ import ApplicationNavigator from "@/navigation/Application";
 import { ThemeProvider } from "@/theme";
 import "@/translations";
 import { AuthProvider } from "@/services/auth/AuthProvider";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
+GoogleSignin.configure({
+  webClientId: "",
+});
 
 export const queryClient = new QueryClient({
   defaultOptions: {

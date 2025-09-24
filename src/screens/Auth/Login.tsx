@@ -22,7 +22,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 
 function Login({ navigation }: RootScreenProps<Paths.Login>) {
   const { gutters, layout, fonts, colors } = useTheme();
-  const { signInWithEmail } = useAuth();
+  const { signInWithEmail, signInWithGoogle } = useAuth();
   const [email, setEmail] = useState<LoginForm["email"]>("");
   const [password, setPassword] = useState<LoginForm["password"]>("");
   const [emailError, setEmailError] = useState<string | undefined>();
@@ -179,7 +179,7 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
           {/* Google button */}
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => {}}
+            onPress={signInWithGoogle}
             style={{
               borderWidth: 1,
               borderColor: "#19222a",

@@ -5,18 +5,24 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import auth from "@react-native-firebase/auth";
+import auth, {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from "@react-native-firebase/auth";
 import BootSplash from "react-native-bootsplash";
 
 import { useUser } from "@/hooks";
 import { User } from "@/hooks/domain/user/schema.ts";
 import { UserQueryKey } from "@/hooks/domain/user/useUser.ts";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 type AuthContextShape = {
   user: User | undefined;
   loading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -69,12 +75,33 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setCurrentUser(undefined);
   };
 
+  const signInWithGoogle = async () => {
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+
+    const signInResult = await GoogleSignin.signIn();
+
+    let idToken = signInResult.data?.idToken;
+
+    if (!idToken) {
+      throw new Error("No ID token found");
+    }
+
+    const googleCredential = GoogleAuthProvider.credential(idToken);
+
+    await signInWithCredential(getAuth(), googleCredential);
+
+    const res = await refetch();
+
+    setCurrentUser(res.data);
+  };
+
   const value: AuthContextShape = {
     user: currentUser,
     loading: isLoading,
     signInWithEmail,
     signUpWithEmail,
     signOut,
+    signInWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
