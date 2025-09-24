@@ -1,17 +1,17 @@
-import type { User } from './schema';
+import type { User } from "./schema";
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { UserServices } from './userService';
+import { UserServices } from "./userService";
 
 const enum UserQueryKey {
-  fetchOne = 'fetchOneUser',
+  fetchOne = "fetchOneUser",
 }
 
-const useFetchOneQuery = (currentId: User['id']) =>
+const useFetchOneQuery = (currentId: User["id"]) =>
   useQuery({
     enabled: currentId >= 0,
-    queryFn: () => UserServices.fetchOne(currentId),
+    queryFn: () => UserServices.fetchProfile(),
     queryKey: [UserQueryKey.fetchOne, currentId],
   });
 

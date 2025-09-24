@@ -1,12 +1,13 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { MMKV } from 'react-native-mmkv';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MMKV } from "react-native-mmkv";
 
-import ApplicationNavigator from '@/navigation/Application';
-import { ThemeProvider } from '@/theme';
-import '@/translations';
+import ApplicationNavigator from "@/navigation/Application";
+import { ThemeProvider } from "@/theme";
+import "@/translations";
+import { AuthProvider } from "@/services/auth/AuthProvider";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,7 +27,9 @@ function App() {
     <GestureHandlerRootView>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider storage={storage}>
-          <ApplicationNavigator />
+          <AuthProvider>
+            <ApplicationNavigator />
+          </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
