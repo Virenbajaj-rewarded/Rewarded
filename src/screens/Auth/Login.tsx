@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
-import { IconByVariant } from "@/components/atoms";
+import IconByVariant from "@/components/atoms/IconByVariant";
 import { SafeScreen } from "@/components/templates";
 import AuthTextInput from "@/components/auth/AuthTextInput";
 import PrimaryButton from "@/components/auth/PrimaryButton";
