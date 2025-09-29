@@ -52,13 +52,23 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, [isFetched]);
 
   const signInWithEmail = async (email: string, password: string) => {
-    await auth().signInWithEmailAndPassword(email.trim(), password);
-    await refetch();
+    try {
+      await auth().signInWithEmailAndPassword(email.trim(), password);
+      await refetch();
+    } catch (e) {
+      const error = e as Error;
+      throw new Error(getAuthErrorMessage(error));
+    }
   };
 
   const signUpWithEmail = async (email: string, password: string) => {
-    await auth().createUserWithEmailAndPassword(email.trim(), password);
-    await refetch();
+    try {
+      await auth().createUserWithEmailAndPassword(email.trim(), password);
+      await refetch();
+    } catch (e) {
+      const error = e as Error;
+      throw new Error(getAuthErrorMessage(error));
+    }
   };
 
   const signOut = async () => {
@@ -98,3 +108,20 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+function getAuthErrorMessage(error: any): string {
+  switch (error?.code) {
+    case "auth/invalid-email":
+      return "Please enter a valid email";
+    case "auth/user-not-found":
+      return "No account found with this email";
+    case "auth/wrong-password":
+      return "Incorrect password";
+    case "auth/too-many-requests":
+      return "Too many attempts. Please try again later";
+    case "auth/invalid-credential":
+      return "Authentication error. Please try again";
+    default:
+      return "An unknown error occurred. Please try again later";
+  }
+}

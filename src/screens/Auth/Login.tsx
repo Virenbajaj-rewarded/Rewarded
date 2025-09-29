@@ -62,7 +62,8 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
       setLoading(true);
       await signInWithEmail(validEmail, validPassword);
     } catch (e) {
-      console.log("Error logging in: ", e);
+      const error = e as Error;
+      setAuthError(error?.message || "Error logging in");
     } finally {
       setLoading(false);
     }
