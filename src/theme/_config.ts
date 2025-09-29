@@ -16,6 +16,7 @@ export const colorsLight = {
   purple50: "#1B1A23",
   purple500: "#3c83f6",
   red500: "#C13333",
+  text: "#000000",
   skeleton: "#A1A1A1",
 } as const;
 
@@ -29,6 +30,7 @@ export const colorsDark = {
   purple50: "#1B1A23",
   purple500: "#A6A4F0",
   red500: "#C13333",
+  text: "#FFFFFF",
   skeleton: "#303030",
 } as const;
 

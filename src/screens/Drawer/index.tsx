@@ -9,6 +9,7 @@ import Spending from "@/screens/Drawer/Spending";
 import MaterialIcons from "@react-native-vector-icons/material-design-icons";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
+import Layout from "@/screens/Drawer/Layout.tsx";
 
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
@@ -21,6 +22,7 @@ export default function DrawerNavigator({
 
   return (
     <Drawer.Navigator
+      screenLayout={Layout}
       screenOptions={{
         headerShown: true,
         drawerType: "front",
