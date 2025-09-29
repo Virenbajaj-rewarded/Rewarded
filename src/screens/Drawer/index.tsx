@@ -1,71 +1,15 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { useTheme } from "@/theme";
-import { useAuth } from "@/services/auth/AuthProvider.tsx";
+import { DrawerStackParamList, RootScreenProps } from "@/navigation/types.ts";
+import { DrawerPaths, Paths } from "@/navigation/paths.ts";
+import Wallet from "@/screens/Drawer/Wallet";
+import Stores from "@/screens/Drawer/Stores";
+import DiscoverAndEarn from "@/screens/Drawer/DiscoverAndEarn";
+import Spending from "@/screens/Drawer/Spending";
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
-function ScreenPlaceholder({ title }: { title: string }) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  );
-}
-
-export function MyWalletScreen() {
-  const { colors } = useTheme();
-  const { signOut } = useAuth();
-
-  return (
-    <View style={{ marginTop: 75 }}>
-      <TouchableOpacity
-        style={{
-          padding: 10,
-          backgroundColor: colors.purple500,
-          marginHorizontal: 20,
-          borderRadius: 5,
-        }}
-        onPress={() => {
-          Alert.alert(
-            "Are you sure you want to logout?",
-            "",
-            [
-              {
-                text: "No",
-                style: "cancel",
-              },
-              {
-                text: "Yes",
-                onPress: () => {
-                  signOut(); // <-- call your logout function here
-                },
-              },
-            ],
-            { cancelable: true },
-          );
-        }}
-      >
-        <Text style={{ color: "#ffffff" }}>Logout</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-export function MyStoresScreen() {
-  return <ScreenPlaceholder title="My Stores" />;
-}
-
-export function DiscoverEarnScreen() {
-  return <ScreenPlaceholder title="Discover & Earn" />;
-}
-
-export function MySpendingScreen() {
-  return <ScreenPlaceholder title="My Spending" />;
-}
-
-export const DrawerNavigator: React.FC = () => {
+export default function DrawerNavigator({}: RootScreenProps<Paths.Drawer>) {
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -75,22 +19,18 @@ export const DrawerNavigator: React.FC = () => {
       }}
     >
       <Drawer.Screen
-        name="My Wallet"
-        component={MyWalletScreen}
+        name={DrawerPaths.MY_WALLET}
+        component={Wallet}
         options={{
           drawerActiveBackgroundColor: "#FFFFFF",
         }}
       />
-      <Drawer.Screen name="My Stores" component={MyStoresScreen} />
-      <Drawer.Screen name="Discover & Earn" component={DiscoverEarnScreen} />
-      <Drawer.Screen name="My Spending" component={MySpendingScreen} />
+      <Drawer.Screen name={DrawerPaths.STORES} component={Stores} />
+      <Drawer.Screen
+        name={DrawerPaths.DISCOVER_AND_EARN}
+        component={DiscoverAndEarn}
+      />
+      <Drawer.Screen name={DrawerPaths.SPENDING} component={Spending} />
     </Drawer.Navigator>
   );
-};
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "center" },
-  title: { fontSize: 22, fontWeight: "600", color: "#FFFFFF" },
-});
-
-export default DrawerNavigator;
+}

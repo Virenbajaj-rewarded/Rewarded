@@ -33,7 +33,6 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { useFetchProfileQuery, invalidateQuery } = useUser();
 
-  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   const [bootSplashHidden, setBootSplashHidden] = useState(false);
 
   const {
@@ -45,26 +44,24 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!isPending && !isLoading && !bootSplashHidden) {
-      setCurrentUser(profile);
       BootSplash.hide({ fade: true }).then(() => {
-        console.log("BootSplash hidden");
         setBootSplashHidden(true);
       });
     }
   }, [isLoading, isPending]);
 
+  useEffect(() => {
+    console.log("profile", profile);
+  }, [profile]);
+
   const signInWithEmail = async (email: string, password: string) => {
     await auth().signInWithEmailAndPassword(email.trim(), password);
-    const res = await refetch();
-
-    setCurrentUser(res.data);
+    await refetch();
   };
 
   const signUpWithEmail = async (email: string, password: string) => {
     await auth().createUserWithEmailAndPassword(email.trim(), password);
-    const res = await refetch();
-
-    setCurrentUser(res.data);
+    await refetch();
   };
 
   const signOut = async () => {
@@ -72,7 +69,6 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       invalidateQuery([UserQueryKey.fetchUserProfile]),
       auth().signOut(),
     ]);
-    setCurrentUser(undefined);
   };
 
   const signInWithGoogle = async () => {
@@ -90,13 +86,11 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     await signInWithCredential(getAuth(), googleCredential);
 
-    const res = await refetch();
-
-    setCurrentUser(res.data);
+    await refetch();
   };
 
   const value: AuthContextShape = {
-    user: currentUser,
+    user: profile,
     loading: isLoading,
     signInWithEmail,
     signUpWithEmail,
