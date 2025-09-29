@@ -1,20 +1,20 @@
-import type { RootScreenProps } from '@/navigation/types';
+import type { RootScreenProps } from "@/navigation/types";
 
-import { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
-import { Paths } from '@/navigation/paths';
-import { useTheme } from '@/theme';
+import { Paths } from "@/navigation/paths";
+import { useTheme } from "@/theme";
 
-import { SafeScreen } from '@/components/templates';
-import AuthTextInput from '@/components/auth/AuthTextInput';
-import PrimaryButton from '@/components/auth/PrimaryButton';
+import SafeScreen from "@/components/templates/SafeScreen";
+import AuthTextInput from "@/components/auth/AuthTextInput";
+import PrimaryButton from "@/components/auth/PrimaryButton";
 
 function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
   const { gutters, layout, fonts, colors } = useTheme();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
   const onSignUp = () => {
     // Placeholder logic: go to Login
@@ -48,10 +48,16 @@ function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
           secureTextEntry
         />
 
-        <PrimaryButton label="Create account" onPress={onSignUp} style={{ marginBottom: 12 }} />
+        <PrimaryButton
+          label="Create account"
+          onPress={onSignUp}
+          style={{ marginBottom: 12 }}
+        />
 
         <TouchableOpacity onPress={() => navigation.navigate(Paths.Login)}>
-          <Text style={[fonts.size_12, { color: colors.purple500 }]}>Already have an account? Login</Text>
+          <Text style={[fonts.size_12, { color: colors.purple500 }]}>
+            Already have an account? Login
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeScreen>

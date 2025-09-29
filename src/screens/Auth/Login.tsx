@@ -14,7 +14,7 @@ import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
 import IconByVariant from "@/components/atoms/IconByVariant";
-import { SafeScreen } from "@/components/templates";
+import SafeScreen from "@/components/templates/SafeScreen";
 import AuthTextInput from "@/components/auth/AuthTextInput";
 import PrimaryButton from "@/components/auth/PrimaryButton";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";

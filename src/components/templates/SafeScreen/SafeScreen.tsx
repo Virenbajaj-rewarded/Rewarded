@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/theme";
 
 import DefaultError from "@/components/molecules/DefaultError";
-import { ErrorBoundary } from "@/components/organisms";
+import ErrorBoundary from "@/components/organisms/ErrorBoundary";
 
 type Properties = PropsWithChildren<
   {
