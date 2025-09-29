@@ -14,11 +14,11 @@ import BootSplash from "react-native-bootsplash";
 
 import { useUser } from "@/hooks";
 import { User } from "@/hooks/domain/user/schema.ts";
-import { UserQueryKey } from "@/hooks/domain/user/useUser.ts";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { UserQueryKey } from "@/hooks/domain/user/useUser.ts";
 
 type AuthContextShape = {
-  user: User | undefined;
+  user: User | null;
   loading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
@@ -31,28 +31,25 @@ export const useAuth = () => useContext(AuthContext);
 
 //TODO Refactor this screen
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { useFetchProfileQuery, invalidateQuery } = useUser();
+  const { useFetchProfileQuery, invalidateQuery, setQueryData } = useUser();
 
   const [bootSplashHidden, setBootSplashHidden] = useState(false);
-
   const {
     data: profile,
     isLoading,
-    isPending,
+    isFetched,
     refetch,
   } = useFetchProfileQuery();
 
   useEffect(() => {
-    if (!isPending && !isLoading && !bootSplashHidden) {
-      BootSplash.hide({ fade: true }).then(() => {
-        setBootSplashHidden(true);
-      });
+    if (isFetched && !bootSplashHidden) {
+      setTimeout(() => {
+        BootSplash.hide({ fade: true }).then(() => {
+          setBootSplashHidden(true);
+        });
+      }, 300);
     }
-  }, [isLoading, isPending]);
-
-  useEffect(() => {
-    console.log("profile", profile);
-  }, [profile]);
+  }, [isFetched]);
 
   const signInWithEmail = async (email: string, password: string) => {
     await auth().signInWithEmailAndPassword(email.trim(), password);
@@ -66,9 +63,10 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const signOut = async () => {
     await Promise.all([
-      invalidateQuery([UserQueryKey.fetchUserProfile]),
       auth().signOut(),
+      invalidateQuery([UserQueryKey.fetchUserProfile], { cancelRefetch: true }),
     ]);
+    setQueryData(null);
   };
 
   const signInWithGoogle = async () => {

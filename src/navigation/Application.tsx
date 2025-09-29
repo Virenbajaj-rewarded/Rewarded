@@ -21,7 +21,12 @@ function ApplicationNavigator() {
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={navigationTheme}>
-        <Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          key={variant}
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
           {!user ? (
             <>
               <Stack.Screen component={Login} name={Paths.Login} />

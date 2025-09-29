@@ -19,6 +19,7 @@ import AuthTextInput from "@/components/auth/AuthTextInput";
 import PrimaryButton from "@/components/auth/PrimaryButton";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
 import { styles } from "./styles.ts";
+import GoogleButton from "@/components/molecules/GoogleButton";
 
 const loginSchema = z.object({
   email: z.email().min(1, { error: "Email is required" }),
@@ -29,7 +30,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 
 function Login({ navigation }: RootScreenProps<Paths.Login>) {
   const { gutters, layout, fonts, colors } = useTheme();
-  const { signInWithEmail, signInWithGoogle } = useAuth();
+  const { signInWithEmail } = useAuth();
   const [email, setEmail] = useState<LoginForm["email"]>("");
   const [password, setPassword] = useState<LoginForm["password"]>("");
   const [emailError, setEmailError] = useState<string | undefined>();
@@ -177,26 +178,7 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
               style={{ marginBottom: 12 }}
             />
 
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={signInWithGoogle}
-              style={{
-                borderWidth: 1,
-                borderColor: "#19222a",
-                paddingVertical: 12,
-                borderRadius: 8,
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "center",
-              }}
-            >
-              <View style={{ marginRight: 8 }}>
-                <IconByVariant path="google" width={20} height={20} />
-              </View>
-              <Text style={[fonts.size_16, { color: "#FFFFFF" }]}>
-                Continue with Google
-              </Text>
-            </TouchableOpacity>
+            <GoogleButton disabled={loading} />
 
             <View
               style={[layout.row, layout.justifyBetween, gutters.marginTop_16]}

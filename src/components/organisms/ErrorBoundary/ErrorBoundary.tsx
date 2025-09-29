@@ -1,15 +1,15 @@
-import type { ErrorInfo } from 'react';
-import type { ErrorBoundaryPropsWithFallback } from 'react-error-boundary';
+import type { ErrorInfo } from "react";
+import type { ErrorBoundaryPropsWithFallback } from "react-error-boundary";
 
-import { ErrorBoundary as DefaultErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary as DefaultErrorBoundary } from "react-error-boundary";
 
-import { DefaultError } from '@/components/molecules';
+import DefaultError from "@/components/molecules/DefaultError";
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Pick<Partial<T>, K>;
 
 type Properties = {
   readonly onReset?: () => void;
-} & Optional<ErrorBoundaryPropsWithFallback, 'fallback'>;
+} & Optional<ErrorBoundaryPropsWithFallback, "fallback">;
 
 function ErrorBoundary({
   fallback = undefined,
