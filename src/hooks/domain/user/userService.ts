@@ -1,10 +1,10 @@
-import { instance } from '@/services/instance';
+import { instance } from "@/services/instance";
 
-import { userSchema } from './schema';
+import { User, userSchema } from "./schema";
 
 export const UserServices = {
-  fetchOne: async (id: number) => {
-    const response = await instance.get(`users/${id}`).json();
+  fetchProfile: async () => {
+    const response = await instance.get<User>(`users/me`).json();
     return userSchema.parse(response);
   },
 };

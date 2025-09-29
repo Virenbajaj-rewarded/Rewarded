@@ -1,35 +1,37 @@
-import type { ThemeConfiguration } from '@/theme/types/config';
+import type { ThemeConfiguration } from "@/theme/types/config";
 
-import { DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 
 export const enum Variant {
-  DARK = 'dark',
+  DARK = "dark",
 }
 
-const colorsLight = {
-  gray100: '#DFDFDF',
-  gray200: '#171f26',
-  gray400: '#4D4D4D',
-  gray50: '#171f24',
-  gray800: '#303030',
-  purple100: '#0c141b',
-  purple50: '#1B1A23',
-  purple500: '#3c83f6',
-  red500: '#C13333',
-  skeleton: '#A1A1A1',
+export const colorsLight = {
+  gray100: "#DFDFDF",
+  gray200: "#171f26",
+  gray400: "#4D4D4D",
+  gray50: "#171f24",
+  gray800: "#303030",
+  purple100: "#0c141b",
+  purple50: "#1B1A23",
+  purple500: "#3c83f6",
+  red500: "#C13333",
+  text: "#000000",
+  skeleton: "#A1A1A1",
 } as const;
 
-const colorsDark = {
-  gray100: '#000000',
-  gray200: '#BABABA',
-  gray400: '#969696',
-  gray50: '#EFEFEF',
-  gray800: '#E0E0E0',
-  purple100: '#252732',
-  purple50: '#1B1A23',
-  purple500: '#A6A4F0',
-  red500: '#C13333',
-  skeleton: '#303030',
+export const colorsDark = {
+  gray100: "#000000",
+  gray200: "#BABABA",
+  gray400: "#969696",
+  gray50: "#EFEFEF",
+  gray800: "#E0E0E0",
+  purple100: "#252732",
+  purple50: "#1B1A23",
+  purple500: "#A6A4F0",
+  red500: "#C13333",
+  text: "#FFFFFF",
+  skeleton: "#303030",
 } as const;
 
 const sizes = [12, 16, 24, 32, 40, 80] as const;

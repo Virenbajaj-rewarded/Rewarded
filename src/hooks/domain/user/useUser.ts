@@ -1,30 +1,45 @@
-import type { User } from './schema';
+import {
+  InvalidateOptions,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { UserServices } from "./userService";
+import { User } from "@/hooks/domain/user/schema.ts";
 
-import { UserServices } from './userService';
-
-const enum UserQueryKey {
-  fetchOne = 'fetchOneUser',
+export const enum UserQueryKey {
+  fetchUserProfile = "fetchUserProfile",
 }
 
-const useFetchOneQuery = (currentId: User['id']) =>
+const useFetchProfileQuery = () =>
   useQuery({
-    enabled: currentId >= 0,
-    queryFn: () => UserServices.fetchOne(currentId),
-    queryKey: [UserQueryKey.fetchOne, currentId],
+    queryFn: () => UserServices.fetchProfile(),
+    queryKey: [UserQueryKey.fetchUserProfile],
+    staleTime: 0,
+    initialData: null,
   });
 
 export const useUser = () => {
   const client = useQueryClient();
 
-  const invalidateQuery = (queryKeys: UserQueryKey[]) =>
-    client.invalidateQueries({
-      queryKey: queryKeys,
-    });
+  const invalidateQuery = (
+    queryKeys: UserQueryKey[],
+    options?: InvalidateOptions,
+  ) =>
+    client.invalidateQueries(
+      {
+        queryKey: queryKeys,
+      },
+      options,
+    );
+
+  const setQueryData = (profile: User | null) => {
+    client.setQueryData([UserQueryKey.fetchUserProfile], profile);
+  };
 
   return {
     invalidateQuery,
-    useFetchOneQuery,
+    useFetchProfileQuery,
+    setQueryData,
   };
 };

@@ -1,6 +1,12 @@
 export const enum Paths {
-  Home = 'home',
-  Startup = 'startup',
-  Login = 'login',
-  SignUp = 'signUp',
+  Drawer = "drawer",
+  Login = "login",
+  SignUp = "signUp",
+}
+
+export const enum DrawerPaths {
+  MY_WALLET = "myWallet",
+  DISCOVER_AND_EARN = "discoverAndEarn",
+  SPENDING = "spending",
+  STORES = "stores",
 }
