@@ -11,16 +11,30 @@ import {
 import { styles } from "./styles";
 import { useTheme } from "@/theme";
 import MaterialIcons from "@react-native-vector-icons/material-design-icons";
+import { useNavigation } from "@react-navigation/native";
+import { Paths } from "@/navigation/paths.ts";
 
 function Store(props: StoreProperties) {
   const { colors, fonts } = useTheme();
+  const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={[styles.storeContainer, { backgroundColor: colors.purple100 }]}
+      onPress={() =>
+        navigation.navigate(Paths.Store, {
+          storeId: props.id,
+          store: { ...props },
+        })
+      }
     >
       <View style={styles.logoContainer}>
-        <Image source={{ uri: props.logoKey }} style={styles.logoImage} />
+        <Image
+          source={{ uri: props.logoUrl }}
+          style={styles.logoImage}
+          width={60}
+          height={60}
+        />
         <Text style={[fonts.size_24, { color: "#FFFFFF" }]}>
           {props.businessName}
         </Text>

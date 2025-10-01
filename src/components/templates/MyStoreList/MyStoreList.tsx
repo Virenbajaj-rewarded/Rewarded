@@ -140,7 +140,12 @@ function MyStoreList() {
         );
       }}
       refreshControl={
-        <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        <RefreshControl
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          colors={[colors.purple500]}
+          tintColor={colors.purple500}
+        />
       }
     />
   );

@@ -9,7 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
-import { DrawerNavigator, Login, SignUp } from "@/screens";
+import { DrawerNavigator, Login, SignUp, Store } from "@/screens";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -35,6 +35,24 @@ function ApplicationNavigator() {
           ) : (
             <>
               <Stack.Screen component={DrawerNavigator} name={Paths.Drawer} />
+              <Stack.Group
+                screenOptions={{
+                  headerShown: true,
+                }}
+              >
+                <Stack.Screen
+                  component={Store}
+                  name={Paths.Store}
+                  options={{
+                    headerTitle: "Store",
+                    headerTitleStyle: {
+                      color: "#ffffff",
+                    },
+                    headerBackTitle: "Back",
+                    headerTintColor: "#ffffff",
+                  }}
+                />
+              </Stack.Group>
             </>
           )}
         </Stack.Navigator>

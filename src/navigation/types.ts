@@ -5,6 +5,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { DrawerScreenProps } from "@react-navigation/drawer";
+import { Store as StoreItem } from "@/hooks/domain/stores/schema.ts";
 
 export type RootScreenProps<
   S extends keyof RootStackParamList = keyof RootStackParamList,
@@ -19,6 +20,10 @@ export type DrawerCombinedScreenProps<
 
 export type RootStackParamList = {
   [Paths.Drawer]: NavigatorScreenParams<DrawerStackParamList>;
+  [Paths.Store]: {
+    storeId: string;
+    store?: StoreItem;
+  };
   [Paths.Login]: undefined;
   [Paths.SignUp]: undefined;
 };

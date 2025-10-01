@@ -2,6 +2,7 @@ export const enum Paths {
   Drawer = "drawer",
   Login = "login",
   SignUp = "signUp",
+  Store = "store",
 }
 
 export const enum DrawerPaths {

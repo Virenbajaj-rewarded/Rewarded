@@ -6,9 +6,9 @@ export const storeSchema = z.object({
   businessEmail: z.email(),
   businessPhoneNumber: z.string(),
   businessAddress: z.string(),
-  tgUsername: z.string(),
-  whatsppUsername: z.string(),
-  logoKey: z.string(),
+  tgUsername: z.string().optional(),
+  whatsppUsername: z.string().optional(),
+  logoUrl: z.string().optional(),
 });
 
 export const storesResponseSchema = z.object({
