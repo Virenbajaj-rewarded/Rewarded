@@ -16,6 +16,7 @@ import {
   SignUp,
   Store,
   QRScanner,
+  MerchantQRPayment,
 } from "@/screens";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
 
@@ -77,6 +78,19 @@ function ApplicationNavigator() {
             </>
           )}
           <Stack.Screen name={Paths.QR_SCANNER} component={QRScanner} />
+          <Stack.Screen
+            name={Paths.MERCHANT_QR_PAYMENT}
+            component={MerchantQRPayment}
+            options={{
+              headerShown: true,
+              headerTitle: "Top up / Withdraw points",
+              headerTitleStyle: {
+                color: "#ffffff",
+              },
+              headerBackTitle: "Back",
+              headerTintColor: "#ffffff",
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

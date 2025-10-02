@@ -4,3 +4,4 @@ export { default as DrawerNavigator } from "./Drawer";
 export { default as MerchantDrawerNavigator } from "./MerchantDrawer";
 export * from "./Store";
 export * from "./QRScanner";
+export * from "./MerchantQRPayment";

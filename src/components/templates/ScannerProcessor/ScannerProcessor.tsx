@@ -7,6 +7,7 @@ import {
   Dimensions,
   Platform,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import {
   Camera,
@@ -17,18 +18,20 @@ import {
   useCodeScanner,
 } from "react-native-vision-camera";
 import MaterialIcons from "@react-native-vector-icons/material-design-icons";
-import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "@/theme";
 import { ACCESSIBLE_QR_TYPES, QR_CODE } from "@/types";
-import { safeJsonParse } from "@/utils/helpers.ts";
+import { safeJsonParse, testDelay } from "@/utils/helpers.ts";
+import { Paths } from "@/navigation/paths.ts";
+import { RootScreenProps } from "@/navigation/types.ts";
 
 const { width, height } = Dimensions.get("window");
 const SCAN_SIZE = Math.min(width * 0.7, 350);
 
-export default function ScannerProcessor() {
-  const navigation = useNavigation();
+export default function ScannerProcessor({
+  navigation,
+}: RootScreenProps<Paths.QR_SCANNER>) {
   const device = useCameraDevice("back");
 
   const { fonts, colors } = useTheme();
@@ -38,6 +41,7 @@ export default function ScannerProcessor() {
   const overlaySide = (width - SCAN_SIZE) / 2;
 
   const [torchOn, setTorchOn] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const lastScannedValue = useRef<string | null>(null);
 
@@ -110,9 +114,31 @@ export default function ScannerProcessor() {
           "This QR code is not supported. Please try a different one.",
         );
       }
+
+      processQR(parsedQR);
     },
     regionOfInterest, // Note: works only on IOS
   });
+
+  async function processQR(qrCode: QR_CODE) {
+    try {
+      setLoading(true);
+      switch (qrCode.type) {
+        case "customer_profile":
+          await testDelay(3000);
+          navigation.replace(Paths.MERCHANT_QR_PAYMENT, {
+            consumerId: "1",
+          });
+          break;
+        default:
+          throw new Error("Unknow type");
+      }
+    } catch (e) {
+      Alert.prompt("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (!device) {
     return (
@@ -209,6 +235,20 @@ export default function ScannerProcessor() {
         <View style={[styles.corner, styles.bl]} />
         <View style={[styles.corner, styles.br]} />
       </View>
+
+      {loading && (
+        <View
+          style={{
+            position: "absolute",
+            top: overlayTop + SCAN_SIZE + 40,
+            left: 0,
+            right: 0,
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      )}
 
       <View style={styles.footer}>
         <Text style={styles.hint}>

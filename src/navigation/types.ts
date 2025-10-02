@@ -38,6 +38,9 @@ export type RootStackParamList = {
     store?: StoreItem;
   };
   [Paths.QR_SCANNER]: undefined;
+  [Paths.MERCHANT_QR_PAYMENT]: {
+    consumerId: string;
+  };
   [Paths.Login]: undefined;
   [Paths.SignUp]: undefined;
 };

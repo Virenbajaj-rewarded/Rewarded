@@ -5,6 +5,7 @@ export const enum Paths {
   SignUp = "signUp",
   Store = "store",
   QR_SCANNER = "qrScanner",
+  MERCHANT_QR_PAYMENT = "MerchantQRPayment",
 }
 
 export const enum UserDrawerPaths {
