@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Platform,
+  Alert,
 } from "react-native";
 import {
   Camera,
+  Code,
+  CodeScannerFrame,
   useCameraDevice,
+  useCameraFormat,
   useCodeScanner,
 } from "react-native-vision-camera";
 import MaterialIcons from "@react-native-vector-icons/material-design-icons";
@@ -16,6 +21,8 @@ import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "@/theme";
+import { ACCESSIBLE_QR_TYPES, QR_CODE } from "@/types";
+import { safeJsonParse } from "@/utils/helpers.ts";
 
 const { width, height } = Dimensions.get("window");
 const SCAN_SIZE = Math.min(width * 0.7, 350);
@@ -32,11 +39,79 @@ export default function ScannerProcessor() {
 
   const [torchOn, setTorchOn] = useState(false);
 
+  const lastScannedValue = useRef<string | null>(null);
+
+  const format = useCameraFormat(device, [
+    { videoResolution: { width: 720, height: 1280 } },
+  ]);
+
+  const regionOfInterest = useMemo(() => {
+    if (!format) return undefined;
+
+    const camW = format.videoWidth;
+    const camH = format.videoHeight;
+
+    const scale = Math.max(width / camW, height / camH);
+    const scaledW = camW * scale;
+    const scaledH = camH * scale;
+
+    const offsetX = (scaledW - width) / 2;
+    const offsetY = (scaledH - height) / 2;
+
+    const roiX = (overlaySide + offsetX) / scaledW;
+    const roiY = (overlayTop + offsetY) / scaledH;
+    const roiWidth = SCAN_SIZE / scaledW;
+    const roiHeight = SCAN_SIZE / scaledH;
+
+    return { x: roiX, y: roiY, width: roiWidth, height: roiHeight };
+  }, [format, overlaySide, overlayTop]);
+
+  const isCodeInsideROI = (code: Code, frame: CodeScannerFrame) => {
+    if (!code?.frame || !frame || !regionOfInterest) {
+      return false;
+    }
+
+    const { x: codeX, y: codeY, width: codeW, height: codeH } = code.frame;
+
+    const centerX = codeY + codeW / 2;
+    const centerY = codeX + codeH / 2;
+    const normalizedLeft = 1 - centerX / frame.height;
+    const normalizedTop = centerY / frame.width;
+    return (
+      normalizedLeft >= regionOfInterest.x &&
+      normalizedLeft <= regionOfInterest.x + regionOfInterest.width &&
+      normalizedTop >= regionOfInterest.y &&
+      normalizedTop <= regionOfInterest.y + regionOfInterest.height
+    );
+  };
+
   const codeScanner = useCodeScanner({
     codeTypes: ["qr"],
-    onCodeScanned: (codes) => {
-      console.log("Scanned codes", codes);
+    onCodeScanned: (codes, frame) => {
+      const qr = codes[0];
+      let isInside = true;
+      if (Platform.OS !== "ios") isInside = isCodeInsideROI(qr, frame); // On IOS, we use regionOfInterest
+
+      if (!isInside || !qr.value || qr.value === lastScannedValue.current) {
+        return;
+      }
+
+      lastScannedValue.current = qr.value;
+
+      const parsedQR = safeJsonParse(qr.value) as unknown as QR_CODE;
+
+      if (
+        !parsedQR ||
+        !parsedQR.type ||
+        !ACCESSIBLE_QR_TYPES.includes(parsedQR.type)
+      ) {
+        Alert.alert(
+          "Invalid QR Code",
+          "This QR code is not supported. Please try a different one.",
+        );
+      }
     },
+    regionOfInterest, // Note: works only on IOS
   });
 
   if (!device) {
@@ -64,6 +139,7 @@ export default function ScannerProcessor() {
         isActive={true}
         torch={torchOn ? "on" : "off"}
         codeScanner={codeScanner}
+        format={format}
       />
 
       <View style={[styles.header, { top: insets.top + 16 }]}>
@@ -71,13 +147,18 @@ export default function ScannerProcessor() {
           <MaterialIcons name="arrow-left" size={28} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Скануй QR</Text>
-        <TouchableOpacity onPress={() => setTorchOn((p) => !p)}>
-          <MaterialIcons
-            name={torchOn ? "flash" : "flash-off"}
-            size={28}
-            color="#fff"
-          />
-        </TouchableOpacity>
+
+        {device.hasTorch ? (
+          <TouchableOpacity onPress={() => setTorchOn((p) => !p)}>
+            <MaterialIcons
+              name={torchOn ? "flash" : "flash-off"}
+              size={28}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
       </View>
 
       <View

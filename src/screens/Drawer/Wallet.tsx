@@ -6,6 +6,7 @@ import { useAuth } from "@/services/auth/AuthProvider.tsx";
 import { QrCodeSvg } from "react-native-qr-svg";
 import { useTheme } from "@/theme";
 import ScanQRButton from "@/components/molecules/ScanQRButton";
+import { QR_CODE } from "@/types";
 
 export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths.MY_WALLET>) {
   const { user } = useAuth();
@@ -27,9 +28,9 @@ export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths
       </Text>
       <QrCodeSvg
         value={JSON.stringify({
-          userId: user?.id || "",
-          type: "profile",
-        })}
+          value: user?.id || "",
+          type: "customer_profile",
+        } satisfies QR_CODE)}
         frameSize={200}
         backgroundColor={"transparent"}
         dotColor={"#ffffff"}

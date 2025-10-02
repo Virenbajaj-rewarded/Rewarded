@@ -8,13 +8,13 @@ import { styles } from "./styles";
 import { useCameraPermission } from "react-native-vision-camera";
 
 export default function ScanQRButton() {
-  const { colors, fonts } = useTheme();
+  const { fonts } = useTheme();
   const navigation = useNavigation();
   const { hasPermission, requestPermission } = useCameraPermission();
 
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: colors.purple50 }]}
+      style={[styles.button]}
       onPress={async () => {
         const granted = hasPermission || (await requestPermission());
 
@@ -33,8 +33,8 @@ export default function ScanQRButton() {
         );
       }}
     >
-      <MaterialIcons name={"qrcode-scan"} size={24} />
-      <Text style={[fonts.size_24]}>Scan QR Code</Text>
+      <MaterialIcons name={"qrcode-scan"} size={24} color={"#FFFFFF"} />
+      <Text style={[fonts.size_24, { color: "#FFFFFF" }]}>Scan QR Code</Text>
     </TouchableOpacity>
   );
 }
