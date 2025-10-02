@@ -1,4 +1,8 @@
-import { DrawerPaths, Paths } from "@/navigation/paths";
+import {
+  MerchantDrawerPaths,
+  Paths,
+  UserDrawerPaths,
+} from "@/navigation/paths";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   CompositeScreenProps,
@@ -11,15 +15,24 @@ export type RootScreenProps<
   S extends keyof RootStackParamList = keyof RootStackParamList,
 > = NativeStackScreenProps<RootStackParamList, S>;
 
-export type DrawerCombinedScreenProps<
-  R extends keyof DrawerStackParamList = keyof DrawerStackParamList,
+export type UserDrawerCombinedScreenProps<
+  R extends keyof UserDrawerStackParamList = keyof UserDrawerStackParamList,
 > = CompositeScreenProps<
-  DrawerScreenProps<DrawerStackParamList, R>,
+  DrawerScreenProps<UserDrawerStackParamList, R>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
+export type MerchantDrawerCombinedScreenProps<
+  R extends
+    keyof MerchantDrawerStackParamList = keyof MerchantDrawerStackParamList,
+> = CompositeScreenProps<
+  DrawerScreenProps<MerchantDrawerStackParamList, R>,
   NativeStackScreenProps<RootStackParamList>
 >;
 
 export type RootStackParamList = {
-  [Paths.Drawer]: NavigatorScreenParams<DrawerStackParamList>;
+  [Paths.UserDrawer]: NavigatorScreenParams<UserDrawerStackParamList>;
+  [Paths.MerchantDrawer]: NavigatorScreenParams<MerchantDrawerStackParamList>;
   [Paths.Store]: {
     storeId: string;
     store?: StoreItem;
@@ -28,9 +41,13 @@ export type RootStackParamList = {
   [Paths.SignUp]: undefined;
 };
 
-export type DrawerStackParamList = {
-  [DrawerPaths.MY_WALLET]: undefined;
-  [DrawerPaths.DISCOVER_AND_EARN]: undefined;
-  [DrawerPaths.SPENDING]: undefined;
-  [DrawerPaths.STORES]: undefined;
+export type UserDrawerStackParamList = {
+  [UserDrawerPaths.MY_WALLET]: undefined;
+  [UserDrawerPaths.DISCOVER_AND_EARN]: undefined;
+  [UserDrawerPaths.SPENDING]: undefined;
+  [UserDrawerPaths.STORES]: undefined;
+};
+
+export type MerchantDrawerStackParamList = {
+  [MerchantDrawerPaths.MY_STORE]: undefined;
 };

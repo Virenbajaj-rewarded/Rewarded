@@ -11,6 +11,7 @@ import { useTheme } from "@/theme";
 
 import { DrawerNavigator, Login, SignUp, Store } from "@/screens";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
+import MerchantDrawerNavigator from "@/screens/MerchantDrawer";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -34,25 +35,39 @@ function ApplicationNavigator() {
             </>
           ) : (
             <>
-              <Stack.Screen component={DrawerNavigator} name={Paths.Drawer} />
-              <Stack.Group
-                screenOptions={{
-                  headerShown: true,
-                }}
-              >
-                <Stack.Screen
-                  component={Store}
-                  name={Paths.Store}
-                  options={{
-                    headerTitle: "Store",
-                    headerTitleStyle: {
-                      color: "#ffffff",
-                    },
-                    headerBackTitle: "Back",
-                    headerTintColor: "#ffffff",
-                  }}
-                />
-              </Stack.Group>
+              {user.role === "USER" ? (
+                <Stack.Group>
+                  <Stack.Screen
+                    component={DrawerNavigator}
+                    name={Paths.UserDrawer}
+                  />
+                  <Stack.Group
+                    screenOptions={{
+                      headerShown: true,
+                    }}
+                  >
+                    <Stack.Screen
+                      component={Store}
+                      name={Paths.Store}
+                      options={{
+                        headerTitle: "Store",
+                        headerTitleStyle: {
+                          color: "#ffffff",
+                        },
+                        headerBackTitle: "Back",
+                        headerTintColor: "#ffffff",
+                      }}
+                    />
+                  </Stack.Group>
+                </Stack.Group>
+              ) : (
+                <Stack.Group>
+                  <Stack.Screen
+                    component={MerchantDrawerNavigator}
+                    name={Paths.MerchantDrawer}
+                  />
+                </Stack.Group>
+              )}
             </>
           )}
         </Stack.Navigator>

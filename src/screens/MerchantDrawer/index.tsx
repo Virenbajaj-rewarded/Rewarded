@@ -1,31 +1,31 @@
 import React, { useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
-  UserDrawerStackParamList,
+  MerchantDrawerStackParamList,
   RootScreenProps,
 } from "@/navigation/types.ts";
-import { UserDrawerPaths, Paths } from "@/navigation/paths.ts";
-import Wallet from "@/screens/Drawer/Wallet";
-import Stores from "@/screens/Drawer/Stores";
-import DiscoverAndEarn from "@/screens/Drawer/DiscoverAndEarn";
-import Spending from "@/screens/Drawer/Spending";
+import { MerchantDrawerPaths, Paths } from "@/navigation/paths.ts";
 import MaterialIcons from "@react-native-vector-icons/material-design-icons";
 import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
 import Layout from "@/screens/Drawer/Layout.tsx";
+import MyStore from "@/screens/MerchantDrawer/MyStore.tsx";
 
-const Drawer = createDrawerNavigator<UserDrawerStackParamList>();
+//TODO Refactor
 
-export default function DrawerNavigator({
+const MerchantDrawer = createDrawerNavigator<MerchantDrawerStackParamList>();
+
+export default function MerchantDrawerNavigator({
   navigation,
-}: RootScreenProps<Paths.UserDrawer>) {
+}: RootScreenProps<Paths.MerchantDrawer>) {
   const { signOut } = useAuth();
 
   const [loggingOut, setLoggingOut] = useState(false);
 
   return (
-    <Drawer.Navigator
+    <MerchantDrawer.Navigator
       screenLayout={Layout}
+      //FIXME Reuse it in another Drawer
       screenOptions={{
         headerShown: true,
         drawerType: "front",
@@ -71,38 +71,14 @@ export default function DrawerNavigator({
         },
       }}
     >
-      <Drawer.Screen
-        name={UserDrawerPaths.MY_WALLET}
-        component={Wallet}
+      <MerchantDrawer.Screen
+        name={MerchantDrawerPaths.MY_STORE}
+        component={MyStore}
         options={{
-          drawerLabel: "My Wallet",
-          headerTitle: "My Wallet",
+          drawerLabel: "My Store",
+          headerTitle: "My Store",
         }}
       />
-      <Drawer.Screen
-        name={UserDrawerPaths.STORES}
-        component={Stores}
-        options={{
-          drawerLabel: "My Stores",
-          headerTitle: "My Stores",
-        }}
-      />
-      <Drawer.Screen
-        name={UserDrawerPaths.DISCOVER_AND_EARN}
-        component={DiscoverAndEarn}
-        options={{
-          drawerLabel: "Discover & Earn",
-          headerTitle: "Discover & Earn",
-        }}
-      />
-      <Drawer.Screen
-        name={UserDrawerPaths.SPENDING}
-        component={Spending}
-        options={{
-          drawerLabel: "My Spending",
-          headerTitle: "My Spending",
-        }}
-      />
-    </Drawer.Navigator>
+    </MerchantDrawer.Navigator>
   );
 }

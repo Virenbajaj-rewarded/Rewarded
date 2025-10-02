@@ -1,7 +1,7 @@
 import { View } from "react-native";
-import { DrawerCombinedScreenProps } from "@/navigation/types.ts";
-import { DrawerPaths } from "@/navigation/paths.ts";
+import { UserDrawerCombinedScreenProps } from "@/navigation/types.ts";
+import { UserDrawerPaths } from "@/navigation/paths.ts";
 
-export default function Spending({}: DrawerCombinedScreenProps<DrawerPaths.SPENDING>) {
+export default function Spending({}: UserDrawerCombinedScreenProps<UserDrawerPaths.SPENDING>) {
   return <View></View>;
 }
