@@ -5,7 +5,7 @@ import React from "react";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
 import { QrCodeSvg } from "react-native-qr-svg";
 import { useTheme } from "@/theme";
-import QRScanner from "@/components/templates/QRScanner";
+import ScanQRButton from "@/components/molecules/ScanQRButton";
 
 export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths.MY_WALLET>) {
   const { user } = useAuth();
@@ -37,7 +37,7 @@ export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths
           marginHorizontal: "auto",
         }}
       />
-      <QRScanner />
+      <ScanQRButton />
     </View>
   );
 }

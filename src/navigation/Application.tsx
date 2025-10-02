@@ -9,9 +9,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
-import { DrawerNavigator, Login, SignUp, Store } from "@/screens";
+import {
+  DrawerNavigator,
+  MerchantDrawerNavigator,
+  Login,
+  SignUp,
+  Store,
+  QRScanner,
+} from "@/screens";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
-import MerchantDrawerNavigator from "@/screens/MerchantDrawer";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -70,6 +76,7 @@ function ApplicationNavigator() {
               )}
             </>
           )}
+          <Stack.Screen name={Paths.QR_SCANNER} component={QRScanner} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

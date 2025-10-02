@@ -37,6 +37,7 @@ export type RootStackParamList = {
     storeId: string;
     store?: StoreItem;
   };
+  [Paths.QR_SCANNER]: undefined;
   [Paths.Login]: undefined;
   [Paths.SignUp]: undefined;
 };
