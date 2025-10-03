@@ -5900,6 +5900,11 @@ loose-envify@^1.0.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-react-native@^7.3.4:
+  version "7.3.4"
+  resolved "https://registry.npmjs.org/lottie-react-native/-/lottie-react-native-7.3.4.tgz"
+  integrity sha512-XUh7eGFb7ID8JRdU6U4N4cYQeYmjtdQRvd8ZXJ6xrdSsn5gZD0c79ITOREPcwJg4YupBFHgyV1GXdAHQP+KYUQ==
+
 lower-case@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmjs.org/lower-case/-/lower-case-2.0.2.tgz"
@@ -7101,7 +7106,7 @@ react-native-worklets@^0.5.1, react-native-worklets@>=0.5.0:
     convert-source-map "^2.0.0"
     semver "7.7.2"
 
-react-native@*, react-native@>=0.57, react-native@>=0.59.0, react-native@0.80.2:
+react-native@*, react-native@>=0.46, react-native@>=0.57, react-native@>=0.59.0, react-native@0.80.2:
   version "0.80.2"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.80.2.tgz"
   integrity sha512-6ySV4qTJo/To3lgpG/9Mcg/ZtvExqOVZuT7JVGcO5rS2Bjvl/yUAkQF0hTnbRb2Ch6T5MlKghrM4OeHX+KA9Pg==

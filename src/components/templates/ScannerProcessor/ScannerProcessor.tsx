@@ -25,6 +25,7 @@ import { ACCESSIBLE_QR_TYPES, QR_CODE } from "@/types";
 import { safeJsonParse, testDelay } from "@/utils/helpers.ts";
 import { Paths } from "@/navigation/paths.ts";
 import { RootScreenProps } from "@/navigation/types.ts";
+import { useFocusEffect } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 const SCAN_SIZE = Math.min(width * 0.7, 350);
@@ -44,6 +45,10 @@ export default function ScannerProcessor({
   const [loading, setLoading] = useState(false);
 
   const lastScannedValue = useRef<string | null>(null);
+
+  useFocusEffect(() => {
+    lastScannedValue.current = null;
+  });
 
   const format = useCameraFormat(device, [
     { videoResolution: { width: 720, height: 1280 } },
