@@ -125,7 +125,7 @@ export default function ScannerProcessor({
       setLoading(true);
       switch (qrCode.type) {
         case "customer_profile":
-          await testDelay(3000);
+          await testDelay(500);
           navigation.replace(Paths.MERCHANT_QR_PAYMENT, {
             consumerId: "1",
           });

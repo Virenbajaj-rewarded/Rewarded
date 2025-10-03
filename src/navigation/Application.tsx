@@ -81,15 +81,6 @@ function ApplicationNavigator() {
           <Stack.Screen
             name={Paths.MERCHANT_QR_PAYMENT}
             component={MerchantQRPayment}
-            options={{
-              headerShown: true,
-              headerTitle: "Top up / Withdraw points",
-              headerTitleStyle: {
-                color: "#ffffff",
-              },
-              headerBackTitle: "Back",
-              headerTintColor: "#ffffff",
-            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

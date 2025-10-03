@@ -23,13 +23,15 @@ function SafeScreen({
   style,
   ...props
 }: Properties) {
-  const { layout, navigationTheme, variant } = useTheme();
+  const { layout, navigationTheme } = useTheme();
 
   return (
     <SafeAreaView {...props} mode="padding" style={[layout.flex_1, style]}>
       <StatusBar
         backgroundColor={navigationTheme.colors.background}
-        barStyle={variant === "dark" ? "light-content" : "dark-content"}
+        //FIXME
+        //barStyle={variant === "dark" ? "light-content" : "dark-content"}
+        barStyle={"light-content"}
       />
       <ErrorBoundary onReset={onResetError}>
         {isError ? <DefaultError onReset={onResetError} /> : children}
