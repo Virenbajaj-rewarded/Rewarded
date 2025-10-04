@@ -118,6 +118,7 @@ export default function ScannerProcessor({
           "Invalid QR Code",
           "This QR code is not supported. Please try a different one.",
         );
+        return;
       }
 
       processQR(parsedQR);
@@ -139,7 +140,7 @@ export default function ScannerProcessor({
           throw new Error("Unknow type");
       }
     } catch (e) {
-      Alert.prompt("Something went wrong");
+      Alert.alert("Something went wrong");
     } finally {
       setLoading(false);
     }

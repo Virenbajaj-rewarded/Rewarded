@@ -5,7 +5,6 @@ import React from "react";
 import { useAuth } from "@/services/auth/AuthProvider.tsx";
 import { QrCodeSvg } from "react-native-qr-svg";
 import { useTheme } from "@/theme";
-import ScanQRButton from "@/components/molecules/ScanQRButton";
 import { QR_CODE } from "@/types";
 
 export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths.MY_WALLET>) {
@@ -38,7 +37,6 @@ export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths
           marginHorizontal: "auto",
         }}
       />
-      <ScanQRButton />
     </View>
   );
 }
