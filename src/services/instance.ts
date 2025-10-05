@@ -1,7 +1,8 @@
 import ky from "ky";
 import { getIdToken, peekIdToken } from "@/services/auth";
+import Config from "react-native-config";
 
-const prefixUrl = `https://bk-xvaf.onrender.com/`;
+const prefixUrl = `${Config.API_BASE_URL}`;
 
 export const instance = ky.extend({
   headers: {

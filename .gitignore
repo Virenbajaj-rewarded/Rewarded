@@ -79,3 +79,5 @@ yarn-error.log
 .env.staging
 .env.production
 
+# react-native-config codegen
+ios/tmp.xcconfig
