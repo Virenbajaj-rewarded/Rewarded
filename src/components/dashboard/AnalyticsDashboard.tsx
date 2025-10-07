@@ -1,8 +1,7 @@
-import { MetricsCards } from "./MetricsCards";
-import { AnalyticsCharts } from "./AnalyticsCharts";
-import { CustomerTable } from "./CustomerTable";
-import { OffersTable } from "./OffersTable";
-import { NotesSection } from "./NotesSection";
+import { MetricsCards } from './MetricsCards';
+import { CustomerTable } from './CustomerTable';
+import { OffersTable } from './OffersTable';
+import { NotesSection } from './NotesSection';
 
 export const AnalyticsDashboard = () => {
   return (

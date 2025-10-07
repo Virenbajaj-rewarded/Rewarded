@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Droplets } from 'lucide-react';
@@ -24,13 +30,13 @@ const Register = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match');
       return;
@@ -46,7 +52,7 @@ const Register = () => {
     try {
       const { confirmPassword, ...registrationData } = formData;
       const success = await register(registrationData);
-      
+
       if (success) {
         toast.success('Account created successfully!');
         navigate('/');
@@ -143,9 +149,9 @@ const Register = () => {
                 required
               />
             </div>
-            <Button 
-              type="submit" 
-              className="w-full" 
+            <Button
+              type="submit"
+              className="w-full"
               disabled={isLoading}
               size="lg"
             >
@@ -153,16 +159,19 @@ const Register = () => {
             </Button>
           </form>
           <div className="mt-6 text-center text-sm">
-            <span className="text-muted-foreground">Already have an account? </span>
-            <Link 
-              to="/login" 
+            <span className="text-muted-foreground">
+              Already have an account?{' '}
+            </span>
+            <Link
+              to="/login"
               className="text-primary hover:text-primary/80 underline underline-offset-4"
             >
               Sign in
             </Link>
           </div>
           <p className="mt-4 text-xs text-muted-foreground text-center">
-            A live representative will be in touch to help you get set up within 2 business days and answer any questions.
+            A live representative will be in touch to help you get set up within
+            2 business days and answer any questions.
           </p>
         </CardContent>
       </Card>

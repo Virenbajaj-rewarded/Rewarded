@@ -1,28 +1,80 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Users, TrendingUp, Gift, Star, MoreHorizontal } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Gift, MoreHorizontal, Star, TrendingUp, Users } from 'lucide-react';
+import { api } from '@/lib/api';
+import { useToast } from '@/hooks/use-toast';
 
-const customerMetrics = [
-  { title: "Total Customers", value: "1,247", change: "+12%", icon: Users },
-  { title: "Active This Month", value: "892", change: "+8%", icon: TrendingUp },
-  { title: "Points Earned", value: "45,231", change: "+15%", icon: Gift },
-  { title: "Avg. Rating", value: "4.8", change: "+0.2", icon: Star },
-];
+type CustomersMetricsResponse = {
+  totalCustomers: number;
+  activeThisMonth: number;
+  pointsEarnedTotal: number;
+};
 
 const topCustomers = [
-  { name: "Sarah Johnson", points: 2450, visits: 24, tier: "Gold" },
-  { name: "Michael Chen", points: 1980, visits: 19, tier: "Silver" },
-  { name: "Emily Davis", points: 1750, visits: 18, tier: "Silver" },
-  { name: "David Wilson", points: 1520, visits: 15, tier: "Bronze" },
-  { name: "Lisa Anderson", points: 1340, visits: 14, tier: "Bronze" },
+  { name: 'Sarah Johnson', points: 2450, visits: 24, tier: 'Gold' },
+  { name: 'Michael Chen', points: 1980, visits: 19, tier: 'Silver' },
+  { name: 'Emily Davis', points: 1750, visits: 18, tier: 'Silver' },
+  { name: 'David Wilson', points: 1520, visits: 15, tier: 'Bronze' },
+  { name: 'Lisa Anderson', points: 1340, visits: 14, tier: 'Bronze' },
 ];
 
 export const CustomerAnalytics = () => {
+  const { toast } = useToast();
+  const [metrics, setMetrics] = useState<CustomersMetricsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get<CustomersMetricsResponse>(
+          '/metrics/customers/overview'
+        );
+        setMetrics(data);
+      } catch (err) {
+        toast({
+          title: 'Error',
+          description: 'Failed to load customer metrics',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const customerMetrics = [
+    {
+      title: 'Total Customers',
+      value: metrics ? metrics.totalCustomers.toLocaleString() : '-',
+      change: '+0%',
+      icon: Users,
+    },
+    {
+      title: 'Active This Month',
+      value: metrics ? metrics.activeThisMonth.toLocaleString() : '-',
+      change: '+0%',
+      icon: TrendingUp,
+    },
+    {
+      title: 'Points Earned',
+      value: metrics ? metrics.pointsEarnedTotal.toLocaleString() : '-',
+      change: '+0%',
+      icon: Gift,
+    },
+    {
+      title: 'Avg. Rating',
+      value: '4.8',
+      change: '+0.2',
+      icon: Star,
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {customerMetrics.map((metric) => (
+        {customerMetrics.map(metric => (
           <Card key={metric.title} className="bg-gradient-card shadow-card">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -32,7 +84,9 @@ export const CustomerAnalytics = () => {
                 </Badge>
               </div>
               <div className="mt-4">
-                <div className="text-2xl font-bold text-foreground">{metric.value}</div>
+                <div className="text-2xl font-bold text-foreground">
+                  {loading ? '…' : metric.value}
+                </div>
                 <p className="text-sm text-muted-foreground">{metric.title}</p>
               </div>
             </CardContent>
@@ -47,20 +101,37 @@ export const CustomerAnalytics = () => {
         <CardContent>
           <div className="space-y-4">
             {topCustomers.map((customer, index) => (
-              <div key={customer.name} className="flex items-center justify-between p-4 bg-card/50 rounded-lg">
+              <div
+                key={customer.name}
+                className="flex items-center justify-between p-4 bg-card/50 rounded-lg"
+              >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-primary-foreground font-medium">
                     {index + 1}
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">{customer.name}</p>
-                    <p className="text-sm text-muted-foreground">{customer.visits} visits</p>
+                    <p className="font-medium text-foreground">
+                      {customer.name}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {customer.visits} visits
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="font-medium text-foreground">{customer.points.toLocaleString()} pts</p>
-                    <Badge variant={customer.tier === 'Gold' ? 'default' : customer.tier === 'Silver' ? 'secondary' : 'outline'}>
+                    <p className="font-medium text-foreground">
+                      {customer.points.toLocaleString()} pts
+                    </p>
+                    <Badge
+                      variant={
+                        customer.tier === 'Gold'
+                          ? 'default'
+                          : customer.tier === 'Silver'
+                            ? 'secondary'
+                            : 'outline'
+                      }
+                    >
                       {customer.tier}
                     </Badge>
                   </div>

@@ -1,15 +1,15 @@
 import axios from 'axios';
-import {auth} from './firebase';
+import { auth } from './firebase';
 
 export const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE || 'http://localhost:5001',
+  baseURL: import.meta.env.VITE_API_BASE || 'http://localhost:5001',
 });
 
-api.interceptors.request.use(async (config) => {
-    const user = auth.currentUser;
-    if (user) {
-        const token = await user.getIdToken();
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+api.interceptors.request.use(async config => {
+  const user = auth.currentUser;
+  if (user) {
+    const token = await user.getIdToken();
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
