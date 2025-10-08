@@ -10,7 +10,7 @@ import { Paths } from "@/navigation/paths";
 import { useTheme } from "@/theme";
 
 import {
-  DrawerNavigator,
+  UserDrawerNavigator,
   MerchantDrawerNavigator,
   Login,
   SignUp,
@@ -45,7 +45,7 @@ function ApplicationNavigator() {
               {user.role === "USER" ? (
                 <Stack.Group>
                   <Stack.Screen
-                    component={DrawerNavigator}
+                    component={UserDrawerNavigator}
                     name={Paths.UserDrawer}
                   />
                   <Stack.Group

@@ -12,7 +12,12 @@
           "package_name": "com.rewarded"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1014701049072-67i6vqhkf1t2ml87lvjoj3u7f6ns3n31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAhGnMfeJIBMXhVHOMX4654F8mQ6K8b-58"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014701049072-67i6vqhkf1t2ml87lvjoj3u7f6ns3n31.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1014701049072-9rmk8370qlqm4vuc64jesh4oph11c517.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rewarded.app"
+              }
+            }
+          ]
         }
       }
     }

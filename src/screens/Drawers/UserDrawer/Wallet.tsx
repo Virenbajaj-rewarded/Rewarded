@@ -63,7 +63,7 @@ export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths
             <Text
               style={[fonts.size_16, { color: "#ffffff", fontWeight: "600" }]}
             >
-              {balances.find((balance) => balance.type === "FREE")?.balance ||
+              {balances?.find((balance) => balance.type === "FREE")?.balance ||
                 0}
             </Text>
             <IconByVariant path="coins" width={16} height={16} />
@@ -100,7 +100,7 @@ export default function Wallet({}: UserDrawerCombinedScreenProps<UserDrawerPaths
             <Text
               style={[fonts.size_16, { color: "#ffffff", fontWeight: "600" }]}
             >
-              {balances.find((balance) => balance.type === "PAID")?.balance ||
+              {balances?.find((balance) => balance.type === "PAID")?.balance ||
                 0}
             </Text>
             <IconByVariant path="coins" width={16} height={16} />

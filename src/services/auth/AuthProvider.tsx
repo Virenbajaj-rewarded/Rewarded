@@ -106,7 +106,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   const value: AuthContextShape = {
-    user: profile,
+    user: profile ?? null,
     loading: isLoading,
     signInWithEmail,
     signUpWithEmail,
