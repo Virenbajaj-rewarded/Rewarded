@@ -9,6 +9,8 @@ import { User } from "@/hooks/domain/user/schema.ts";
 
 export const enum UserQueryKey {
   fetchUserProfile = "fetchUserProfile",
+  fetchMerchantBalance = "fetchMerchantBalance",
+  fetchCustomerBalance = "fetchCustomerBalance",
 }
 
 const useFetchProfileQuery = () =>
@@ -17,6 +19,38 @@ const useFetchProfileQuery = () =>
     queryKey: [UserQueryKey.fetchUserProfile],
     staleTime: 0,
     initialData: null,
+  });
+
+export const useFetchMerchantBalanceQuery = () =>
+  useQuery({
+    queryFn: () => UserServices.fetchMerchantBalance(),
+    queryKey: [UserQueryKey.fetchMerchantBalance],
+    staleTime: 300000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    initialData: {
+      type: "PAID",
+      balance: 0,
+    },
+  });
+
+export const useFetchCustomerBalanceQuery = () =>
+  useQuery({
+    queryFn: () => UserServices.fetchCustomerBalance(),
+    queryKey: [UserQueryKey.fetchCustomerBalance],
+    staleTime: 300000,
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+    initialData: [
+      {
+        type: "PAID",
+        balance: 0,
+      },
+      {
+        type: "FREE",
+        balance: 0,
+      },
+    ],
   });
 
 export const useUser = () => {

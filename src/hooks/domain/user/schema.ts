@@ -11,3 +11,10 @@ export const userSchema = z.object({
 });
 
 export type User = z.infer<typeof userSchema>;
+
+export const balanceSchema = z.object({
+  balance: z.number(),
+  type: z.enum(["PAID", "FREE"]),
+});
+
+export type BalanceType = z.infer<typeof balanceSchema>;
