@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
   },
-  userName: {
+  userEmail: {
     fontSize: 18,
     fontWeight: "700",
     color: "#ffffff",

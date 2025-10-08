@@ -7,6 +7,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -21,24 +23,39 @@ import { Paths } from "@/navigation/paths.ts";
 import IconByVariant from "@/components/atoms/IconByVariant";
 import SliderButton from "@/components/atoms/SwipeButton";
 import LottieView from "lottie-react-native";
-import { testDelay } from "@/utils/helpers.ts";
 import { styles } from "./styles";
+import {
+  useFetchCustomerById,
+  useFetchMerchantBalanceQuery,
+} from "@/hooks/domain/user/useUser.ts";
+import { useCreateLedger } from "@/hooks/domain/ledger/useLedger.ts";
+import uuid from "react-native-uuid";
+import { Skeleton } from "@/components/atoms/Skeleton";
 
 const { width: screenWidth } = Dimensions.get("window");
 
 export default function MerchantQRPayment({
   navigation,
+  route,
 }: RootScreenProps<Paths.MERCHANT_QR_PAYMENT>) {
-  const consumer = {
-    id: "123",
-    name: "Test User",
-  };
+  const { mutate: submitTransaction } = useCreateLedger();
+
+  const {
+    isLoading: isLoadingConsumer,
+    isPending,
+    data: consumer,
+  } = useFetchCustomerById(route.params.consumerId);
 
   const [amount, setAmount] = useState("");
   const [comment, setComment] = useState("");
   const [warning, setWarning] = useState(false);
   const [isTopUp, setIsTopUp] = useState(true);
-  const [balance, setBalance] = useState(887.88);
+
+  const {
+    isRefetching: isRefetchingBalance,
+    isLoading: isLoadingBalance,
+    data: balance,
+  } = useFetchMerchantBalanceQuery();
 
   const amountInputRef = useRef<TextInput>(null);
   const commentInputRef = useRef<TextInput>(null);
@@ -65,22 +82,40 @@ export default function MerchantQRPayment({
 
   const handleConfirm = async () => {
     const parsedAmount = parseFloat(amount);
-    await testDelay(500);
 
-    if (isTopUp) {
-      setBalance(balance - parsedAmount);
-    } else {
-      setBalance(balance + parsedAmount);
-    }
+    submitTransaction(
+      {
+        type: isTopUp ? "REDEEM" : "EARN",
+        value: {
+          consumerId: consumer?.id || "",
+          idempotencyKey: uuid.v4(),
+          amount: parsedAmount,
+          comment,
+        },
+      },
+      {
+        onSuccess: (tx) => {
+          confettiRef.current?.play(0);
+          setTimeout(() => {
+            navigation.goBack();
+          }, 1500);
+        },
+        onError: (e) => {
+          const error = e as Error;
 
-    confettiRef.current?.play(0);
-
-    setTimeout(() => {
-      navigation.goBack();
-    }, 2000);
+          Alert.alert(
+            "Unexpected error",
+            error?.message || "Something went wrong",
+          );
+        },
+      },
+    );
   };
 
   const handleInputChange = (text: string) => {
+    if (!balance) {
+      return;
+    }
     let formatted = text.replace(",", ".");
 
     formatted = formatted.replace(/[^0-9.]/g, "");
@@ -120,7 +155,7 @@ export default function MerchantQRPayment({
     setAmount(formatted);
 
     const numericValue = parseFloat(formatted);
-    if (!isNaN(numericValue) && numericValue > balance) {
+    if (!isNaN(numericValue) && numericValue > balance!.balance) {
       setWarning(true);
     } else {
       setWarning(false);
@@ -143,10 +178,23 @@ export default function MerchantQRPayment({
             </TouchableOpacity>
 
             <View style={styles.userRow}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>ЮМ</Text>
-              </View>
-              <Text style={styles.userName}>{consumer.name}</Text>
+              <Skeleton
+                loading={isLoadingConsumer}
+                width={40}
+                height={40}
+                style={{
+                  borderRadius: 20,
+                  marginRight: 12,
+                }}
+              >
+                <View style={styles.avatar}>
+                  <Text style={styles.avatarText}>ЮМ</Text>
+                </View>
+              </Skeleton>
+
+              <Skeleton loading={isLoadingConsumer} height={24} width={135}>
+                <Text style={styles.userEmail}>{consumer?.email}</Text>
+              </Skeleton>
             </View>
           </View>
           <Animated.View style={[styles.content, animatedStyle]}>
@@ -161,7 +209,13 @@ export default function MerchantQRPayment({
             >
               <MaterialIcons name={"wallet"} size={16} color={"#ffffff"} />
               <View style={styles.balanceLabelWrapper}>
-                <Text style={styles.balanceLabel}>{balance}</Text>
+                {isLoadingBalance || isRefetchingBalance ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <Text style={styles.balanceLabel}>
+                    {balance?.balance || 0}
+                  </Text>
+                )}
                 <IconByVariant path="coins" width={16} height={16} />
               </View>
             </View>
@@ -223,7 +277,7 @@ export default function MerchantQRPayment({
 
             <SliderButton
               onConfirm={handleConfirm}
-              disabled={!amount || warning}
+              disabled={!amount || warning || isPending}
               buttonWidth={screenWidth - 32}
             />
           </View>

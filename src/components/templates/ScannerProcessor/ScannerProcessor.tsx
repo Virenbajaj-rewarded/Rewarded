@@ -22,7 +22,7 @@ import { styles } from "./styles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTheme } from "@/theme";
 import { ACCESSIBLE_QR_TYPES, QR_CODE } from "@/types";
-import { safeJsonParse, testDelay } from "@/utils/helpers.ts";
+import { safeJsonParse } from "@/utils/helpers.ts";
 import { Paths } from "@/navigation/paths.ts";
 import { RootScreenProps } from "@/navigation/types.ts";
 import { useFocusEffect } from "@react-navigation/native";
@@ -131,9 +131,8 @@ export default function ScannerProcessor({
       setLoading(true);
       switch (qrCode.type) {
         case "customer_profile":
-          await testDelay(500);
           navigation.replace(Paths.MERCHANT_QR_PAYMENT, {
-            consumerId: "1",
+            consumerId: qrCode.value,
           });
           break;
         default:

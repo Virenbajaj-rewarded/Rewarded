@@ -11,6 +11,7 @@ export const enum UserQueryKey {
   fetchUserProfile = "fetchUserProfile",
   fetchMerchantBalance = "fetchMerchantBalance",
   fetchCustomerBalance = "fetchCustomerBalance",
+  fetchCustomerById = "fetchCustomerById",
 }
 
 const useFetchProfileQuery = () =>
@@ -18,7 +19,6 @@ const useFetchProfileQuery = () =>
     queryFn: () => UserServices.fetchProfile(),
     queryKey: [UserQueryKey.fetchUserProfile],
     staleTime: 0,
-    initialData: null,
   });
 
 export const useFetchMerchantBalanceQuery = () =>
@@ -26,9 +26,9 @@ export const useFetchMerchantBalanceQuery = () =>
     queryFn: () => UserServices.fetchMerchantBalance(),
     queryKey: [UserQueryKey.fetchMerchantBalance],
     staleTime: 300000,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-    initialData: {
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+    placeholderData: {
       type: "PAID",
       balance: 0,
     },
@@ -41,7 +41,7 @@ export const useFetchCustomerBalanceQuery = () =>
     staleTime: 300000,
     refetchOnWindowFocus: "always",
     refetchOnReconnect: "always",
-    initialData: [
+    placeholderData: [
       {
         type: "PAID",
         balance: 0,
@@ -51,6 +51,14 @@ export const useFetchCustomerBalanceQuery = () =>
         balance: 0,
       },
     ],
+  });
+
+export const useFetchCustomerById = (id?: string) =>
+  useQuery({
+    queryFn: () => UserServices.fetchUserById(id!),
+    queryKey: [UserQueryKey.fetchCustomerById, id],
+    staleTime: 60 * 1000,
+    enabled: !!id,
   });
 
 export const useUser = () => {

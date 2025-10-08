@@ -14,7 +14,6 @@ export const UserServices = {
     return balanceSchema.parse(response);
   },
   fetchCustomerBalance: async () => {
-    console.log("Fetch");
     const response = await instance
       .get<BalanceType[]>(`users/me/balances`)
       .json();
