@@ -1,5 +1,7 @@
 package com.rewarded
 
+import com.bugsnag.android.Bugsnag
+import com.bugsnag.android.Configuration
 import android.app.Application
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
@@ -34,6 +36,10 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
+      Bugsnag.start(this, Configuration.load(this).apply {
+          enabledReleaseStages = setOf("production", "development", "staging")
+          releaseStage = BuildConfig.RELEASE_STAGE
+      })
     loadReactNative(this)
   }
 }

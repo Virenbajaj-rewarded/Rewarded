@@ -129,6 +129,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            buildConfigField 'String', 'RELEASE_STAGE', '"local"'
         }
         release {
             // Caution! In production, you need to generate your own keystore file.

@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react";
+import React, { PropsWithChildren } from "react";
 import type { SafeAreaViewProps } from "react-native-safe-area-context";
 
 import { StatusBar } from "react-native";
@@ -7,7 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/theme";
 
 import DefaultError from "@/components/molecules/DefaultError";
-import ErrorBoundary from "@/components/organisms/ErrorBoundary";
+
+import Bugsnag from "@bugsnag/react-native";
 
 type Properties = PropsWithChildren<
   {
@@ -25,6 +26,8 @@ function SafeScreen({
 }: Properties) {
   const { layout, navigationTheme } = useTheme();
 
+  const ErrorBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
+
   return (
     <SafeAreaView {...props} mode="padding" style={[layout.flex_1, style]}>
       <StatusBar
@@ -33,9 +36,7 @@ function SafeScreen({
         //barStyle={variant === "dark" ? "light-content" : "dark-content"}
         barStyle={"light-content"}
       />
-      <ErrorBoundary onReset={onResetError}>
-        {isError ? <DefaultError onReset={onResetError} /> : children}
-      </ErrorBoundary>
+      <ErrorBoundary FallbackComponent={DefaultError}>{children}</ErrorBoundary>
     </SafeAreaView>
   );
 }

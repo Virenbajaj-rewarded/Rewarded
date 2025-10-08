@@ -1018,7 +1018,7 @@
     "@babel/plugin-transform-modules-commonjs" "^7.27.1"
     "@babel/plugin-transform-typescript" "^7.27.1"
 
-"@babel/runtime@*", "@babel/runtime@^7.12.5", "@babel/runtime@^7.25.0", "@babel/runtime@^7.26.10", "@babel/runtime@^7.27.6", "@babel/runtime@^7.8.4":
+"@babel/runtime@*", "@babel/runtime@^7.25.0", "@babel/runtime@^7.26.10", "@babel/runtime@^7.27.6", "@babel/runtime@^7.8.4":
   version "7.28.2"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.28.2.tgz"
   integrity sha512-KHp2IflsnGywDjBWDkR9iEqiWSpc8GIi0lgTT3mOElT0PP1tG26P4tmFI2YvAdzgq9RGyoHZQEIEdZy6Ec5xCA==
@@ -1065,6 +1065,102 @@
   dependencies:
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
+
+"@bugsnag/cli@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.npmjs.org/@bugsnag/cli/-/cli-3.4.1.tgz"
+  integrity sha512-/hb1Rj+zYqySsB2XY2qdQcXIakG9weMtwC3+BkpxcZHbxQff+EWCtko7hOBSWlWaDFXYXre4XIOKjMX2TTj8jQ==
+  dependencies:
+    yaml "^2.7.0"
+
+"@bugsnag/core@^8.0.0", "@bugsnag/core@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/core/-/core-8.6.0.tgz"
+  integrity sha512-94Jo443JegaiKV8z8NXMFdyTGubiUnwppWhq3kG2ldlYKtEvrmIaO5+JA58B6oveySvoRu3cCe2W9ysY7G7mDw==
+  dependencies:
+    "@bugsnag/cuid" "^3.0.0"
+    "@bugsnag/safe-json-stringify" "^6.0.0"
+    error-stack-parser "^2.0.3"
+    iserror "^0.0.2"
+    stack-generator "^2.0.3"
+
+"@bugsnag/cuid@^3.0.0":
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/@bugsnag/cuid/-/cuid-3.2.1.tgz"
+  integrity sha512-zpvN8xQ5rdRWakMd/BcVkdn2F8HKlDSbM3l7duueK590WmI1T0ObTLc1V/1e55r14WNjPd5AJTYX4yPEAFVi+Q==
+
+"@bugsnag/delivery-react-native@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/delivery-react-native/-/delivery-react-native-8.6.0.tgz"
+  integrity sha512-s+KARw1KdE0LHycU4BSd01lzemDi/E128prj5XCRtN/5Hszsa9NSe5sGmaOb0wfz5gfJkgWs7LwFzNiUw0Yftw==
+
+"@bugsnag/plugin-console-breadcrumbs@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-console-breadcrumbs/-/plugin-console-breadcrumbs-8.6.0.tgz"
+  integrity sha512-rBrUf1DN9EBb6LrpZw9sGzIfRcAH7GhCE7KS3TYjb5okilLqFZ2/IpGlM0lGRaIHtYoJr8nSKMYTiwAIOEYqGw==
+
+"@bugsnag/plugin-network-breadcrumbs@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-network-breadcrumbs/-/plugin-network-breadcrumbs-8.6.0.tgz"
+  integrity sha512-QLXbGTp74m1fh7Un/feAm4ZRMA+28Ry9hvlZ2w5dN9W4zotLB8q8l1PBumPJS8ZXTsiXL6I18HSt4BZBUhohmQ==
+
+"@bugsnag/plugin-react-native-client-sync@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react-native-client-sync/-/plugin-react-native-client-sync-8.6.0.tgz"
+  integrity sha512-UK3qOWSb0GZQKNKm0eS6/ctKN+f525AcgUcFcVuXlFAXTgISezRek0Wzaw+3ExvaKn5ROtGLIVEEMbg6iyztKg==
+
+"@bugsnag/plugin-react-native-event-sync@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react-native-event-sync/-/plugin-react-native-event-sync-8.6.0.tgz"
+  integrity sha512-qAPevlVcboiP7A2baOFwc8Zy5BFsfw16zlXXarHgR1q8LpQoLRzDsFVRmmTqxJQyhxaS7aruki5KlDrOJ7gBJg==
+
+"@bugsnag/plugin-react-native-global-error-handler@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react-native-global-error-handler/-/plugin-react-native-global-error-handler-8.6.0.tgz"
+  integrity sha512-kJrMKulgp66V11OkVL/Nv/5e6T/UKr9BXkEWy3hpZSUDNbBE5Xq+hQT6OuFV0greNeKNtg9IHptBxtlX3sn0AQ==
+
+"@bugsnag/plugin-react-native-hermes@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react-native-hermes/-/plugin-react-native-hermes-8.6.0.tgz"
+  integrity sha512-j8lLEMi3fgnJfxEUGjyjEA5eJenTuZehnSZ2EbGN3Z8Khddpz1aPGli9E1cnV4rwlYiR4+O/0M61qKoE80+jXw==
+
+"@bugsnag/plugin-react-native-session@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react-native-session/-/plugin-react-native-session-8.6.0.tgz"
+  integrity sha512-Q/6KZMypvp8/wLBltUhTG/zj8i7VfoaQ7bgebFeRtFc2/+JHBn920ZjqMgkgB7OPxU8oprghKWasPAVcGIDr6g==
+
+"@bugsnag/plugin-react-native-unhandled-rejection@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react-native-unhandled-rejection/-/plugin-react-native-unhandled-rejection-8.6.0.tgz"
+  integrity sha512-pYhPrjE7+kPpJQHqJw+kjAo7BGldNnqhCNuPHqI7modIc78mxmG7ryHlfRjEKFnOZ4F1TwJio87odPoE6U+Lsg==
+
+"@bugsnag/plugin-react@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/plugin-react/-/plugin-react-8.6.0.tgz"
+  integrity sha512-bJP2N5XZZb7Kzb7ZS60peTskWdSIC210w7ufPKyL/WYLFnF/BwC0VKt6BcxIOzCqdUBmPKGIdbRLInnStH3thQ==
+
+"@bugsnag/react-native@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.npmjs.org/@bugsnag/react-native/-/react-native-8.6.0.tgz"
+  integrity sha512-gzeuVYZNi/kujzn0rRtkeBD/c4neSgNBbiEr1v6jD51/w/hadMc1O0v3qZM/b4FtVdyZmEEltGfTd/mnoQffwQ==
+  dependencies:
+    "@bugsnag/core" "^8.6.0"
+    "@bugsnag/delivery-react-native" "^8.6.0"
+    "@bugsnag/plugin-console-breadcrumbs" "^8.6.0"
+    "@bugsnag/plugin-network-breadcrumbs" "^8.6.0"
+    "@bugsnag/plugin-react" "^8.6.0"
+    "@bugsnag/plugin-react-native-client-sync" "^8.6.0"
+    "@bugsnag/plugin-react-native-event-sync" "^8.6.0"
+    "@bugsnag/plugin-react-native-global-error-handler" "^8.6.0"
+    "@bugsnag/plugin-react-native-hermes" "^8.6.0"
+    "@bugsnag/plugin-react-native-session" "^8.6.0"
+    "@bugsnag/plugin-react-native-unhandled-rejection" "^8.6.0"
+    iserror "^0.0.2"
+
+"@bugsnag/safe-json-stringify@^6.0.0":
+  version "6.1.0"
+  resolved "https://registry.npmjs.org/@bugsnag/safe-json-stringify/-/safe-json-stringify-6.1.0.tgz"
+  integrity sha512-ImA35rnM7bGr+J30R979FQ95BhRB4UO1KfJA0J2sVqc8nwnrS9hhE5mkTmQWMs8Vh1Da+hkLKs5jJB4JjNZp4A==
 
 "@callstack/react-theme-provider@^3.0.9":
   version "3.0.9"
@@ -4121,7 +4217,7 @@ error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
-error-stack-parser@^2.0.6:
+error-stack-parser@^2.0.3, error-stack-parser@^2.0.6:
   version "2.1.4"
   resolved "https://registry.npmjs.org/error-stack-parser/-/error-stack-parser-2.1.4.tgz"
   integrity sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ==
@@ -4857,6 +4953,11 @@ fs.realpath@^1.0.0:
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
+fsevents@^2.3.2:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
+
 function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
@@ -5537,6 +5638,11 @@ isarray@^2.0.5:
   version "2.0.5"
   resolved "https://registry.npmjs.org/isarray/-/isarray-2.0.5.tgz"
   integrity sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==
+
+iserror@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/iserror/-/iserror-0.0.2.tgz"
+  integrity sha512-oKGGrFVaWwETimP3SiWwjDeY27ovZoyZPHtxblC4hCq9fXxed/jasx+ATWFFjCVSRZng8VTMsN1nDnGo6zMBSw==
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -6944,13 +7050,6 @@ react-devtools-core@^6.1.1:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-error-boundary@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/react-error-boundary/-/react-error-boundary-5.0.0.tgz"
-  integrity sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-
 react-freeze@^1.0.0:
   version "1.0.4"
   resolved "https://registry.npmjs.org/react-freeze/-/react-freeze-1.0.4.tgz"
@@ -7179,7 +7278,7 @@ react-refresh@^0.14.0:
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.14.2.tgz"
   integrity sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==
 
-react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^18 || ^19", react@^19.1.0, "react@>= 16.8.0", "react@>= 18.2.0", react@>=16, react@>=16.13.1, react@>=16.3.0, react@>=16.8, react@>=17.0.0, react@19.1.0:
+react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^18 || ^19", react@^19.1.0, "react@>= 16.8.0", "react@>= 18.2.0", react@>=16, react@>=16.3.0, react@>=16.8, react@>=17.0.0, react@19.1.0:
   version "19.1.0"
   resolved "https://registry.npmjs.org/react/-/react-19.1.0.tgz"
   integrity sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==
@@ -7705,6 +7804,13 @@ stable-hash-x@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/stable-hash-x/-/stable-hash-x-0.2.0.tgz"
   integrity sha512-o3yWv49B/o4QZk5ZcsALc6t0+eCelPc44zZsLtCQnZPDwFpDYSWcDnrv2TtMmMbQ7uKo3J0HTURCqckw23czNQ==
+
+stack-generator@^2.0.3:
+  version "2.0.10"
+  resolved "https://registry.npmjs.org/stack-generator/-/stack-generator-2.0.10.tgz"
+  integrity sha512-mwnua/hkqM6pF4k8SnmZ2zfETsRUpWXREfA/goT8SLCV4iOFa4bzOX2nDipWAZFPTjLvQB82f5yaodMVhK0yJQ==
+  dependencies:
+    stackframe "^1.3.4"
 
 stack-utils@^2.0.3:
   version "2.0.6"
@@ -8574,7 +8680,7 @@ yallist@^3.0.2:
   resolved "https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz"
   integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 
-yaml@^2.2.1:
+yaml@^2.2.1, yaml@^2.7.0:
   version "2.7.1"
   resolved "https://registry.npmjs.org/yaml/-/yaml-2.7.1.tgz"
   integrity sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ==

@@ -1,6 +1,7 @@
 import ky from "ky";
 import { getIdToken, peekIdToken } from "@/services/auth";
 import Config from "react-native-config";
+import Bugsnag from "@bugsnag/react-native";
 
 const prefixUrl = `${Config.API_BASE_URL}`;
 
@@ -33,6 +34,28 @@ export const instance = ky.extend({
           request.headers.set("Authorization", `Bearer ${fresh}`);
           return ky(request);
         }
+
+        if (response.ok || [401, 404].includes(response.status)) {
+          return response;
+        }
+
+        let responseBody: string | undefined;
+        try {
+          const cloned = response.clone();
+          responseBody = await cloned.text();
+        } catch (err) {
+          responseBody = "<unreadable body>";
+        }
+
+        Bugsnag.notify(new Error(`API Error: ${response.status}`), (event) => {
+          event.severity = "warning";
+          event.context = `${request.method?.toUpperCase()} ${request.url}`;
+          event.addMetadata("response", {
+            status: response.status,
+            body: responseBody,
+          });
+        });
+
         return response;
       },
     ],

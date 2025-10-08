@@ -43,7 +43,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -71,5 +71,18 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your Camera.</string>
+	<key>bugsnag</key>
+	<dict>
+		<key>apiKey</key>
+		<string>bb037ad2388a55bfde03159a69ec4296</string>
+		<key>enabledReleaseStages</key>
+        <array>
+        			<string>production</string>
+        			<string>development</string>
+        			<string>staging</string>
+        		</array>
+        		<key>releaseStage</key>
+        		<string>$(BUG_SNAG_RELEASE_TYPE)</string>
+	</dict>
 </dict>
 </plist>

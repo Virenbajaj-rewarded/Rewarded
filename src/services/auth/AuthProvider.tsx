@@ -16,6 +16,7 @@ import { useUser } from "@/hooks";
 import { User } from "@/hooks/domain/user/schema.ts";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { UserQueryKey } from "@/hooks/domain/user/useUser.ts";
+import Bugsnag from "@bugsnag/react-native";
 
 type AuthContextShape = {
   user: User | null;
@@ -50,6 +51,12 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }, 300);
     }
   }, [isFetched]);
+
+  useEffect(() => {
+    if (profile) {
+      Bugsnag.setUser(profile.id, profile.email);
+    }
+  }, [profile]);
 
   const signInWithEmail = async (email: string, password: string) => {
     try {
