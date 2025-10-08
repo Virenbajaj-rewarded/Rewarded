@@ -16,9 +16,10 @@ import { AuthProvider } from "@/services/auth/AuthProvider";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { AppState } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
+import Config from "react-native-config";
 
 GoogleSignin.configure({
-  webClientId: "",
+  webClientId: Config.WEB_CLIENT_ID,
 });
 
 focusManager.setEventListener((handleFocus) => {

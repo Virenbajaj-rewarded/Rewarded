@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   logoImage: {
     width: 60,
     height: 60,
-    borderRadius: "50%",
+    borderRadius: 30,
   },
   infoList: {
     gap: 8,

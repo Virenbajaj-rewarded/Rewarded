@@ -1,6 +1,7 @@
 declare module "react-native-config" {
   export interface NativeConfig {
     API_BASE_URL?: string;
+    WEB_CLIENT_ID?: string;
   }
 
   export const Config: NativeConfig;

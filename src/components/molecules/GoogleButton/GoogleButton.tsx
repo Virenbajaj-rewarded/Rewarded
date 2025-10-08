@@ -26,7 +26,14 @@ export default function GoogleButton(
       await signInWithGoogle();
     } catch (e) {
       const error = e as Error;
-      Alert.alert(error?.message || "Error", "Please try again later", []);
+      Alert.alert(
+        error?.message || "Error",
+        "Please try again later",
+        [{ text: "OK" }],
+        {
+          cancelable: true,
+        },
+      );
     } finally {
       setGoogleLoading(false);
     }

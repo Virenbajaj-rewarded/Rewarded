@@ -1,13 +1,7 @@
 import type { RootScreenProps } from "@/navigation/types";
 
 import { useState } from "react";
-import {
-  Keyboard,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Keyboard, Text, TouchableWithoutFeedback, View } from "react-native";
 import { z } from "zod";
 
 import { Paths } from "@/navigation/paths";
@@ -181,18 +175,19 @@ function Login({ navigation }: RootScreenProps<Paths.Login>) {
 
             <GoogleButton disabled={loading} />
 
-            <View
-              style={[layout.row, layout.justifyBetween, gutters.marginTop_16]}
-            >
-              <TouchableOpacity
-                onPress={() => navigation.navigate(Paths.SignUp)}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <Text style={[fonts.size_12, { color: "#FFFFFF" }]}>
-                  Create account
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {/*<View*/}
+            {/*  style={[layout.row, layout.justifyBetween, gutters.marginTop_16]}*/}
+            {/*>*/}
+            {/*  <TouchableOpacity*/}
+            {/*    disabled={true}*/}
+            {/*    onPress={() => navigation.navigate(Paths.SignUp)}*/}
+            {/*    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}*/}
+            {/*  >*/}
+            {/*    <Text style={[fonts.size_12, { color: "#FFFFFF" }]}>*/}
+            {/*      Create account*/}
+            {/*    </Text>*/}
+            {/*  </TouchableOpacity>*/}
+            {/*</View>*/}
           </View>
         </View>
       </TouchableWithoutFeedback>
