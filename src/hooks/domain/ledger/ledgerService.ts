@@ -11,7 +11,6 @@ export const LedgerService = {
   create: async (payload: LedgerRequest): Promise<Transaction> => {
     const body = ledgerRequestSchema.parse(payload);
 
-    console.log("body", body);
     const response = await instance
       .post("ledger", {
         json: body,

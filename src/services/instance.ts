@@ -35,26 +35,37 @@ export const instance = ky.extend({
           return ky(request);
         }
 
-        if (response.ok || [401, 404].includes(response.status)) {
-          return response;
-        }
+        if (!response.ok) {
+          let errorBody: any = null;
+          try {
+            errorBody = await response.clone().json();
+          } catch {
+            try {
+              errorBody = await response.clone().text();
+            } catch {
+              errorBody = null;
+            }
+          }
 
-        let responseBody: string | undefined;
-        try {
-          const cloned = response.clone();
-          responseBody = await cloned.text();
-        } catch (err) {
-          responseBody = "<unreadable body>";
-        }
+          const message =
+            typeof errorBody === "string"
+              ? errorBody
+              : errorBody?.message || errorBody?.error || "Unknown error";
 
-        Bugsnag.notify(new Error(`API Error: ${response.status}`), (event) => {
-          event.severity = "warning";
-          event.context = `${request.method?.toUpperCase()} ${request.url}`;
-          event.addMetadata("response", {
-            status: response.status,
-            body: responseBody,
-          });
-        });
+          Bugsnag.notify(
+            new Error(`API Error: ${response.status}`),
+            (event) => {
+              event.severity = "warning";
+              event.context = `${request.method?.toUpperCase()} ${request.url}`;
+              event.addMetadata("response", {
+                status: response.status,
+                body: errorBody,
+              });
+            },
+          );
+
+          throw new Error(message);
+        }
 
         return response;
       },
