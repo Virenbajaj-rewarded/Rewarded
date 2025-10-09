@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1014701049072-9rmk8370qlqm4vuc64jesh4oph11c517.apps.googleusercontent.com</string>
+	<string>1014701049072-v1ppbneeqv37r0dtgoc8a0tdqpomm5li.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1014701049072-9rmk8370qlqm4vuc64jesh4oph11c517</string>
+	<string>com.googleusercontent.apps.1014701049072-v1ppbneeqv37r0dtgoc8a0tdqpomm5li</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1014701049072-7e3fpikl6dh08h9gj2k5kkd40c2fhc8u.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDOXgvvsUMm06k63L-_d9h3XxhrEDa4D6E</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.rewarded.app</string>
+	<string>com.rewarded</string>
 	<key>PROJECT_ID</key>
 	<string>rewardedapp-2ee82</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1014701049072:ios:e881fa7787f45bb68a2e35</string>
+	<string>1:1014701049072:ios:d744ae503222154e8a2e35</string>
 </dict>
 </plist>

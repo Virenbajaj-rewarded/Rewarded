@@ -454,6 +454,7 @@
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Rewarded/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -465,7 +466,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded;
 				PRODUCT_NAME = Rewarded;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -488,6 +489,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				INFOPLIST_FILE = Rewarded/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -499,7 +501,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded;
 				PRODUCT_NAME = Rewarded;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -805,6 +807,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				INFOPLIST_FILE = Rewarded/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -816,7 +819,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded;
 				PRODUCT_NAME = Rewarded;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -954,6 +957,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				INFOPLIST_FILE = Rewarded/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -965,7 +969,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rewarded;
 				PRODUCT_NAME = Rewarded;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
