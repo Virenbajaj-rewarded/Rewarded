@@ -5,7 +5,7 @@ export const ledgerRequestSchema = z.object({
   value: z.object({
     consumerId: z.uuid(),
     idempotencyKey: z.uuid(),
-    amount: z.number().int().positive(),
+    amount: z.number().nonnegative(),
     comment: z.string().optional(),
   }),
 });

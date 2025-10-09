@@ -31,6 +31,7 @@ import {
 import { useCreateLedger } from "@/hooks/domain/ledger/useLedger.ts";
 import uuid from "react-native-uuid";
 import { Skeleton } from "@/components/atoms/Skeleton";
+import { useFocusEffect } from "@react-navigation/native";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -63,6 +64,17 @@ export default function MerchantQRPayment({
 
   const translateY = useSharedValue(50);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      confettiRef.current?.reset?.();
+      confettiRef.current?.pause?.();
+      return () => {
+        confettiRef.current?.reset?.();
+        confettiRef.current?.pause?.();
+      };
+    }, []),
+  );
+
   useEffect(() => {
     translateY.value = withTiming(0, {
       duration: 400,
@@ -83,13 +95,14 @@ export default function MerchantQRPayment({
   const handleConfirm = async () => {
     const parsedAmount = parseFloat(amount);
 
+    const type = isTopUp ? "EARN" : "REDEEM";
     submitTransaction(
       {
-        type: isTopUp ? "REDEEM" : "EARN",
+        type,
         value: {
           consumerId: consumer?.id || "",
           idempotencyKey: uuid.v4(),
-          amount: parsedAmount,
+          amount: type === "EARN" ? parsedAmount * 100 : parsedAmount,
           comment,
         },
       },
@@ -98,7 +111,7 @@ export default function MerchantQRPayment({
           confettiRef.current?.play(0);
           setTimeout(() => {
             navigation.goBack();
-          }, 1500);
+          }, 2000);
         },
         onError: (e) => {
           const error = e as Error;
@@ -155,7 +168,7 @@ export default function MerchantQRPayment({
     setAmount(formatted);
 
     const numericValue = parseFloat(formatted);
-    if (!isNaN(numericValue) && numericValue > balance!.balance) {
+    if (!isNaN(numericValue) && numericValue > balance!.balance && isTopUp) {
       setWarning(true);
     } else {
       setWarning(false);
@@ -242,7 +255,14 @@ export default function MerchantQRPayment({
                     backgroundColor: "#3c83f6",
                   },
                 ]}
-                onPress={() => setIsTopUp(true)}
+                onPress={() => {
+                  const numericValue = parseFloat(amount || "0");
+                  if (!isNaN(numericValue) && numericValue > balance!.balance) {
+                    setWarning(true);
+                  }
+
+                  setIsTopUp(true);
+                }}
               >
                 <Text style={styles.optionLabel}>Top up</Text>
               </TouchableOpacity>
@@ -253,7 +273,12 @@ export default function MerchantQRPayment({
                     backgroundColor: "#3c83f6",
                   },
                 ]}
-                onPress={() => setIsTopUp(false)}
+                onPress={() => {
+                  if (warning) {
+                    setWarning(false);
+                  }
+                  setIsTopUp(false);
+                }}
               >
                 <Text style={styles.optionLabel}>Withdraw</Text>
               </TouchableOpacity>
