@@ -1,4 +1,4 @@
-package com.rewarded
+package com.rewarded.app2025
 
 import com.bugsnag.android.Bugsnag
 import com.bugsnag.android.Configuration

@@ -1,4 +1,4 @@
-package com.rewarded
+package com.rewarded.app2025
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity
