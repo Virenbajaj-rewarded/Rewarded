@@ -177,7 +177,7 @@ export default function ScannerProcessor({
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-left" size={28} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Скануй QR</Text>
+        <Text style={styles.headerTitle}>Scan QR</Text>
 
         {device.hasTorch ? (
           <TouchableOpacity onPress={() => setTorchOn((p) => !p)}>
