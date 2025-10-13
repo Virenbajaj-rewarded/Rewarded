@@ -1,29 +1,29 @@
-import ky from "ky";
-import { getIdToken, peekIdToken } from "@/services/auth";
-import Config from "react-native-config";
-import Bugsnag from "@bugsnag/react-native";
+import ky from 'ky';
+import { getIdToken, peekIdToken } from '@/services/auth';
+import Config from 'react-native-config';
+import Bugsnag from '@bugsnag/react-native';
 
-const prefixUrl = `${Config.API_BASE_URL}`;
+const prefixUrl = Config.API_BASE_URL;
 
 export const instance = ky.extend({
   headers: {
-    Accept: "application/json",
+    Accept: 'application/json',
   },
   prefixUrl,
   timeout: 10000,
   retry: {
     limit: 3,
-    methods: ["get", "head", "put", "delete", "options", "trace"],
+    methods: ['get', 'head', 'put', 'delete', 'options', 'trace'],
     statusCodes: [408, 413, 429, 500, 502, 503, 504],
     backoffLimit: 2000,
   },
   hooks: {
     beforeRequest: [
-      async (request) => {
+      async request => {
         const token = peekIdToken() ?? (await getIdToken());
 
         if (token) {
-          request.headers.set("Authorization", `Bearer ${token}`);
+          request.headers.set('Authorization', `Bearer ${token}`);
         }
       },
     ],
@@ -31,7 +31,7 @@ export const instance = ky.extend({
       async (request, _options, response) => {
         if (response.status === 401) {
           const fresh = await getIdToken(true);
-          request.headers.set("Authorization", `Bearer ${fresh}`);
+          request.headers.set('Authorization', `Bearer ${fresh}`);
           return ky(request);
         }
 
@@ -48,21 +48,18 @@ export const instance = ky.extend({
           }
 
           const message =
-            typeof errorBody === "string"
+            typeof errorBody === 'string'
               ? errorBody
-              : errorBody?.message || errorBody?.error || "Unknown error";
+              : errorBody?.message || errorBody?.error || 'Unknown error';
 
-          Bugsnag.notify(
-            new Error(`API Error: ${response.status}`),
-            (event) => {
-              event.severity = "warning";
-              event.context = `${request.method?.toUpperCase()} ${request.url}`;
-              event.addMetadata("response", {
-                status: response.status,
-                body: errorBody,
-              });
-            },
-          );
+          Bugsnag.notify(new Error(`API Error: ${response.status}`), event => {
+            event.severity = 'warning';
+            event.context = `${request.method?.toUpperCase()} ${request.url}`;
+            event.addMetadata('response', {
+              status: response.status,
+              body: errorBody,
+            });
+          });
 
           throw new Error(message);
         }

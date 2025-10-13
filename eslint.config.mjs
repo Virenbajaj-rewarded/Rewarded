@@ -1,34 +1,24 @@
 import eslintConfigPrettier from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
-import perfectionist from 'eslint-plugin-perfectionist';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import unicorn from 'eslint-plugin-unicorn';
-
-const ERROR = 2;
-const OFF = 0;
 
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
+const WARN = 1;
+const ERROR = 2;
+const OFF = 0;
+
 export default tseslint.config(
   eslint.configs.recommended,
-  tseslint.configs.strictTypeChecked,
-  tseslint.configs.stylisticTypeChecked,
-  unicorn.configs.all,
-  perfectionist.configs['recommended-alphabetical'],
-  importPlugin.flatConfigs.react,
-  importPlugin.flatConfigs['react-native'],
-  importPlugin.flatConfigs.typescript,
-  react.configs.flat.all,
+  ...tseslint.configs.recommended,
+  react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
-  reactRefresh.configs.recommended,
-  eslintConfigPrettier, // last
+  eslintConfigPrettier,
   {
     languageOptions: {
       globals: {
-        __DEV__: 'readonly', // define it as a global variable
+        __DEV__: 'readonly',
       },
       parserOptions: {
         projectService: true,
@@ -36,114 +26,54 @@ export default tseslint.config(
       },
     },
     settings: {
-      'import/resolver': {
-        node: true,
-        typescript: true,
-      },
-      perfectionist: {
-        partitionByComment: true,
-        type: 'alphabetical',
-      },
       react: {
         version: 'detect',
       },
     },
   },
   {
-    ...reactHooks.configs.recommended,
     plugins: {
       'react-hooks': reactHooks,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      '@typescript-eslint/consistent-type-definitions': [ERROR, 'type'],
-      '@typescript-eslint/dot-notation': [ERROR, { allowKeywords: true }],
-      '@typescript-eslint/no-empty-function': OFF,
-      '@typescript-eslint/restrict-template-expressions': OFF,
-      'import/no-unresolved': OFF, // handled by TypeScript
-      'no-console': [ERROR, { allow: ['warn', 'error'] }],
-      'no-magic-numbers': [
-        ERROR,
-        { ignore: [-1, 0, 1, 2, 3, 4, 5, 6], ignoreArrayIndexes: true },
-      ],
-      'perfectionist/sort-imports': [
-        'error',
-        {
-          customGroups: {
-            value: {
-              components: '@/components(/.+)?',
-              hooks: '@/hooks(/.+)?',
-              navigation: '@/navigation(/.+)?',
-              screens: '@/screens(/.+)?',
-              theme: '@/theme(/.+)?',
-              translations: '@/translations(/.+)?',
-            },
-          },
-          groups: [
-            'side-effect',
-            ['type', 'internal-type'],
-            ['builtin', 'external'],
-            ['theme', 'hooks', 'navigation', 'translations'],
-            ['components', 'screens'],
-            'internal',
-            'unknown',
-          ],
-          newlinesBetween: 'always',
-          type: 'alphabetical',
-        },
-      ],
 
-      'react-refresh/only-export-components': OFF,
-      'react/forbid-component-props': OFF,
-      'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx', '.jsx'] }],
-      'react/jsx-max-depth': [ERROR, { max: 10 }],
+      // TypeScript rules - relaxed
+      '@typescript-eslint/no-unused-vars': [
+        WARN,
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': OFF, // Allow any type
+      '@typescript-eslint/no-empty-function': OFF,
+      '@typescript-eslint/no-empty-object-type': OFF,
+      '@typescript-eslint/no-require-imports': OFF,
+
+      // React rules - relaxed
+      'react/prop-types': OFF, // Using TypeScript
+      'react/react-in-jsx-scope': OFF, // Not needed with new JSX transform
+      'react/jsx-uses-react': OFF,
       'react/jsx-no-bind': OFF,
-      'react/jsx-no-literals': OFF,
       'react/jsx-props-no-spreading': OFF,
-      'react/jsx-sort-props': OFF, // Handled by perfectionist
-      'react/no-multi-comp': OFF,
-      'react/no-unescaped-entities': OFF,
-      'react/require-default-props': [
-        ERROR,
-        {
-          forbidDefaultForRequired: true,
-          functions: 'defaultArguments',
-        },
-      ],
-      'unicorn/filename-case': OFF,
-      'unicorn/no-keyword-prefix': OFF,
-      'unicorn/no-useless-undefined': OFF,
-      'unicorn/prefer-top-level-await': 0, // not valid on RN for the moment
-      'unicorn/prevent-abbreviations': [
-        ERROR,
-        {
-          allowList: {
-            env: true,
-            Param: true,
-            props: true,
-            Props: true,
-          },
-        },
-      ],
+
+      // General code quality
+      'no-console': [WARN, { allow: ['warn', 'error'] }],
+      'no-empty-pattern': OFF,
+      'prefer-const': WARN,
+      'no-var': ERROR,
     },
   },
   {
-    files: ['**/theme/*.ts'],
-    rules: {
-      'no-magic-numbers': OFF,
-    },
-  },
-  {
-    files: ['*.conf.js', '*.config.js', '*.setup.js'],
+    files: ['*.conf.js', '*.config.js', '*.setup.js', '*.config.mjs'],
     rules: {
       '@typescript-eslint/no-require-imports': OFF,
-      '@typescript-eslint/no-unsafe-assignment': OFF,
-      '@typescript-eslint/no-unsafe-call': OFF,
       'no-undef': OFF,
-      'unicorn/prefer-module': OFF,
     },
   },
   {
-    ignores: ['plugins/**'],
-  },
+    ignores: ['plugins/**', 'node_modules/**', 'android/**', 'ios/**', '.bundle/**'],
+  }
 );

@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import MaterialIcons from "@react-native-vector-icons/material-design-icons";
-import { styles } from "./styles";
+import { styles } from "./SwipeButton.styles";
 import { scheduleOnRN } from "react-native-worklets";
 
 const { width } = Dimensions.get("screen");

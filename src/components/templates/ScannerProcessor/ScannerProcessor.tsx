@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Platform,
   Alert,
   ActivityIndicator,
-} from "react-native";
+} from 'react-native';
 import {
   Camera,
   Code,
@@ -16,26 +16,23 @@ import {
   useCameraDevice,
   useCameraFormat,
   useCodeScanner,
-} from "react-native-vision-camera";
-import MaterialIcons from "@react-native-vector-icons/material-design-icons";
-import { styles } from "./styles";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "@/theme";
-import { ACCESSIBLE_QR_TYPES, QR_CODE } from "@/types";
-import { safeJsonParse } from "@/utils/helpers.ts";
-import { Paths } from "@/navigation/paths.ts";
-import { RootScreenProps } from "@/navigation/types.ts";
-import { useFocusEffect } from "@react-navigation/native";
+} from 'react-native-vision-camera';
+import MaterialIcons from '@react-native-vector-icons/material-design-icons';
+import { styles } from './ScannerProcessor.styles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '@/theme';
+import { ACCESSIBLE_QR_TYPES, QR_CODE } from '@/types';
+import { safeJsonParse } from '@/utils/helpers.ts';
+import { Paths } from '@/navigation/paths.ts';
+import { RootScreenProps } from '@/navigation/types.ts';
+import { useFocusEffect } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 const SCAN_SIZE = Math.min(width * 0.7, 350);
 
-export default function ScannerProcessor({
-  navigation,
-}: RootScreenProps<Paths.QR_SCANNER>) {
-  const device = useCameraDevice("back");
+export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.QR_SCANNER>) {
+  const device = useCameraDevice('back');
 
-  const { fonts, colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   const overlayTop = (height - SCAN_SIZE) / 2;
@@ -50,9 +47,7 @@ export default function ScannerProcessor({
     lastScannedValue.current = null;
   });
 
-  const format = useCameraFormat(device, [
-    { videoResolution: { width: 720, height: 1280 } },
-  ]);
+  const format = useCameraFormat(device, [{ videoResolution: { width: 720, height: 1280 } }]);
 
   const regionOfInterest = useMemo(() => {
     if (!format) return undefined;
@@ -95,11 +90,11 @@ export default function ScannerProcessor({
   };
 
   const codeScanner = useCodeScanner({
-    codeTypes: ["qr"],
+    codeTypes: ['qr'],
     onCodeScanned: (codes, frame) => {
       const qr = codes[0];
       let isInside = true;
-      if (Platform.OS !== "ios") isInside = isCodeInsideROI(qr, frame); // On IOS, we use regionOfInterest
+      if (Platform.OS !== 'ios') isInside = isCodeInsideROI(qr, frame); // On IOS, we use regionOfInterest
 
       if (!isInside || !qr.value || qr.value === lastScannedValue.current) {
         return;
@@ -109,14 +104,10 @@ export default function ScannerProcessor({
 
       const parsedQR = safeJsonParse(qr.value) as unknown as QR_CODE;
 
-      if (
-        !parsedQR ||
-        !parsedQR.type ||
-        !ACCESSIBLE_QR_TYPES.includes(parsedQR.type)
-      ) {
+      if (!parsedQR || !parsedQR.type || !ACCESSIBLE_QR_TYPES.includes(parsedQR.type)) {
         Alert.alert(
-          "Invalid QR Code",
-          "This QR code is not supported. Please try a different one.",
+          'Invalid QR Code',
+          'This QR code is not supported. Please try a different one.'
         );
         return;
       }
@@ -130,33 +121,32 @@ export default function ScannerProcessor({
     try {
       setLoading(true);
       switch (qrCode.type) {
-        case "customer_profile":
+        case 'customer_profile':
           navigation.replace(Paths.MERCHANT_QR_PAYMENT, {
             consumerId: qrCode.value,
           });
           break;
         default:
-          throw new Error("Unknow type");
+          throw new Error('Unknow type');
       }
     } catch (e) {
-      Alert.alert("Something went wrong");
+      Alert.alert('Something went wrong');
     } finally {
       setLoading(false);
     }
   }
 
+  const onGoBack = () => {
+    navigation.goBack();
+  };
+
   if (!device) {
     return (
       <View style={styles.center}>
-        <Text style={[fonts.size_32, { color: "#FFFFFF", marginBottom: 24 }]}>
-          No camera found
-        </Text>
+        <Text style={styles.noCameraText}>No camera found</Text>
 
-        <TouchableOpacity
-          style={[styles.goBackButton, { backgroundColor: colors.purple500 }]}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[fonts.size_24, { color: "#FFFFFF" }]}>Back</Text>
+        <TouchableOpacity style={styles.goBackButton} onPress={onGoBack}>
+          <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
       </View>
     );
@@ -168,7 +158,7 @@ export default function ScannerProcessor({
         style={StyleSheet.absoluteFill}
         device={device}
         isActive={true}
-        torch={torchOn ? "on" : "off"}
+        torch={torchOn ? 'on' : 'off'}
         codeScanner={codeScanner}
         format={format}
       />
@@ -180,26 +170,17 @@ export default function ScannerProcessor({
         <Text style={styles.headerTitle}>Scan QR</Text>
 
         {device.hasTorch ? (
-          <TouchableOpacity onPress={() => setTorchOn((p) => !p)}>
-            <MaterialIcons
-              name={torchOn ? "flash" : "flash-off"}
-              size={28}
-              color="#fff"
-            />
+          <TouchableOpacity onPress={() => setTorchOn(p => !p)}>
+            <MaterialIcons name={torchOn ? 'flash' : 'flash-off'} size={28} color="#fff" />
           </TouchableOpacity>
         ) : (
           <View />
         )}
       </View>
 
+      <View style={[styles.mask, { top: 0, left: 0, right: 0, height: overlayTop }]} />
       <View
-        style={[styles.mask, { top: 0, left: 0, right: 0, height: overlayTop }]}
-      />
-      <View
-        style={[
-          styles.mask,
-          { top: overlayTop, left: 0, width: overlaySide, height: SCAN_SIZE },
-        ]}
+        style={[styles.mask, { top: overlayTop, left: 0, width: overlaySide, height: SCAN_SIZE }]}
       />
       <View
         style={[
@@ -242,25 +223,16 @@ export default function ScannerProcessor({
       </View>
 
       {loading && (
-        <View
-          style={{
-            position: "absolute",
-            top: overlayTop + SCAN_SIZE + 40,
-            left: 0,
-            right: 0,
-            alignItems: "center",
-          }}
-        >
+        <View style={[styles.loadingContainer, { top: overlayTop + SCAN_SIZE + 40 }]}>
           <ActivityIndicator size="large" color="#fff" />
         </View>
       )}
 
       <View style={styles.footer}>
         <Text style={styles.hint}>
-          Can’t scan the QR code?{"\n"}
-          Try:{"\n"}- tapping on the screen to focus{"\n"}- adjusting the
-          distance between the phone and the QR code{"\n"}- turning the
-          flashlight on or off{"\n"}- restarting the app
+          Can’t scan the QR code?{'\n'}
+          Try:{'\n'}- tapping on the screen to focus{'\n'}- adjusting the distance between the phone
+          and the QR code{'\n'}- turning the flashlight on or off{'\n'}- restarting the app
         </Text>
       </View>
     </View>

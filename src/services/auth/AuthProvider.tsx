@@ -1,22 +1,16 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import auth, {
   getAuth,
   GoogleAuthProvider,
   signInWithCredential,
-} from "@react-native-firebase/auth";
-import BootSplash from "react-native-bootsplash";
+} from '@react-native-firebase/auth';
+import BootSplash from 'react-native-bootsplash';
 
-import { useUser } from "@/hooks";
-import { User } from "@/hooks/domain/user/schema.ts";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { UserQueryKey } from "@/hooks/domain/user/useUser.ts";
-import Bugsnag from "@bugsnag/react-native";
+import { useUser } from '@/hooks';
+import { User } from '@/hooks/domain/user/schema.ts';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { UserQueryKey } from '@/hooks/domain/user/useUser.ts';
+import Bugsnag from '@bugsnag/react-native';
 
 type AuthContextShape = {
   user: User | null;
@@ -35,12 +29,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { useFetchProfileQuery, invalidateQuery, setQueryData } = useUser();
 
   const [bootSplashHidden, setBootSplashHidden] = useState(false);
-  const {
-    data: profile,
-    isLoading,
-    isFetched,
-    refetch,
-  } = useFetchProfileQuery();
+  const { data: profile, isLoading, isFetched, refetch } = useFetchProfileQuery();
 
   useEffect(() => {
     if (isFetched && !bootSplashHidden) {
@@ -50,7 +39,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         });
       }, 300);
     }
-  }, [isFetched]);
+  }, [isFetched, bootSplashHidden]);
 
   useEffect(() => {
     if (profile) {
@@ -64,7 +53,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       await refetch();
     } catch (e) {
       const error = e as Error;
-      console.log("error", error);
+      console.log('error', error);
       throw new Error(getAuthErrorMessage(error));
     }
   };
@@ -92,10 +81,10 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     const signInResult = await GoogleSignin.signIn();
 
-    let idToken = signInResult.data?.idToken;
+    const idToken = signInResult.data?.idToken;
 
     if (!idToken) {
-      throw new Error("No ID token found");
+      throw new Error('No ID token found');
     }
 
     const googleCredential = GoogleAuthProvider.credential(idToken);
@@ -119,17 +108,17 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
 function getAuthErrorMessage(error: any): string {
   switch (error?.code) {
-    case "auth/invalid-email":
-      return "Please enter a valid email";
-    case "auth/user-not-found":
-      return "No account found with this email";
-    case "auth/wrong-password":
-      return "Incorrect password";
-    case "auth/too-many-requests":
-      return "Too many attempts. Please try again later";
-    case "auth/invalid-credential":
-      return "Authentication error. Please try again";
+    case 'auth/invalid-email':
+      return 'Please enter a valid email';
+    case 'auth/user-not-found':
+      return 'No account found with this email';
+    case 'auth/wrong-password':
+      return 'Incorrect password';
+    case 'auth/too-many-requests':
+      return 'Too many attempts. Please try again later';
+    case 'auth/invalid-credential':
+      return 'Authentication error. Please try again';
     default:
-      return "An unknown error occurred. Please try again later";
+      return 'An unknown error occurred. Please try again later';
   }
 }

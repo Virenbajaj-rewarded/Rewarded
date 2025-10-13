@@ -4,7 +4,6 @@ import type { Gutters } from '@/theme/types/gutters';
 import { type ViewStyle } from 'react-native';
 
 export const generateGutters = (configuration: UnionConfiguration): Gutters => {
-  // eslint-disable-next-line unicorn/no-array-reduce
   return configuration.gutters.reduce<Gutters>((accumulator, current) => {
     return Object.assign(accumulator, {
       [`gap_${current}`]: {

@@ -1,18 +1,14 @@
 import type { HasProperty } from '@/theme/types/common';
-import type {
-  FulfilledThemeConfiguration,
-  Variant,
-} from '@/theme/types/config';
+import type { FulfilledThemeConfiguration, Variant } from '@/theme/types/config';
 
 import { config } from '@/theme/_config';
 
 function hasProperty<Config, KeyPath extends string>(
   configuration: Config,
-  property: KeyPath,
+  property: KeyPath
 ): configuration is Config & HasProperty<Config, KeyPath> {
   const parts = property.split('.');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let currentObject: any = configuration;
 
   for (const part of parts) {
@@ -20,7 +16,6 @@ function hasProperty<Config, KeyPath extends string>(
       return false;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     currentObject = currentObject[part];
   }
 
@@ -57,9 +52,7 @@ const buildConfig = (variant: Variant) => {
   };
   const colors = {
     ...defaultConfig.colors,
-    ...(variantConfig && hasProperty(variantConfig, 'colors')
-      ? variantConfig.colors
-      : {}),
+    ...(variantConfig && hasProperty(variantConfig, 'colors') ? variantConfig.colors : {}),
   };
 
   return {

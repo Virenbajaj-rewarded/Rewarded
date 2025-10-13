@@ -17,7 +17,6 @@ import { config } from '@/theme/_config';
 export const generateBorderColors = (configuration: UnionConfiguration) => {
   return Object.entries(
     configuration.borders.colors,
-    // eslint-disable-next-line unicorn/no-array-reduce
   ).reduce<BorderColors>((accumulator, [key, value]) => {
     return Object.assign(accumulator, {
       [key]: {
@@ -31,7 +30,6 @@ export const generateBorderColors = (configuration: UnionConfiguration) => {
  * Generates border radius styles from configuration
  */
 export const generateBorderRadius = () => {
-  // eslint-disable-next-line unicorn/no-array-reduce
   return config.borders.radius.reduce<
     BorderBottomRadius & BorderRadius & BorderTopRadius
   >(
@@ -64,7 +62,6 @@ export const generateBorderRadius = () => {
  * Generates border width styles from configuration
  */
 export const generateBorderWidths = () => {
-  // eslint-disable-next-line unicorn/no-array-reduce
   return config.borders.widths.reduce<BorderWidths>((accumulator, width) => {
     return Object.assign(accumulator, {
       [`w_${width}`]: {

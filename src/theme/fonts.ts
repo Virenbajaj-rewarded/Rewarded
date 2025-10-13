@@ -5,7 +5,6 @@ import type { TextStyle } from 'react-native';
 import { config } from '@/theme/_config';
 
 export const generateFontColors = (configuration: UnionConfiguration) => {
-  // eslint-disable-next-line unicorn/no-array-reduce
   return Object.entries(configuration.fonts.colors).reduce<FontColors>(
     (accumulator, [key, value]) => {
       return Object.assign(accumulator, {
@@ -19,7 +18,6 @@ export const generateFontColors = (configuration: UnionConfiguration) => {
 };
 
 export const generateFontSizes = () => {
-  // eslint-disable-next-line unicorn/no-array-reduce
   return config.fonts.sizes.reduce<FontSizes>((accumulator, size) => {
     return Object.assign(accumulator, {
       [`size_${size}`]: {

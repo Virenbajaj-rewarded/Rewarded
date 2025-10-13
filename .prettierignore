@@ -1,0 +1,12 @@
+node_modules
+android
+ios
+.bundle
+*.lock
+*.log
+dist
+build
+coverage
+.expo
+.turbo
+

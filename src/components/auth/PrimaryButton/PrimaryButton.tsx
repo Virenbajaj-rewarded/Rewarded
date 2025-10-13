@@ -1,6 +1,5 @@
-import React from 'react';
 import { TouchableOpacity, Text, StyleProp, ViewStyle } from 'react-native';
-import { useTheme } from '@/theme';
+import { styles } from './PrimaryButton.styles';
 
 interface Props {
   label: string;
@@ -11,8 +10,6 @@ interface Props {
 }
 
 export default function PrimaryButton({ label, onPress, style, disabled, testID }: Props) {
-  const { colors, fonts } = useTheme();
-
   return (
     <TouchableOpacity
       accessibilityRole="button"
@@ -20,17 +17,9 @@ export default function PrimaryButton({ label, onPress, style, disabled, testID 
       testID={testID}
       onPress={onPress}
       disabled={disabled}
-      style={[
-        {
-          backgroundColor: disabled ? '#232c34' : colors.purple500,
-          paddingVertical: 12,
-          borderRadius: 8,
-          alignItems: 'center',
-        },
-        style,
-      ]}
+      style={[styles.button, { backgroundColor: disabled ? '#232c34' : '#3c83f6' }, style]}
     >
-      <Text style={[fonts.size_16, { color: '#ffffff' }]}>{label}</Text>
+      <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>
   );
 }
