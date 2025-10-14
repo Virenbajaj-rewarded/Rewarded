@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,31 +9,28 @@ import {
   Dimensions,
   ActivityIndicator,
   Alert,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   Easing,
-} from "react-native-reanimated";
-import MaterialIcons from "@react-native-vector-icons/material-design-icons";
-import SafeScreen from "@/components/templates/SafeScreen";
-import { RootScreenProps } from "@/navigation/types.ts";
-import { Paths } from "@/navigation/paths.ts";
-import IconByVariant from "@/components/atoms/IconByVariant";
-import SliderButton from "@/components/atoms/SwipeButton";
-import LottieView from "lottie-react-native";
-import { styles } from "./styles";
-import {
-  useFetchCustomerById,
-  useFetchMerchantBalanceQuery,
-} from "@/hooks/domain/user/useUser.ts";
-import { useCreateLedger } from "@/hooks/domain/ledger/useLedger.ts";
-import uuid from "react-native-uuid";
-import { Skeleton } from "@/components/atoms/Skeleton";
-import { useFocusEffect } from "@react-navigation/native";
+} from 'react-native-reanimated';
+import MaterialIcons from '@react-native-vector-icons/material-design-icons';
+import SafeScreen from '@/components/templates/SafeScreen';
+import { RootScreenProps } from '@/navigation/types.ts';
+import { Paths } from '@/navigation/paths.ts';
+import IconByVariant from '@/components/atoms/IconByVariant';
+import SliderButton from '@/components/atoms/SwipeButton';
+import LottieView from 'lottie-react-native';
+import { styles } from './styles';
+import { useFetchCustomerById, useFetchMerchantBalanceQuery } from '@/services/user/useUser';
+import { useCreateLedger } from '@/services/ledger/useLedger';
+import uuid from 'react-native-uuid';
+import { Skeleton } from '@/components/atoms/Skeleton';
+import { useFocusEffect } from '@react-navigation/native';
 
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function MerchantQRPayment({
   navigation,
@@ -47,8 +44,8 @@ export default function MerchantQRPayment({
     data: consumer,
   } = useFetchCustomerById(route.params.consumerId);
 
-  const [amount, setAmount] = useState("");
-  const [comment, setComment] = useState("");
+  const [amount, setAmount] = useState('');
+  const [comment, setComment] = useState('');
   const [warning, setWarning] = useState(false);
   const [isTopUp, setIsTopUp] = useState(true);
 
@@ -72,7 +69,7 @@ export default function MerchantQRPayment({
         confettiRef.current?.reset?.();
         confettiRef.current?.pause?.();
       };
-    }, []),
+    }, [])
   );
 
   useEffect(() => {
@@ -95,33 +92,30 @@ export default function MerchantQRPayment({
   const handleConfirm = async () => {
     const parsedAmount = parseFloat(amount);
 
-    const type = isTopUp ? "EARN" : "REDEEM";
+    const type = isTopUp ? 'EARN' : 'REDEEM';
     submitTransaction(
       {
         type,
         value: {
-          consumerId: consumer?.id || "",
+          consumerId: consumer?.id || '',
           idempotencyKey: uuid.v4(),
-          amount: type === "EARN" ? parsedAmount * 100 : parsedAmount,
+          amount: type === 'EARN' ? parsedAmount * 100 : parsedAmount,
           comment,
         },
       },
       {
-        onSuccess: (tx) => {
+        onSuccess: tx => {
           confettiRef.current?.play(0);
           setTimeout(() => {
             navigation.goBack();
           }, 2000);
         },
-        onError: (e) => {
+        onError: e => {
           const error = e as Error;
 
-          Alert.alert(
-            "Unexpected error",
-            error?.message || "Something went wrong",
-          );
+          Alert.alert('Unexpected error', error?.message || 'Something went wrong');
         },
-      },
+      }
     );
   };
 
@@ -129,40 +123,40 @@ export default function MerchantQRPayment({
     if (!balance) {
       return;
     }
-    let formatted = text.replace(",", ".");
+    let formatted = text.replace(',', '.');
 
-    formatted = formatted.replace(/[^0-9.]/g, "");
+    formatted = formatted.replace(/[^0-9.]/g, '');
 
-    const firstDotIndex = formatted.indexOf(".");
+    const firstDotIndex = formatted.indexOf('.');
     if (firstDotIndex !== -1) {
       formatted =
         formatted.slice(0, firstDotIndex + 1) +
-        formatted.slice(firstDotIndex + 1).replace(/\./g, "");
+        formatted.slice(firstDotIndex + 1).replace(/\./g, '');
     }
 
-    let [intPart, decPart] = formatted.split(".");
+    let [intPart, decPart] = formatted.split('.');
 
     if (intPart) {
       intPart = intPart.slice(0, 8);
     }
 
-    if (intPart && intPart.length > 1 && intPart.startsWith("0") && !decPart) {
+    if (intPart && intPart.length > 1 && intPart.startsWith('0') && !decPart) {
       intPart = String(parseInt(intPart, 10));
     }
 
     if (decPart !== undefined) {
       decPart = decPart.slice(0, 2);
-      formatted = decPart.length > 0 ? `${intPart}.${decPart}` : intPart + ".";
+      formatted = decPart.length > 0 ? `${intPart}.${decPart}` : intPart + '.';
     } else {
-      formatted = intPart ?? "";
+      formatted = intPart ?? '';
     }
 
-    if (formatted === ".") {
-      formatted = "0.";
+    if (formatted === '.') {
+      formatted = '0.';
     }
 
-    if (formatted === "0") {
-      formatted = "";
+    if (formatted === '0') {
+      formatted = '';
     }
 
     setAmount(formatted);
@@ -179,15 +173,15 @@ export default function MerchantQRPayment({
     <>
       <SafeScreen>
         <KeyboardAvoidingView
-          style={{ flex: 1, width: "100%" }}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={{ flex: 1, width: '100%' }}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
           <View style={styles.headerWrapper}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               hitSlop={{ right: 10, left: 10, top: 10, bottom: 10 }}
             >
-              <MaterialIcons name={"arrow-left"} size={24} color={"#ffffff"} />
+              <MaterialIcons name={'arrow-left'} size={24} color={'#ffffff'} />
             </TouchableOpacity>
 
             <View style={styles.userRow}>
@@ -215,19 +209,17 @@ export default function MerchantQRPayment({
               style={[
                 styles.balanceContainer,
                 warning && {
-                  borderColor: "#ff0000",
-                  backgroundColor: "rgba(255,0,0,0.2)",
+                  borderColor: '#ff0000',
+                  backgroundColor: 'rgba(255,0,0,0.2)',
                 },
               ]}
             >
-              <MaterialIcons name={"wallet"} size={16} color={"#ffffff"} />
+              <MaterialIcons name={'wallet'} size={16} color={'#ffffff'} />
               <View style={styles.balanceLabelWrapper}>
                 {isLoadingBalance || isRefetchingBalance ? (
                   <ActivityIndicator size="small" color="#ffffff" />
                 ) : (
-                  <Text style={styles.balanceLabel}>
-                    {balance?.balance || 0}
-                  </Text>
+                  <Text style={styles.balanceLabel}>{balance?.balance || 0}</Text>
                 )}
                 <IconByVariant path="coins" width={16} height={16} />
               </View>
@@ -238,10 +230,10 @@ export default function MerchantQRPayment({
                 style={styles.amountInput}
                 keyboardType="numeric"
                 value={amount}
-                placeholderTextColor={"#FFFFFF"}
+                placeholderTextColor={'#FFFFFF'}
                 allowFontScaling={false}
                 onChangeText={handleInputChange}
-                placeholder={"0"}
+                placeholder={'0'}
                 caretHidden={true}
               />
               <IconByVariant path="coins" width={40} height={40} />
@@ -252,11 +244,11 @@ export default function MerchantQRPayment({
                 style={[
                   styles.optionItem,
                   isTopUp && {
-                    backgroundColor: "#3c83f6",
+                    backgroundColor: '#3c83f6',
                   },
                 ]}
                 onPress={() => {
-                  const numericValue = parseFloat(amount || "0");
+                  const numericValue = parseFloat(amount || '0');
                   if (!isNaN(numericValue) && numericValue > balance!.balance) {
                     setWarning(true);
                   }
@@ -270,7 +262,7 @@ export default function MerchantQRPayment({
                 style={[
                   styles.optionItem,
                   !isTopUp && {
-                    backgroundColor: "#3c83f6",
+                    backgroundColor: '#3c83f6',
                   },
                 ]}
                 onPress={() => {
@@ -311,7 +303,7 @@ export default function MerchantQRPayment({
 
       <LottieView
         ref={confettiRef}
-        source={require("../../../assets/lottie/CONFETTI.json")}
+        source={require('../../../assets/lottie/CONFETTI.json')}
         autoPlay={false}
         loop={false}
         style={styles.lottie}

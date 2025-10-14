@@ -6,10 +6,10 @@ import auth, {
 } from '@react-native-firebase/auth';
 import BootSplash from 'react-native-bootsplash';
 
-import { useUser } from '@/hooks';
-import { User } from '@/hooks/domain/user/schema.ts';
+import { useUser } from '@/services/user/useUser';
+import { User } from '@/services/user/schema';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { UserQueryKey } from '@/hooks/domain/user/useUser.ts';
+import { UserQueryKey } from '@/services/user/useUser';
 import Bugsnag from '@bugsnag/react-native';
 
 type AuthContextShape = {

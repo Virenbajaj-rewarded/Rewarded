@@ -1,17 +1,13 @@
-import {
-  InvalidateOptions,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { InvalidateOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { UserServices } from "./userService";
-import { User } from "@/hooks/domain/user/schema.ts";
+import { UserServices } from './userService';
+import { User } from '@/services/user/schema';
 
 export const enum UserQueryKey {
-  fetchUserProfile = "fetchUserProfile",
-  fetchMerchantBalance = "fetchMerchantBalance",
-  fetchCustomerBalance = "fetchCustomerBalance",
-  fetchCustomerById = "fetchCustomerById",
+  fetchUserProfile = 'fetchUserProfile',
+  fetchMerchantBalance = 'fetchMerchantBalance',
+  fetchCustomerBalance = 'fetchCustomerBalance',
+  fetchCustomerById = 'fetchCustomerById',
 }
 
 const useFetchProfileQuery = () =>
@@ -26,10 +22,10 @@ export const useFetchMerchantBalanceQuery = () =>
     queryFn: () => UserServices.fetchMerchantBalance(),
     queryKey: [UserQueryKey.fetchMerchantBalance],
     staleTime: 300000,
-    refetchOnWindowFocus: "always",
-    refetchOnReconnect: "always",
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
     placeholderData: {
-      type: "PAID",
+      type: 'PAID',
       balance: 0,
     },
   });
@@ -39,15 +35,15 @@ export const useFetchCustomerBalanceQuery = () =>
     queryFn: () => UserServices.fetchCustomerBalance(),
     queryKey: [UserQueryKey.fetchCustomerBalance],
     staleTime: 300000,
-    refetchOnWindowFocus: "always",
-    refetchOnReconnect: "always",
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
     placeholderData: [
       {
-        type: "PAID",
+        type: 'PAID',
         balance: 0,
       },
       {
-        type: "FREE",
+        type: 'FREE',
         balance: 0,
       },
     ],
@@ -64,15 +60,12 @@ export const useFetchCustomerById = (id?: string) =>
 export const useUser = () => {
   const client = useQueryClient();
 
-  const invalidateQuery = (
-    queryKeys: UserQueryKey[],
-    options?: InvalidateOptions,
-  ) =>
+  const invalidateQuery = (queryKeys: UserQueryKey[], options?: InvalidateOptions) =>
     client.invalidateQueries(
       {
         queryKey: queryKeys,
       },
-      options,
+      options
     );
 
   const setQueryData = (profile: User | null) => {
