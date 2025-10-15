@@ -1,47 +1,37 @@
-import React from "react";
-import {
-  createDrawerNavigator,
-  DrawerNavigationOptions,
-} from "@react-navigation/drawer";
-import {
-  UserDrawerStackParamList,
-  RootScreenProps,
-} from "@/navigation/types.ts";
-import { UserDrawerPaths, Paths } from "@/navigation/paths.ts";
-import { drawerScreenOptions } from "@/screens/Drawers";
-import DrawerLayout from "@/screens/Drawers/DrawerLayout";
-import Wallet from "@/screens/Drawers/UserDrawer/Wallet.tsx";
-import Stores from "@/screens/Drawers/UserDrawer/Stores.tsx";
-import DiscoverAndEarn from "@/screens/Drawers/UserDrawer/DiscoverAndEarn.tsx";
-import Spending from "@/screens/Drawers/UserDrawer/Spending.tsx";
+import { createDrawerNavigator, DrawerNavigationOptions } from '@react-navigation/drawer';
+import { UserDrawerStackParamList, RootScreenProps } from '@/navigation/types.ts';
+import { UserDrawerPaths, Paths } from '@/navigation/paths.ts';
+import { drawerScreenOptions } from '@/screens/Drawers';
+import DrawerLayout from '@/screens/Drawers/DrawerLayout';
+import Wallet from '@/screens/Drawers/UserDrawer/Wallet.tsx';
+import UserStores from '@/screens/Drawers/UserDrawer/UserStores/UserStores';
+import DiscoverAndEarn from '@/screens/Drawers/UserDrawer/DiscoverAndEarn.tsx';
+import Spending from '@/screens/Drawers/UserDrawer/Spending.tsx';
 
 const UserDrawer = createDrawerNavigator<UserDrawerStackParamList>();
 
 const drawerContent: Record<UserDrawerPaths, DrawerNavigationOptions> = {
   [UserDrawerPaths.STORES]: {
-    drawerLabel: "My Stores",
-    headerTitle: "My Stores",
+    drawerLabel: 'My Stores',
+    headerTitle: 'My Stores',
   },
   [UserDrawerPaths.MY_WALLET]: {
-    drawerLabel: "My Wallet",
-    headerTitle: "My Wallet",
+    drawerLabel: 'My Wallet',
+    headerTitle: 'My Wallet',
   },
   [UserDrawerPaths.DISCOVER_AND_EARN]: {
-    drawerLabel: "Discover & Earn",
-    headerTitle: "Discover & Earn",
+    drawerLabel: 'Discover & Earn',
+    headerTitle: 'Discover & Earn',
   },
   [UserDrawerPaths.SPENDING]: {
-    drawerLabel: "My Spending",
-    headerTitle: "My Spending",
+    drawerLabel: 'My Spending',
+    headerTitle: 'My Spending',
   },
 };
 
 export default function UserDrawerNavigator({}: RootScreenProps<Paths.UserDrawer>) {
   return (
-    <UserDrawer.Navigator
-      screenLayout={DrawerLayout}
-      screenOptions={drawerScreenOptions}
-    >
+    <UserDrawer.Navigator screenLayout={DrawerLayout} screenOptions={drawerScreenOptions}>
       <UserDrawer.Screen
         name={UserDrawerPaths.MY_WALLET}
         component={Wallet}
@@ -49,7 +39,7 @@ export default function UserDrawerNavigator({}: RootScreenProps<Paths.UserDrawer
       />
       <UserDrawer.Screen
         name={UserDrawerPaths.STORES}
-        component={Stores}
+        component={UserStores}
         options={drawerContent[UserDrawerPaths.STORES]}
       />
       <UserDrawer.Screen

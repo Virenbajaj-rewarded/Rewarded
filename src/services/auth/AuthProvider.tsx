@@ -53,7 +53,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       await refetch();
     } catch (e) {
       const error = e as Error;
-      console.log('error', error);
+      console.error('error', error);
       throw new Error(getAuthErrorMessage(error));
     }
   };

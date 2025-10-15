@@ -1,15 +1,18 @@
 import {
   useInfiniteQuery,
+  useQuery,
   useQueryClient,
   InvalidateOptions,
   useMutation,
 } from '@tanstack/react-query';
-import { StoresResponse } from './schema';
+import { StoresResponseType } from './schema';
 import { StoreServices } from '@/services/stores/storesService';
 
 export const enum StoreQueryKey {
   fetchMyStores = 'fetchMyStores',
   fetchDeletedStores = 'fetchDeletedStores',
+  fetchStore = 'fetchStore',
+  fetchSavings = 'fetchSavings',
 }
 
 const useFetchStoresQuery = () =>
@@ -38,6 +41,20 @@ const useFetchRemovedStoresQuery = () =>
     staleTime: 180000,
   });
 
+const useFetchStoreQuery = (id: string) =>
+  useQuery({
+    queryKey: [StoreQueryKey.fetchStore, id],
+    queryFn: () => StoreServices.fetchStore(id),
+    staleTime: 180000,
+  });
+
+const useFetchSavingsQuery = () =>
+  useQuery({
+    queryKey: [StoreQueryKey.fetchSavings],
+    queryFn: () => StoreServices.fetchSavings(),
+    staleTime: 300000,
+  });
+
 export const useMyStores = () => {
   const client = useQueryClient();
 
@@ -53,6 +70,8 @@ export const useMyStores = () => {
     invalidateQuery,
     useFetchStoresQuery,
     useFetchRemovedStoresQuery,
+    useFetchStoreQuery,
+    useFetchSavingsQuery,
   };
 };
 
@@ -62,7 +81,7 @@ export const useDeleteStore = () => {
   return useMutation({
     mutationFn: (id: string) => StoreServices.deleteStore(id),
     onSuccess: id => {
-      client.setQueryData<{ pages: StoresResponse[]; pageParams: unknown[] } | undefined>(
+      client.setQueryData<{ pages: StoresResponseType[]; pageParams: unknown[] } | undefined>(
         [StoreQueryKey.fetchMyStores],
         oldData => {
           if (!oldData) {
@@ -92,7 +111,7 @@ export const useRestoreStore = () => {
   return useMutation({
     mutationFn: (id: string) => StoreServices.restoreStore(id),
     onSuccess: id => {
-      client.setQueryData<{ pages: StoresResponse[]; pageParams: unknown[] } | undefined>(
+      client.setQueryData<{ pages: StoresResponseType[]; pageParams: unknown[] } | undefined>(
         [StoreQueryKey.fetchDeletedStores],
         oldData => {
           if (!oldData) {

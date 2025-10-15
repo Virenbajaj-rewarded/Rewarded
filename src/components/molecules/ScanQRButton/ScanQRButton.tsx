@@ -1,11 +1,10 @@
-import { Alert, Linking, Text, TouchableOpacity } from "react-native";
-import MaterialIcons from "@react-native-vector-icons/material-design-icons";
-import { useTheme } from "@/theme";
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Paths } from "@/navigation/paths.ts";
-import { styles } from "./styles";
-import { useCameraPermission } from "react-native-vision-camera";
+import { Alert, Linking, Text, TouchableOpacity } from 'react-native';
+import MaterialIcons from '@react-native-vector-icons/material-design-icons';
+import { useTheme } from '@/theme';
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths.ts';
+import { styles } from './styles';
+import { useCameraPermission } from 'react-native-vision-camera';
 
 export default function ScanQRButton() {
   const { fonts } = useTheme();
@@ -24,17 +23,17 @@ export default function ScanQRButton() {
         }
 
         Alert.alert(
-          "Camera access denied",
-          "To scan QR codes, please allow access in the settings",
+          'Camera access denied',
+          'To scan QR codes, please allow access in the settings',
           [
-            { text: "Open Settings", onPress: Linking.openSettings },
-            { text: "Cancel", style: "cancel" },
-          ],
+            { text: 'Open Settings', onPress: Linking.openSettings },
+            { text: 'Cancel', style: 'cancel' },
+          ]
         );
       }}
     >
-      <MaterialIcons name={"qrcode-scan"} size={24} color={"#FFFFFF"} />
-      <Text style={[fonts.size_24, { color: "#FFFFFF" }]}>Scan QR Code</Text>
+      <MaterialIcons name={'qrcode-scan'} size={24} color={'#FFFFFF'} />
+      <Text style={[fonts.size_24, { color: '#FFFFFF' }]}>Scan QR Code</Text>
     </TouchableOpacity>
   );
 }

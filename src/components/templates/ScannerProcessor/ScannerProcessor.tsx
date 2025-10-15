@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -20,7 +20,6 @@ import {
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import { styles } from './ScannerProcessor.styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '@/theme';
 import { ACCESSIBLE_QR_TYPES, QR_CODE } from '@/types';
 import { safeJsonParse } from '@/utils/helpers.ts';
 import { Paths } from '@/navigation/paths.ts';
@@ -127,9 +126,10 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
           });
           break;
         default:
-          throw new Error('Unknow type');
+          throw new Error('Unknown type');
       }
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e: unknown) {
       Alert.alert('Something went wrong');
     } finally {
       setLoading(false);

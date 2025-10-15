@@ -1,7 +1,6 @@
 import { ActivityIndicator, Text, View } from 'react-native';
 import { UserDrawerCombinedScreenProps } from '@/navigation/types.ts';
 import { UserDrawerPaths } from '@/navigation/paths.ts';
-import React from 'react';
 import { useAuth } from '@/services/auth/AuthProvider.tsx';
 import { QrCodeSvg } from 'react-native-qr-svg';
 import { useTheme } from '@/theme';

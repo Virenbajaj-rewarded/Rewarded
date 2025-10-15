@@ -83,7 +83,7 @@ export default function MerchantQRPayment({
     }, 500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [translateY]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
@@ -104,7 +104,7 @@ export default function MerchantQRPayment({
         },
       },
       {
-        onSuccess: tx => {
+        onSuccess: () => {
           confettiRef.current?.play(0);
           setTimeout(() => {
             navigation.goBack();

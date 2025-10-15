@@ -1,13 +1,8 @@
-import {
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import MaterialIcons from "@react-native-vector-icons/material-design-icons";
-import React, { useState } from "react";
-import { useAuth } from "@/services/auth/AuthProvider.tsx";
-import { styles } from "./LogoutButton.styles";
+import { ActivityIndicator, Alert, TouchableOpacity, View } from 'react-native';
+import MaterialIcons from '@react-native-vector-icons/material-design-icons';
+import { useState } from 'react';
+import { useAuth } from '@/services/auth/AuthProvider.tsx';
+import { styles } from './LogoutButton.styles';
 
 export default function LogoutButton() {
   const { signOut } = useAuth();
@@ -20,19 +15,19 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     Alert.alert(
-      "Are you sure you want to logout?",
-      "",
+      'Are you sure you want to logout?',
+      '',
       [
         {
-          text: "No",
-          style: "cancel",
+          text: 'No',
+          style: 'cancel',
         },
         {
-          text: "Yes",
+          text: 'Yes',
           onPress: logout,
         },
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 

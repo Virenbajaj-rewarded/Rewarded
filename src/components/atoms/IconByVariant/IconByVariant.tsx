@@ -15,12 +15,7 @@ const icons = getAssetsContext('icons');
 const EXTENSION = 'svg';
 const SIZE = 24;
 
-function IconByVariant({
-  height = SIZE,
-  path,
-  width = SIZE,
-  ...props
-}: Properties) {
+function IconByVariant({ height = SIZE, path, width = SIZE, ...props }: Properties) {
   const { variant } = useTheme();
 
   const iconProperties = { ...props, height, width };
@@ -29,9 +24,7 @@ function IconByVariant({
       const getDefaultSource = () =>
         z
           .object({
-            default: z.custom<React.FC<SvgProps>>(() =>
-              z.custom<ReactElement<SvgProps>>(),
-            ),
+            default: z.custom<React.FC<SvgProps>>(() => z.custom<ReactElement<SvgProps>>()),
           })
           .parse(icons(`./${path}.${EXTENSION}`)).default;
 
@@ -42,9 +35,7 @@ function IconByVariant({
       try {
         const fetchedModule = z
           .object({
-            default: z.custom<React.FC<SvgProps>>(() =>
-              z.custom<ReactElement<SvgProps>>(),
-            ),
+            default: z.custom<React.FC<SvgProps>>(() => z.custom<ReactElement<SvgProps>>()),
           })
           .parse(icons(`./${variant}/${path}.${EXTENSION}`));
 
@@ -52,7 +43,7 @@ function IconByVariant({
       } catch (error) {
         console.warn(
           `Couldn't load the icon: ${path}.${EXTENSION} for the variant ${variant}, Fallback to default`,
-          error,
+          error
         );
         return getDefaultSource();
       }

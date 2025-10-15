@@ -1,7 +1,8 @@
 export const ACCESSIBLE_QR_TYPES = [
-  "customer_profile",
-  "invite",
-  "payment",
+  'customer_profile',
+  'store_profile',
+  'invite',
+  'payment',
 ] as const;
 
 export type QRCodeType = (typeof ACCESSIBLE_QR_TYPES)[number];

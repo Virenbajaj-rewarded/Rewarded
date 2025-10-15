@@ -9,20 +9,9 @@ import DefaultError from '@/components/molecules/DefaultError';
 import Bugsnag from '@bugsnag/react-native';
 import { styles } from './SafeScreen.styles';
 
-type Properties = PropsWithChildren<
-  {
-    readonly isError?: boolean;
-    readonly onResetError?: () => void;
-  } & Omit<SafeAreaViewProps, 'mode'>
->;
+type Properties = PropsWithChildren<Omit<SafeAreaViewProps, 'mode'>>;
 
-function SafeScreen({
-  children = undefined,
-  isError = false,
-  onResetError = undefined,
-  style,
-  ...props
-}: Properties) {
+function SafeScreen({ children = undefined, style, ...props }: Properties) {
   const { navigationTheme } = useTheme();
 
   const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React);

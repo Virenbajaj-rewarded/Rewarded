@@ -1,13 +1,12 @@
-import type { RootStackParamList } from "@/navigation/types";
+import type { RootStackParamList } from '@/navigation/types';
 
-import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Paths } from "@/navigation/paths";
-import { useTheme } from "@/theme";
+import { Paths } from '@/navigation/paths';
+import { useTheme } from '@/theme';
 
 import {
   UserDrawerNavigator,
@@ -17,8 +16,8 @@ import {
   Store,
   QRScanner,
   MerchantQRPayment,
-} from "@/screens";
-import { useAuth } from "@/services/auth/AuthProvider.tsx";
+} from '@/screens';
+import { useAuth } from '@/services/auth/AuthProvider.tsx';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -42,12 +41,9 @@ function ApplicationNavigator() {
             </>
           ) : (
             <>
-              {user.role === "USER" ? (
+              {user.role === 'USER' ? (
                 <Stack.Group>
-                  <Stack.Screen
-                    component={UserDrawerNavigator}
-                    name={Paths.UserDrawer}
-                  />
+                  <Stack.Screen component={UserDrawerNavigator} name={Paths.UserDrawer} />
                   <Stack.Group
                     screenOptions={{
                       headerShown: true,
@@ -57,31 +53,25 @@ function ApplicationNavigator() {
                       component={Store}
                       name={Paths.Store}
                       options={{
-                        headerTitle: "Store",
+                        headerTitle: 'Store',
                         headerTitleStyle: {
-                          color: "#ffffff",
+                          color: '#ffffff',
                         },
-                        headerBackTitle: "Back",
-                        headerTintColor: "#ffffff",
+                        headerBackTitle: 'Back',
+                        headerTintColor: '#ffffff',
                       }}
                     />
                   </Stack.Group>
                 </Stack.Group>
               ) : (
                 <Stack.Group>
-                  <Stack.Screen
-                    component={MerchantDrawerNavigator}
-                    name={Paths.MerchantDrawer}
-                  />
+                  <Stack.Screen component={MerchantDrawerNavigator} name={Paths.MerchantDrawer} />
                 </Stack.Group>
               )}
             </>
           )}
           <Stack.Screen name={Paths.QR_SCANNER} component={QRScanner} />
-          <Stack.Screen
-            name={Paths.MERCHANT_QR_PAYMENT}
-            component={MerchantQRPayment}
-          />
+          <Stack.Screen name={Paths.MERCHANT_QR_PAYMENT} component={MerchantQRPayment} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

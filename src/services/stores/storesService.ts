@@ -1,6 +1,13 @@
-import { instance } from "@/services/instance";
+import { instance } from '@/services/instance';
 
-import { StoresResponse, storesResponseSchema } from "./schema";
+import {
+  StoreType,
+  storeSchema,
+  StoresResponseType,
+  storesResponseSchema,
+  SavingsResponseType,
+  savingsResponseSchema,
+} from './schema';
 
 export const StoreServices = {
   fetchMyStores: async ({ pageParam = 1 }: { pageParam?: number }) => {
@@ -11,7 +18,7 @@ export const StoreServices = {
           limit: 12,
         },
       })
-      .json<StoresResponse>();
+      .json<StoresResponseType>();
 
     return storesResponseSchema.parse(response);
   },
@@ -23,9 +30,17 @@ export const StoreServices = {
           limit: 12,
         },
       })
-      .json<StoresResponse>();
+      .json<StoresResponseType>();
 
     return storesResponseSchema.parse(response);
+  },
+  fetchStore: async (id: string) => {
+    const response = await instance.get(`users/me/stores/${id}`).json<StoreType>();
+    return storeSchema.parse(response);
+  },
+  fetchSavings: async () => {
+    const response = await instance.get(`users/me/savings`).json<SavingsResponseType>();
+    return savingsResponseSchema.parse(response);
   },
   deleteStore: async (id: string) => {
     await instance.delete<void>(`users/me/stores/${id}`);

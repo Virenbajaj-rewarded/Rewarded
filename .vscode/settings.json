@@ -27,5 +27,18 @@
   "prettier.requireConfig": false,
   "prettier.useEditorConfig": false,
   "eslint.enable": true,
-  "files.autoSave": "off"
+  "files.autoSave": "off",
+  "cSpell.words": [
+    "addressdetails",
+    "bootsplash",
+    "dsym",
+    "ENVFILE",
+    "gradlew",
+    "MMKV",
+    "netinfo",
+    "pluralrules",
+    "proguard",
+    "qrcode",
+    "worklets"
+  ]
 }

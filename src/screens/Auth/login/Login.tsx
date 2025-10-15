@@ -21,7 +21,7 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>;
 
-function Login({ navigation }: RootScreenProps<Paths.Login>) {
+function Login({}: RootScreenProps<Paths.Login>) {
   const { signInWithEmail } = useAuth();
   const [email, setEmail] = useState<LoginForm['email']>('');
   const [password, setPassword] = useState<LoginForm['password']>('');
