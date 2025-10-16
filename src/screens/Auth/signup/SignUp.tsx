@@ -6,8 +6,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { Paths } from '@/navigation/paths';
 
 import SafeScreen from '@/components/templates/SafeScreen';
-import AuthTextInput from '@/components/auth/AuthTextInput/AuthTextInput';
-import PrimaryButton from '@/components/auth/PrimaryButton/PrimaryButton';
+import { TextField, PrimaryButton } from '@/components';
 import { styles } from './Signup.styles';
 
 function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
@@ -25,7 +24,7 @@ function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
       <View style={styles.container}>
         <Text style={styles.headerTitle}>Sign Up</Text>
 
-        <AuthTextInput
+        <TextField
           value={email}
           onChangeText={setEmail}
           placeholder="Email"
@@ -33,14 +32,14 @@ function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
           keyboardType="email-address"
         />
 
-        <AuthTextInput
+        <TextField
           value={password}
           onChangeText={setPassword}
           placeholder="Password"
           secureTextEntry
         />
 
-        <AuthTextInput
+        <TextField
           value={confirm}
           onChangeText={setConfirm}
           placeholder="Confirm password"

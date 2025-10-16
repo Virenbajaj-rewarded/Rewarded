@@ -1,6 +1,6 @@
 import { instance } from '@/services/instance';
 
-import { balanceSchema, BalanceType, User, userSchema } from './schema';
+import { balanceSchema, BalanceType, User, userSchema, updateUserSchema } from './schema';
 
 export const UserServices = {
   fetchProfile: async () => {
@@ -18,5 +18,9 @@ export const UserServices = {
   fetchUserById: async (id: string) => {
     const response = await instance.get<User>(`users/${id}`).json();
     return userSchema.parse(response);
+  },
+  updateUser: async (data: Partial<User>) => {
+    const response = await instance.patch<Partial<User>>(`users/me/profile`, { json: data }).json();
+    return updateUserSchema.parse(response);
   },
 };

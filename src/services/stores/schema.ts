@@ -17,6 +17,24 @@ export const storesResponseSchema = z.object({
   total: z.number(),
 });
 
+const percentBackRewardProgramSchema = z.object({
+  id: z.string(),
+  strategy: z.literal('PERCENT_BACK'),
+  percentBack: z.number(),
+});
+
+const spendToEarnRewardProgramSchema = z.object({
+  id: z.string(),
+  strategy: z.literal('SPEND_TO_EARN'),
+  rewardPercent: z.number(),
+  spendThreshold: z.number(),
+});
+
+const activeRewardProgramSchema = z.discriminatedUnion('strategy', [
+  percentBackRewardProgramSchema,
+  spendToEarnRewardProgramSchema,
+]);
+
 export const storeSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -26,7 +44,7 @@ export const storeSchema = z.object({
     latitude: z.number(),
     longitude: z.number(),
   }),
-  // discount: z.number(),
+  activeRewardProgram: activeRewardProgramSchema,
   // TODO: add enum
   storeType: z.string(),
   logoUrl: z.string().optional(),
@@ -40,6 +58,13 @@ export type StoreListItemType = z.infer<typeof storeListItemSchema>;
 export type StoresResponseType = z.infer<typeof storesResponseSchema>;
 export type StoreType = z.infer<typeof storeSchema>;
 
+export type PercentBackRewardProgram = z.infer<typeof percentBackRewardProgramSchema>;
+export type SpendToEarnRewardProgram = z.infer<typeof spendToEarnRewardProgramSchema>;
+export type ActiveRewardProgram = z.infer<typeof activeRewardProgramSchema>;
+export enum ERewardProgramStrategy {
+  PERCENT_BACK = 'PERCENT_BACK',
+  SPEND_TO_EARN = 'SPEND_TO_EARN',
+}
 export const savingsResponseSchema = z.object({
   lifetimeSavingsUsd: z.number(),
   rewardPointsBalance: z.number(),

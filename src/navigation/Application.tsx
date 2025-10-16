@@ -16,6 +16,7 @@ import {
   Store,
   QRScanner,
   MerchantQRPayment,
+  UserProfile,
 } from '@/screens';
 import { useAuth } from '@/services/auth/AuthProvider.tsx';
 
@@ -54,6 +55,18 @@ function ApplicationNavigator() {
                       name={Paths.Store}
                       options={{
                         headerTitle: 'Store',
+                        headerTitleStyle: {
+                          color: '#ffffff',
+                        },
+                        headerBackTitle: 'Back',
+                        headerTintColor: '#ffffff',
+                      }}
+                    />
+                    <Stack.Screen
+                      component={UserProfile}
+                      name={Paths.USER_PROFILE}
+                      options={{
+                        headerTitle: 'Profile',
                         headerTitleStyle: {
                           color: '#ffffff',
                         },

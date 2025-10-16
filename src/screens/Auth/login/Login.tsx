@@ -8,8 +8,7 @@ import { Paths } from '@/navigation/paths';
 
 import IconByVariant from '@/components/atoms/IconByVariant';
 import SafeScreen from '@/components/templates/SafeScreen';
-import AuthTextInput from '@/components/auth/AuthTextInput/AuthTextInput.tsx';
-import PrimaryButton from '@/components/auth/PrimaryButton/PrimaryButton.tsx';
+import { TextField, PrimaryButton } from '@/components';
 import { useAuth } from '@/services/auth/AuthProvider.tsx';
 import { styles } from './Login.styles';
 import GoogleButton from '@/components/molecules/GoogleButton';
@@ -92,7 +91,7 @@ function Login({}: RootScreenProps<Paths.Login>) {
             </View>
 
             <View style={styles.inputWrapper}>
-              <AuthTextInput
+              <TextField
                 value={email}
                 onChangeText={handleEmailChange}
                 placeholder="Email"
@@ -106,7 +105,7 @@ function Login({}: RootScreenProps<Paths.Login>) {
             </View>
 
             <View style={styles.inputWrapper}>
-              <AuthTextInput
+              <TextField
                 value={password}
                 onChangeText={handlePasswordChange}
                 placeholder="Password"

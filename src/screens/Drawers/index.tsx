@@ -1,19 +1,14 @@
-import { DrawerNavigationOptions } from "@react-navigation/drawer";
-import React from "react";
-import LogoutButton from "@/components/atoms/LogoutButton";
+import { DrawerNavigationOptions } from '@react-navigation/drawer';
 
 export const drawerScreenOptions: DrawerNavigationOptions = {
   headerShown: true,
-  drawerType: "front",
+  drawerType: 'front',
   swipeEnabled: true,
-  drawerInactiveTintColor: "#ffffff",
+  drawerInactiveTintColor: '#ffffff',
   headerTitleStyle: {
-    color: "#ffffff",
-  },
-  headerRight: () => {
-    return <LogoutButton />;
+    color: '#ffffff',
   },
 };
 
-export { default as UserDrawerNavigator } from "./UserDrawer";
-export { default as MerchantDrawerNavigator } from "./MerchantDrawer";
+export { default as UserDrawerNavigator } from './UserDrawer';
+export { default as MerchantDrawerNavigator } from './MerchantDrawer';

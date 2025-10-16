@@ -3,6 +3,7 @@ import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import { useState } from 'react';
 import { useAuth } from '@/services/auth/AuthProvider.tsx';
 import { styles } from './LogoutButton.styles';
+import { Typography } from '@/components';
 
 export default function LogoutButton() {
   const { signOut } = useAuth();
@@ -39,8 +40,12 @@ export default function LogoutButton() {
         <TouchableOpacity
           hitSlop={{ right: 10, top: 10, bottom: 10, left: 10 }}
           onPress={handleLogout}
+          style={styles.button}
         >
           <MaterialIcons name="logout" size={24} color="#3c83f6" />
+          <Typography fontVariant="regular" fontSize={16} color="#3c83f6">
+            Log out
+          </Typography>
         </TouchableOpacity>
       )}
     </View>

@@ -1,4 +1,4 @@
-import { InvalidateOptions, useQuery, useQueryClient } from '@tanstack/react-query';
+import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 import { UserServices } from './userService';
 import { User } from '@/services/user/schema';
@@ -8,6 +8,7 @@ export const enum UserQueryKey {
   fetchMerchantBalance = 'fetchMerchantBalance',
   fetchCustomerBalance = 'fetchCustomerBalance',
   fetchCustomerById = 'fetchCustomerById',
+  updateUser = 'patchUserProfile',
 }
 
 const useFetchProfileQuery = () =>
@@ -57,6 +58,25 @@ export const useFetchCustomerById = (id?: string) =>
     enabled: !!id,
   });
 
+export const useUpdateUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Partial<User>) => UserServices.updateUser(data),
+    onSuccess: updatedUser => {
+      const currentUser = queryClient.getQueryData<User>([UserQueryKey.fetchUserProfile]);
+      const mergedUser = currentUser ? { ...currentUser, ...updatedUser } : updatedUser;
+      queryClient.setQueryData([UserQueryKey.fetchUserProfile], mergedUser);
+      queryClient.invalidateQueries({
+        queryKey: [UserQueryKey.fetchUserProfile],
+      });
+    },
+    onError: error => {
+      console.error('Failed to update user:', error);
+    },
+  });
+};
+
 export const useUser = () => {
   const client = useQueryClient();
 
@@ -76,5 +96,6 @@ export const useUser = () => {
     invalidateQuery,
     useFetchProfileQuery,
     setQueryData,
+    useUpdateUserMutation,
   };
 };

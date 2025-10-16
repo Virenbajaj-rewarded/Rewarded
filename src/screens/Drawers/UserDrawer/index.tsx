@@ -7,6 +7,7 @@ import Wallet from '@/screens/Drawers/UserDrawer/Wallet.tsx';
 import UserStores from '@/screens/Drawers/UserDrawer/UserStores/UserStores';
 import DiscoverAndEarn from '@/screens/Drawers/UserDrawer/DiscoverAndEarn.tsx';
 import Spending from '@/screens/Drawers/UserDrawer/Spending.tsx';
+import ProfileIcon from '@/components/templates/ProfileIcon';
 
 const UserDrawer = createDrawerNavigator<UserDrawerStackParamList>();
 
@@ -29,9 +30,23 @@ const drawerContent: Record<UserDrawerPaths, DrawerNavigationOptions> = {
   },
 };
 
-export default function UserDrawerNavigator({}: RootScreenProps<Paths.UserDrawer>) {
+export default function UserDrawerNavigator({ navigation }: RootScreenProps<Paths.UserDrawer>) {
   return (
-    <UserDrawer.Navigator screenLayout={DrawerLayout} screenOptions={drawerScreenOptions}>
+    <UserDrawer.Navigator
+      screenLayout={DrawerLayout}
+      screenOptions={{
+        ...drawerScreenOptions,
+        headerRight: () => {
+          return (
+            <ProfileIcon
+              onPress={() => {
+                navigation.navigate(Paths.USER_PROFILE);
+              }}
+            />
+          );
+        },
+      }}
+    >
       <UserDrawer.Screen
         name={UserDrawerPaths.MY_WALLET}
         component={Wallet}

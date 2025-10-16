@@ -9,6 +9,7 @@ import { useStore } from './useStore';
 import { styles } from './Store.styles';
 import SafeScreen from '@/components/templates/SafeScreen';
 import { useShortAddress } from '@/hooks';
+import { ERewardProgramStrategy } from '@/services/stores/schema';
 
 export default function Store({ route }: RootScreenProps<Paths.Store>) {
   const { storeId } = route.params;
@@ -53,8 +54,18 @@ export default function Store({ route }: RootScreenProps<Paths.Store>) {
     );
   }
 
-  const { logoUrl, name, storeType, distance, lifetimeSavings, rewardPoints, spent, email, phone } =
-    store;
+  const {
+    logoUrl,
+    name,
+    storeType,
+    distance,
+    lifetimeSavings,
+    rewardPoints,
+    spent,
+    email,
+    phone,
+    activeRewardProgram,
+  } = store;
 
   return (
     <SafeScreen>
@@ -68,7 +79,10 @@ export default function Store({ route }: RootScreenProps<Paths.Store>) {
             {name}
           </Typography>
           <Typography fontVariant="medium" fontSize={16} color="#3C83F6" textAlign="center">
-            No discount available
+            {activeRewardProgram &&
+            activeRewardProgram.strategy === ERewardProgramStrategy.PERCENT_BACK
+              ? `${activeRewardProgram.percentBack}% on purchases`
+              : `Spend ${activeRewardProgram.spendThreshold} to earn ${activeRewardProgram.rewardPercent}%`}
           </Typography>
 
           <View style={styles.storeTypeAndDistanceContainer}>

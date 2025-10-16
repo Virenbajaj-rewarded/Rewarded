@@ -6,6 +6,8 @@ export const enum Paths {
   Store = 'store',
   QR_SCANNER = 'qrScanner',
   MERCHANT_QR_PAYMENT = 'MerchantQRPayment',
+  USER_PROFILE = 'userProfile',
+  CHANGE_PASSWORD = 'changePassword',
 }
 
 export const enum UserDrawerPaths {

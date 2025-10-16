@@ -2,7 +2,6 @@ import { MerchantDrawerPaths, Paths, UserDrawerPaths } from '@/navigation/paths'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { Store as StoreItem } from '@/services/stores/schema';
 
 export type RootScreenProps<S extends keyof RootStackParamList = keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, S>;
@@ -26,7 +25,6 @@ export type RootStackParamList = {
   [Paths.MerchantDrawer]: NavigatorScreenParams<MerchantDrawerStackParamList>;
   [Paths.Store]: {
     storeId: string;
-    store?: StoreItem;
   };
   [Paths.QR_SCANNER]: undefined;
   [Paths.MERCHANT_QR_PAYMENT]: {
@@ -34,6 +32,7 @@ export type RootStackParamList = {
   };
   [Paths.Login]: undefined;
   [Paths.SignUp]: undefined;
+  [Paths.USER_PROFILE]: undefined;
 };
 
 export type UserDrawerStackParamList = {
