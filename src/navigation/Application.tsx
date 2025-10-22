@@ -17,6 +17,7 @@ import {
   QRScanner,
   MerchantQRPayment,
   UserProfile,
+  ChangePassword,
 } from '@/screens';
 import { useAuth } from '@/services/auth/AuthProvider.tsx';
 
@@ -85,6 +86,19 @@ function ApplicationNavigator() {
           )}
           <Stack.Screen name={Paths.QR_SCANNER} component={QRScanner} />
           <Stack.Screen name={Paths.MERCHANT_QR_PAYMENT} component={MerchantQRPayment} />
+          <Stack.Screen
+            component={ChangePassword}
+            name={Paths.CHANGE_PASSWORD}
+            options={{
+              headerShown: true,
+              headerTitle: 'Change Password',
+              headerTitleStyle: {
+                color: '#ffffff',
+              },
+              headerBackTitle: 'Profile',
+              headerTintColor: '#ffffff',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

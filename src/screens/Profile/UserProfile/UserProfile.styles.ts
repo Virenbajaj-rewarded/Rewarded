@@ -14,8 +14,19 @@ export const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     gap: 16,
+    justifyContent: 'space-between',
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: '#1F1F1F',
+    borderWidth: 1,
+    borderColor: '#3C83F6',
+  },
+  cancelButtonText: {
+    color: '#3C83F6',
   },
   saveButton: {
+    flex: 1,
     borderWidth: 1,
     borderColor: '#3c83f6',
     color: '#fff',

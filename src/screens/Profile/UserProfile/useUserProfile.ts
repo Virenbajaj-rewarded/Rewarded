@@ -3,23 +3,12 @@ import { useFormik } from 'formik';
 import { useUser } from '@/services/user/useUser';
 import { Alert } from 'react-native';
 import { UserProfileForm, userProfileSchema } from './types';
-
-const validate = (values: UserProfileForm) => {
-  const result = userProfileSchema.safeParse(values);
-  if (!result.success) {
-    const fieldErrors = result.error.flatten().fieldErrors;
-    const errors: any = {};
-
-    if (fieldErrors.fullName) errors.fullName = fieldErrors.fullName[0];
-    if (fieldErrors.phone) errors.phone = fieldErrors.phone[0];
-    if (fieldErrors.email) errors.email = fieldErrors.email[0];
-
-    return errors;
-  }
-  return {};
-};
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths';
+import { userProfileValidationSchema } from './UserProfile.validation';
 
 export const useUserProfile = () => {
+  const navigation = useNavigation();
   const { useFetchProfileQuery, useUpdateUserMutation } = useUser();
   const { mutate: updateUser, isPending } = useUpdateUserMutation();
   const { data: profile, isLoading, isError } = useFetchProfileQuery();
@@ -31,24 +20,16 @@ export const useUserProfile = () => {
       email: profile?.email || '',
     },
     enableReinitialize: true,
-    validate,
-    validateOnChange: true,
+    validationSchema: userProfileValidationSchema,
     onSubmit: values => {
-      const result = userProfileSchema.safeParse(values);
-      if (result.success) {
-        console.log('Sending user data:', result.data);
-        updateUser(result.data);
-      } else {
-        console.log('Validation failed:', result.error);
-      }
+      updateUser(values);
     },
   });
 
   const isFormValid = userProfileSchema.safeParse(formik.values).success;
 
   const navigateToChangePassword = () => {
-    // TODO: Implement change password logic
-    console.warn('change password');
+    navigation.navigate(Paths.CHANGE_PASSWORD);
   };
 
   const handleDeleteAccount = () => {

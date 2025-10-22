@@ -33,6 +33,7 @@ export type RootStackParamList = {
   [Paths.Login]: undefined;
   [Paths.SignUp]: undefined;
   [Paths.USER_PROFILE]: undefined;
+  [Paths.CHANGE_PASSWORD]: undefined;
 };
 
 export type UserDrawerStackParamList = {

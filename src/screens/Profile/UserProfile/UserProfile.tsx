@@ -36,57 +36,65 @@ export default function UserProfile({ navigation }: RootScreenProps<Paths.USER_P
           label="Full Name"
           value={formik.values.fullName}
           onChangeText={formik.handleChange('fullName')}
+          onBlur={formik.handleBlur('fullName')}
           placeholder="Full Name"
+          error={
+            formik.touched.fullName && formik.errors.fullName ? formik.errors.fullName : undefined
+          }
         />
-        {formik.errors.fullName && (
-          <Typography fontVariant="regular" fontSize={12} color="#C13333">
-            {formik.errors.fullName}
-          </Typography>
-        )}
 
         <TextField
           label="Phone number"
           value={formik.values.phone}
           onChangeText={formik.handleChange('phone')}
+          onBlur={formik.handleBlur('phone')}
           placeholder="Phone number"
+          error={formik.touched.phone && formik.errors.phone ? formik.errors.phone : undefined}
         />
-        {formik.errors.phone && (
-          <Typography fontVariant="regular" fontSize={12} color="#C13333">
-            {formik.errors.phone}
-          </Typography>
-        )}
 
         <TextField
           label="Email"
           value={formik.values.email}
           onChangeText={formik.handleChange('email')}
+          onBlur={formik.handleBlur('email')}
           placeholder="Email"
-        />
-        {formik.errors.email && (
-          <Typography fontVariant="regular" fontSize={12} color="#C13333">
-            {formik.errors.email}
-          </Typography>
-        )}
-        <PrimaryButton
-          label={isPending ? 'Saving...' : 'Save Changes'}
-          onPress={formik.handleSubmit}
-          style={styles.saveButton}
-          disabled={!formik.dirty || !formik.isValid}
+          error={formik.touched.email && formik.errors.email ? formik.errors.email : undefined}
         />
 
-        <LogoutButton />
-        <PrimaryButton
-          label="Change Password"
-          onPress={navigateToChangePassword}
-          style={styles.changePasswordButton}
-          textStyle={styles.changePasswordButtonText}
-        />
-        <PrimaryButton
-          label="Delete Account"
-          onPress={handleDeleteAccount}
-          style={styles.deleteAccountButton}
-          textStyle={styles.deleteAccountButtonText}
-        />
+        {formik.dirty && (
+          <View style={styles.buttonsContainer}>
+            <PrimaryButton
+              label="Cancel"
+              onPress={formik.resetForm}
+              style={styles.cancelButton}
+              textStyle={styles.cancelButtonText}
+            />
+            <PrimaryButton
+              label={isPending ? 'Saving...' : 'Save Changes'}
+              onPress={formik.handleSubmit}
+              style={styles.saveButton}
+              disabled={!formik.isValid}
+            />
+          </View>
+        )}
+
+        {!formik.dirty && (
+          <>
+            <LogoutButton />
+            <PrimaryButton
+              label="Change Password"
+              onPress={navigateToChangePassword}
+              style={styles.changePasswordButton}
+              textStyle={styles.changePasswordButtonText}
+            />
+            <PrimaryButton
+              label="Delete Account"
+              onPress={handleDeleteAccount}
+              style={styles.deleteAccountButton}
+              textStyle={styles.deleteAccountButtonText}
+            />
+          </>
+        )}
       </View>
     </FormikProvider>
   );
