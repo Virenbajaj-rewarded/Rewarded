@@ -11,7 +11,7 @@ import SafeScreen from '@/components/templates/SafeScreen';
 import { useShortAddress } from '@/hooks';
 import { ERewardProgramStrategy } from '@/services/stores/schema';
 
-export default function Store({ route }: RootScreenProps<Paths.Store>) {
+export default function Store({ route }: RootScreenProps<Paths.STORE>) {
   const { storeId } = route.params;
 
   const {
@@ -43,7 +43,6 @@ export default function Store({ route }: RootScreenProps<Paths.Store>) {
       </View>
     );
   }
-
   if (isFetchStoreError || !store) {
     return (
       <View style={styles.loaderContainer}>

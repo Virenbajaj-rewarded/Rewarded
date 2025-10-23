@@ -1,15 +1,24 @@
 import { ActivityIndicator, View } from 'react-native';
 import type { RootScreenProps } from '@/navigation/types.ts';
 import { Paths } from '@/navigation/paths.ts';
-import { Typography, PrimaryButton, TextField } from '@/components';
+import { Typography, PrimaryButton, TextField, Modal } from '@/components';
 import { FormikProvider } from 'formik';
 import { styles } from './UserProfile.styles';
 import { useUserProfile } from './useUserProfile';
 import LogoutButton from '@/components/atoms/LogoutButton';
 
 export default function UserProfile({ navigation }: RootScreenProps<Paths.USER_PROFILE>) {
-  const { formik, isLoading, isError, isPending, navigateToChangePassword, handleDeleteAccount } =
-    useUserProfile();
+  const {
+    formik,
+    isLoading,
+    isError,
+    isPending,
+    navigateToChangePassword,
+    handleDeleteAccount,
+    isModalVisible,
+    showModal,
+    hideModal,
+  } = useUserProfile();
 
   if (isLoading) {
     return (
@@ -80,22 +89,32 @@ export default function UserProfile({ navigation }: RootScreenProps<Paths.USER_P
 
         {!formik.dirty && (
           <>
-            <LogoutButton />
             <PrimaryButton
               label="Change Password"
               onPress={navigateToChangePassword}
               style={styles.changePasswordButton}
               textStyle={styles.changePasswordButtonText}
             />
+            <LogoutButton />
             <PrimaryButton
               label="Delete Account"
-              onPress={handleDeleteAccount}
+              onPress={showModal}
               style={styles.deleteAccountButton}
               textStyle={styles.deleteAccountButtonText}
             />
           </>
         )}
       </View>
+      <Modal
+        visible={isModalVisible}
+        title="Delete Account?"
+        description="if you delete your account now you will lose all your progress at all programs?"
+        submitButtonLabel="Delete Account"
+        cancelButtonLabel="Cancel"
+        onSubmit={handleDeleteAccount}
+        onCancel={hideModal}
+        onClose={hideModal}
+      />
     </FormikProvider>
   );
 }

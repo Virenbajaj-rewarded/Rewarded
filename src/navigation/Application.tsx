@@ -9,14 +9,15 @@ import { Paths } from '@/navigation/paths';
 import { useTheme } from '@/theme';
 
 import {
-  UserDrawerNavigator,
-  MerchantDrawerNavigator,
+  UserTabNavigator,
+  MerchantTabNavigator,
   Login,
   SignUp,
   Store,
   QRScanner,
   MerchantQRPayment,
   UserProfile,
+  MerchantProfile,
   ChangePassword,
 } from '@/screens';
 import { useAuth } from '@/services/auth/AuthProvider.tsx';
@@ -38,14 +39,14 @@ function ApplicationNavigator() {
         >
           {!user ? (
             <>
-              <Stack.Screen component={Login} name={Paths.Login} />
-              <Stack.Screen component={SignUp} name={Paths.SignUp} />
+              <Stack.Screen component={Login} name={Paths.LOGIN} />
+              <Stack.Screen component={SignUp} name={Paths.SIGN_UP} />
             </>
           ) : (
             <>
               {user.role === 'USER' ? (
                 <Stack.Group>
-                  <Stack.Screen component={UserDrawerNavigator} name={Paths.UserDrawer} />
+                  <Stack.Screen component={UserTabNavigator} name={Paths.USER_TABS} />
                   <Stack.Group
                     screenOptions={{
                       headerShown: true,
@@ -53,7 +54,7 @@ function ApplicationNavigator() {
                   >
                     <Stack.Screen
                       component={Store}
-                      name={Paths.Store}
+                      name={Paths.STORE}
                       options={{
                         headerTitle: 'Store',
                         headerTitleStyle: {
@@ -79,7 +80,20 @@ function ApplicationNavigator() {
                 </Stack.Group>
               ) : (
                 <Stack.Group>
-                  <Stack.Screen component={MerchantDrawerNavigator} name={Paths.MerchantDrawer} />
+                  <Stack.Screen component={MerchantTabNavigator} name={Paths.MERCHANT_TABS} />
+                  <Stack.Screen
+                    component={MerchantProfile}
+                    name={Paths.MERCHANT_PROFILE}
+                    options={{
+                      headerShown: true,
+                      headerTitle: 'Profile',
+                      headerTitleStyle: {
+                        color: '#ffffff',
+                      },
+                      headerBackTitle: 'Back',
+                      headerTintColor: '#ffffff',
+                    }}
+                  />
                 </Stack.Group>
               )}
             </>

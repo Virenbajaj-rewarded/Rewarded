@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
-    marginBottom: 16,
+    marginBottom: 10,
     marginTop: 10,
   },
 });

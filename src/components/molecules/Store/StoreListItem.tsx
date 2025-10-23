@@ -12,7 +12,7 @@ const StoreListItem = (store: StoreListItemType) => {
   const { logoUrl, name, rewardPoints, distance, id, storeType } = store || {};
 
   const handleStorePress = () => {
-    navigation.navigate(Paths.Store, {
+    navigation.navigate(Paths.STORE, {
       storeId: id,
     });
   };

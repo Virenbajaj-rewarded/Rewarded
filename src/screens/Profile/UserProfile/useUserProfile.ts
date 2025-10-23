@@ -1,61 +1,56 @@
 import { useFormik } from 'formik';
-
+import { useState } from 'react';
 import { useUser } from '@/services/user/useUser';
-import { Alert } from 'react-native';
-import { UserProfileForm, userProfileSchema } from './types';
 import { useNavigation } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths';
-import { userProfileValidationSchema } from './UserProfile.validation';
+import { profileValidationSchema, ProfileForm } from '../validation/profileValidationSchema';
 
 export const useUserProfile = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
   const { useFetchProfileQuery, useUpdateUserMutation } = useUser();
   const { mutate: updateUser, isPending } = useUpdateUserMutation();
   const { data: profile, isLoading, isError } = useFetchProfileQuery();
 
-  const formik = useFormik<UserProfileForm>({
+  const formik = useFormik<ProfileForm>({
     initialValues: {
       fullName: profile?.fullName || '',
       phone: profile?.phone || '',
       email: profile?.email || '',
     },
     enableReinitialize: true,
-    validationSchema: userProfileValidationSchema,
+    validationSchema: profileValidationSchema,
     onSubmit: values => {
       updateUser(values);
     },
   });
 
-  const isFormValid = userProfileSchema.safeParse(formik.values).success;
-
   const navigateToChangePassword = () => {
     navigation.navigate(Paths.CHANGE_PASSWORD);
   };
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
   const handleDeleteAccount = () => {
-    Alert.alert(
-      'Delete your account',
-      'This action is irreversible. Your data will be permanently removed.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Yes, delete',
-          style: 'destructive',
-          onPress: () => {
-            // TODO: Implement delete account logic
-            console.warn('delete account');
-          },
-        },
-      ]
-    );
+    // TODO: Implement delete account logic
+    console.warn('delete account');
+    hideModal();
   };
   return {
     formik,
     isLoading,
     isPending,
     isError,
-    isFormValid,
     navigateToChangePassword,
     handleDeleteAccount,
+    isModalVisible,
+    showModal,
+    hideModal,
   };
 };

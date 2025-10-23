@@ -9,14 +9,14 @@ import SafeScreen from '@/components/templates/SafeScreen';
 import { TextField, PrimaryButton } from '@/components';
 import { styles } from './Signup.styles';
 
-function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
+function SignUp({ navigation }: RootScreenProps<Paths.SIGN_UP>) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
   const onSignUp = () => {
     // Placeholder logic: go to Login
-    navigation.replace(Paths.Login);
+    navigation.replace(Paths.LOGIN);
   };
 
   return (
@@ -48,7 +48,7 @@ function SignUp({ navigation }: RootScreenProps<Paths.SignUp>) {
 
         <PrimaryButton label="Create account" onPress={onSignUp} style={{ marginBottom: 12 }} />
 
-        <TouchableOpacity onPress={() => navigation.navigate(Paths.Login)}>
+        <TouchableOpacity onPress={() => navigation.navigate(Paths.LOGIN)}>
           <Text style={styles.loginText}>Already have an account? Login</Text>
         </TouchableOpacity>
       </View>

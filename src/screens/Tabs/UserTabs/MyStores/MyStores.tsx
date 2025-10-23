@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { UserDrawerCombinedScreenProps } from '@/navigation/types.ts';
-import { UserDrawerPaths } from '@/navigation/paths.ts';
+import { UserTabCombinedScreenProps } from '@/navigation/types.ts';
+import { UserTabPaths } from '@/navigation/paths.ts';
 import MyStoreList from '@/components/templates/MyStoreList';
 import { useMyStores } from '@/services/stores/useStores';
-import { styles } from './UserStores.styles';
+import { styles } from './MyStores.styles';
 import { Typography } from '@/components';
 
-export default function UserStores({}: UserDrawerCombinedScreenProps<UserDrawerPaths.STORES>) {
+export default function MyStores({}: UserTabCombinedScreenProps<UserTabPaths.MY_STORES>) {
   const { useFetchStoresQuery, useFetchSavingsQuery } = useMyStores();
 
   const {

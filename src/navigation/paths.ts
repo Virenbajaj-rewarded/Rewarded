@@ -1,22 +1,27 @@
 export const enum Paths {
-  UserDrawer = 'userDrawer',
-  MerchantDrawer = 'merchantDrawer',
-  Login = 'login',
-  SignUp = 'signUp',
-  Store = 'store',
-  QR_SCANNER = 'qrScanner',
-  MERCHANT_QR_PAYMENT = 'MerchantQRPayment',
-  USER_PROFILE = 'userProfile',
-  CHANGE_PASSWORD = 'changePassword',
+  USER_TABS = 'USER_TABS',
+  MERCHANT_TABS = 'MERCHANT_TABS',
+  LOGIN = 'LOGIN',
+  SIGN_UP = 'SIGN_UP',
+  STORE = 'STORE',
+  QR_SCANNER = 'QR_SCANNER',
+  MERCHANT_QR_PAYMENT = 'MERCHANT_QR_PAYMENT',
+  USER_PROFILE = 'USER_PROFILE',
+  MERCHANT_PROFILE = 'MERCHANT_PROFILE',
+  CHANGE_PASSWORD = 'CHANGE_PASSWORD',
 }
 
-export const enum UserDrawerPaths {
-  MY_WALLET = 'myWallet',
-  DISCOVER_AND_EARN = 'discoverAndEarn',
-  SPENDING = 'spending',
-  STORES = 'stores',
+export const enum UserTabPaths {
+  MY_STORES = 'MY_STORES',
+  DISCOVER = 'DISCOVER',
+  WALLET = 'WALLET',
+  EXPENSES = 'EXPENSES',
 }
 
-export const enum MerchantDrawerPaths {
-  MY_STORE = 'myStore',
+export const enum MerchantTabPaths {
+  PROGRAM = 'PROGRAM',
+  CUSTOMERS = 'CUSTOMERS',
+  BUSINESS = 'BUSINESS',
+  BALANCE = 'BALANCE',
+  REQUEST = 'REQUEST',
 }

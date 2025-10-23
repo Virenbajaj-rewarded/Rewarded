@@ -2,7 +2,9 @@ import * as z from 'zod';
 
 export const userSchema = z.object({
   id: z.string(),
-  fullName: z.string(),
+
+  //TODO: Remove that after signup is implemented
+  fullName: z.string().nullable(),
   email: z.email(),
   role: z.enum(['ADMIN', 'USER', 'MERCHANT']),
   phone: z.string().nullable(),
