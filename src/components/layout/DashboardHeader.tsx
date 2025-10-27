@@ -1,14 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { Bell, ChevronDown, LogOut, Menu, User } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Bell, ChevronDown, Menu, User } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom/';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@/services/user/useUser';
 
 const pageTitles: Record<string, string> = {
   '/': 'Rewards Analytics',
@@ -25,11 +19,13 @@ const pageTitles: Record<string, string> = {
 
 export const DashboardHeader = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentTitle = pageTitles[location.pathname] || 'Dashboard';
-  const { user, logout } = useAuth();
+  const { useFetchProfileQuery } = useUser();
+  const { data: user } = useFetchProfileQuery();
 
-  const handleLogout = () => {
-    logout();
+  const handleProfileClick = () => {
+    navigate('/profile');
   };
 
   return (
@@ -60,29 +56,20 @@ export const DashboardHeader = () => {
             <Bell className="h-5 w-5 text-muted-foreground" />
           </Button>
           <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-border" />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-x-3 cursor-pointer hover:opacity-80">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="bg-gradient-primary text-white">
-                    {user?.businessName?.charAt(0) || (
-                      <User className="h-4 w-4" />
-                    )}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium text-foreground hidden sm:inline">
-                  {user?.businessName || 'Merchant'}
-                </span>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div
+            className="flex items-center gap-x-3 cursor-pointer hover:opacity-80"
+            onClick={handleProfileClick}
+          >
+            <Avatar className="w-8 h-8">
+              <AvatarImage src="/placeholder.svg" />
+              <AvatarFallback className="bg-gradient-primary text-white">
+                {user?.fullName?.charAt(0) || <User className="h-4 w-4" />}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium text-foreground hidden sm:inline">
+              {user?.role}
+            </span>
+          </div>
         </div>
       </div>
     </div>

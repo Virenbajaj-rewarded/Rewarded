@@ -9,7 +9,9 @@ import Index from './pages/Index';
 import QRCodes from './pages/QRCodes';
 import Balances from './pages/Balances';
 import RewardsProgram from './pages/RewardsProgram';
-import Profile from './pages/Profile';
+import BusinessProfile from './pages/BusinessProfile';
+import Profile from './pages/profile/Profile';
+import ChangePassword from './pages/change-password/ChangePassword';
 import Customers from './pages/Customers';
 import Scan from './pages/Scan';
 import RewardsAnalytics from './pages/RewardsAnalytics';
@@ -64,10 +66,10 @@ const App = () => (
               }
             />
             <Route
-              path="/profile"
+              path="/business-profile"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <BusinessProfile />
                 </ProtectedRoute>
               }
             />
@@ -108,6 +110,22 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Payment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/change-password"
+              element={
+                <ProtectedRoute>
+                  <ChangePassword />
                 </ProtectedRoute>
               }
             />

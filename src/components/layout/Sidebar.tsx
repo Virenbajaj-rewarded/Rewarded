@@ -14,7 +14,7 @@ import {
 const navigation = [
   { name: 'Analytics', href: '/', icon: BarChart3 },
   { name: 'My Business QR Code', href: '/qr-codes', icon: QrCode },
-  { name: 'My Business Profile', href: '/profile', icon: Settings },
+  { name: 'My Business Profile', href: '/business-profile', icon: Settings },
   { name: 'Customer Analytics', href: '/customers', icon: Users },
   { name: 'Scan Customer QR', href: '/scan', icon: QrCode },
   { name: 'Balances', href: '/balances', icon: Wallet },
