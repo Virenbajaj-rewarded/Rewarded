@@ -8,7 +8,7 @@ export const userSchema = z.object({
   email: z.email(),
   role: z.enum(['ADMIN', 'USER', 'MERCHANT']),
   phone: z.string().nullable(),
-  isPhoneConfirmed: z.boolean(),
+  isEmailConfirmed: z.boolean(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 });
