@@ -5,7 +5,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[8px] text-sm font-medium 
+  ring-offset-background transition-smooth focus-visible:outline-none focus-visible:ring-2 
+  focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[#1F1F1F] disabled:shadow-none 
+  [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0`,
   {
     variants: {
       variant: {
@@ -14,7 +17,7 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-border bg-card hover:bg-muted hover:text-foreground',
+          'border border-[#3C83F6] text-[#3C83F6] bg-card hover:bg-muted hover:text-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-muted hover:text-foreground',
@@ -24,7 +27,7 @@ const buttonVariants = cva(
         warning: 'bg-warning text-warning-foreground hover:bg-warning/90',
       },
       size: {
-        default: 'h-10 px-4 py-2',
+        default: 'h-[40px] px-4 py-2 rounded-[8px]',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',

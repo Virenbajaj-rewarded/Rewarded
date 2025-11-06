@@ -1,3 +1,13 @@
 import tailwindcss from 'prettier-plugin-tailwindcss';
-// prettier.config.js or .prettierrc.js
-export const plugins = [tailwindcss];
+
+export default {
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'es5',
+  printWidth: 80,
+  bracketSpacing: true,
+  arrowParens: 'avoid',
+  endOfLine: 'lf',
+  plugins: [tailwindcss],
+};

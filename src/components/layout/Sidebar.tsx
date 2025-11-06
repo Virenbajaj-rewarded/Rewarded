@@ -1,82 +1,109 @@
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  BarChart3,
-  CreditCard,
-  Gift,
-  QrCode,
-  Settings,
-  TrendingUp,
-  Users,
-  Wallet,
-} from 'lucide-react';
-
-const navigation = [
-  { name: 'Analytics', href: '/', icon: BarChart3 },
-  { name: 'My Business QR Code', href: '/qr-codes', icon: QrCode },
-  { name: 'My Business Profile', href: '/business-profile', icon: Settings },
-  { name: 'Customer Analytics', href: '/customers', icon: Users },
-  { name: 'Scan Customer QR', href: '/scan', icon: QrCode },
-  { name: 'Balances', href: '/balances', icon: Wallet },
-  { name: 'Rewards Program', href: '/rewards-program', icon: Gift },
-  { name: 'Rewards Analytics', href: '/rewards-analytics', icon: TrendingUp },
-  { name: 'Send Offers', href: '/offers', icon: Gift },
-  { name: 'Request Payment', href: '/payment', icon: CreditCard },
-];
+import { useSidebar } from '@/contexts';
+import { ERole } from '../../enums';
+import MenuFoldIcon from '@/assets/menu-fold.svg?react';
+import { sidebarRoutes } from './sidebarRoutes';
 
 export const Sidebar = () => {
   const location = useLocation();
+  const { isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen } =
+    useSidebar();
+
+  const userRole = localStorage.getItem('userRole') as ERole | null;
+
+  const sidebarRoutesBasedOnRole = sidebarRoutes.filter(
+    item => item.role === userRole
+  );
+
+  const closeMobileMenu = () => {
+    setIsMobileOpen(false);
+  };
+
+  const handleSidebarCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+    closeMobileMenu();
+  };
 
   return (
-    <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-card border-r border-border px-6 pb-4">
-        <div className="flex h-16 shrink-0 items-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-primary-foreground rounded-full" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-foreground">Rewarded</h1>
-              <p className="text-xs text-muted-foreground">MERCHANT</p>
-            </div>
+    <>
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={closeMobileMenu}
+          aria-hidden="true"
+        />
+      )}
+
+      <div
+        className={cn(
+          'fixed inset-y-0 z-50 flex flex-col transition-all duration-300',
+          isMobileOpen ? 'left-0' : '-left-full',
+          'w-64',
+          'lg:left-0',
+          isCollapsed ? 'lg:w-20' : 'lg:w-64'
+        )}
+      >
+        <div
+          className={cn(
+            'flex grow flex-col gap-y-5 overflow-y-auto bg-[#1F1F1F] border-r border-border pb-4 transition-all duration-300',
+            isCollapsed ? 'px-2' : 'px-2'
+          )}
+        >
+          <div className="flex h-16 shrink-0 items-center justify-start">
+            <button
+              onClick={handleSidebarCollapse}
+              className="flex items-center justify-center p-2 rounded-md hover:bg-muted transition-colors"
+              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <MenuFoldIcon className="h-5 w-5 text-foreground" />
+            </button>
           </div>
-        </div>
-        <nav className="flex flex-1 flex-col">
-          <ul role="list" className="flex flex-1 flex-col gap-y-7">
-            <li>
-              <ul role="list" className="-mx-2 space-y-1">
-                {navigation.map(item => {
-                  const isActive = location.pathname === item.href;
-                  return (
-                    <li key={item.name}>
-                      <Link
-                        to={item.href}
-                        className={cn(
-                          isActive
-                            ? 'bg-primary text-primary-foreground shadow-primary'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-medium transition-all duration-200'
-                        )}
-                      >
-                        <item.icon
+          <nav className="flex flex-1 flex-col">
+            <ul role="list" className="flex flex-1 flex-col gap-y-7">
+              <li>
+                <ul role="list" className="-mx-2 space-y-1">
+                  {sidebarRoutesBasedOnRole.map(item => {
+                    const isActive = location.pathname === item.href;
+                    return (
+                      <li key={item.name}>
+                        <Link
+                          to={item.href}
+                          onClick={closeMobileMenu}
                           className={cn(
                             isActive
-                              ? 'text-primary-foreground'
-                              : 'text-muted-foreground group-hover:text-foreground',
-                            'h-5 w-5 shrink-0'
+                              ? 'bg-[#0C1A31] text-[#3C83F6] border-r-[3px] border-[#3C83F6]'
+                              : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                            'group flex gap-x-3 p-4 text-sm leading-6 font-medium transition-all duration-200',
+                            isCollapsed && 'lg:justify-center',
+                            'items-center'
                           )}
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </li>
-          </ul>
-        </nav>
+                          title={isCollapsed ? item.name : ''}
+                        >
+                          <item.icon
+                            className={cn(
+                              isActive
+                                ? 'text-[#3C83F6]'
+                                : 'text-muted-foreground group-hover:text-foreground',
+                              'h-5 w-5 shrink-0'
+                            )}
+                            aria-hidden="true"
+                          />
+                          <span
+                            className={cn('block', isCollapsed && 'lg:hidden')}
+                          >
+                            {item.name}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

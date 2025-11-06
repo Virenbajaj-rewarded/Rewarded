@@ -3,13 +3,26 @@ import { useState } from 'react';
 import { useUser } from '@/services/user/useUser';
 import { profileValidationSchema, Profile } from './Profile.validation';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/services/auth/useAuth';
+import { ROUTES } from '@/routes';
 
 export const useProfile = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] =
+    useState(false);
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const navigate = useNavigate();
   const { useFetchProfileQuery, useUpdateUserMutation } = useUser();
   const { mutate: updateUser, isPending } = useUpdateUserMutation();
   const { data: profile, isLoading, isError } = useFetchProfileQuery();
+  const { logout } = useAuth();
+
+  const showLogoutModal = () => setIsLogoutModalVisible(true);
+  const hideLogoutModal = () => setIsLogoutModalVisible(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate(ROUTES.LOGIN);
+  };
 
   const formik = useFormik<Profile>({
     initialValues: {
@@ -20,26 +33,26 @@ export const useProfile = () => {
     enableReinitialize: true,
     validationSchema: profileValidationSchema,
     onSubmit: values => {
-      updateUser(values);
+      updateUser({ fullName: values.fullName });
     },
   });
 
   const navigateToChangePassword = () => {
-    navigate('/change-password');
+    navigate(ROUTES.CHANGE_PASSWORD);
   };
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const showDeleteAccountModal = () => {
+    setIsDeleteAccountModalVisible(true);
   };
 
-  const hideModal = () => {
-    setIsModalVisible(false);
+  const hideDeleteAccountModal = () => {
+    setIsDeleteAccountModalVisible(false);
   };
 
   const handleDeleteAccount = () => {
     // TODO: Implement delete account logic
     console.warn('delete account');
-    hideModal();
+    hideDeleteAccountModal();
   };
   return {
     formik,
@@ -48,8 +61,12 @@ export const useProfile = () => {
     isError,
     navigateToChangePassword,
     handleDeleteAccount,
-    isModalVisible,
-    showModal,
-    hideModal,
+    isDeleteAccountModalVisible,
+    showDeleteAccountModal,
+    hideDeleteAccountModal,
+    handleLogout,
+    isLogoutModalVisible,
+    showLogoutModal,
+    hideLogoutModal,
   };
 };

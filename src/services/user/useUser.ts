@@ -7,6 +7,8 @@ import {
 
 import { UserServices } from './userService';
 import { User } from './userService';
+import { getIsAuthenticated } from '../auth';
+import { toast } from 'sonner';
 
 export const enum UserQueryKey {
   fetchUserProfile = 'fetchUserProfile',
@@ -19,6 +21,7 @@ const useFetchProfileQuery = () =>
     queryFn: () => UserServices.fetchProfile(),
     queryKey: [UserQueryKey.fetchUserProfile],
     staleTime: 0,
+    enabled: getIsAuthenticated(),
   });
 
 export const useFetchCustomerById = (id?: string) =>
@@ -34,17 +37,11 @@ export const useUpdateUserMutation = () => {
 
   return useMutation({
     mutationFn: (data: Partial<User>) => UserServices.updateUser(data),
-    onSuccess: updatedUser => {
-      const currentUser = queryClient.getQueryData<User>([
-        UserQueryKey.fetchUserProfile,
-      ]);
-      const mergedUser = currentUser
-        ? { ...currentUser, ...updatedUser }
-        : updatedUser;
-      queryClient.setQueryData([UserQueryKey.fetchUserProfile], mergedUser);
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [UserQueryKey.fetchUserProfile],
       });
+      toast.success('Changes Saved');
     },
     onError: error => {
       console.error('Failed to update user:', error);

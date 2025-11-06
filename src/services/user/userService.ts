@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import { ERole } from '@/enums';
 
 export type User = {
   id: string;
@@ -6,6 +7,7 @@ export type User = {
   fullName: string;
   isPhoneConfirmed: boolean;
   phone: string;
+  role: ERole;
 };
 
 export const UserServices = {
