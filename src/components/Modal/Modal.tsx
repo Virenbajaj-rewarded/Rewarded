@@ -17,6 +17,7 @@ export default function Modal({
   submitButtonTextStyle,
   cancelButtonStyle,
   cancelButtonTextStyle,
+  submitButtonType = 'default',
 }: IModal) {
   return (
     <NativeModal
@@ -48,7 +49,7 @@ export default function Modal({
           <Typography
             fontVariant="regular"
             fontSize={14}
-            color="#FFFFFF"
+            color="#BFBFBF"
             style={styles.description}
           >
             {description}
@@ -58,7 +59,11 @@ export default function Modal({
             <PrimaryButton
               label={submitButtonLabel}
               onPress={onSubmit}
-              style={[styles.submitButton, submitButtonStyle]}
+              style={[
+                styles.submitButton,
+                submitButtonStyle,
+                submitButtonType === 'delete' && styles.submitDeleteButton,
+              ]}
               textStyle={[styles.submitButtonText, submitButtonTextStyle]}
             />
             <PrimaryButton

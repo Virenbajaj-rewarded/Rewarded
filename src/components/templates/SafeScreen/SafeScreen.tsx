@@ -17,7 +17,12 @@ function SafeScreen({ children = undefined, style, ...props }: Properties) {
   const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React);
 
   return (
-    <SafeAreaView {...props} mode="padding" style={[styles.container, style]}>
+    <SafeAreaView
+      {...props}
+      mode="padding"
+      style={[styles.container, style]}
+      edges={['bottom', 'left', 'right']}
+    >
       <StatusBar
         backgroundColor={navigationTheme.colors.background}
         //FIXME

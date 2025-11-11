@@ -10,4 +10,10 @@ export const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
   },
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
 });

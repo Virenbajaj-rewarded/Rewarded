@@ -9,10 +9,10 @@ import { useStore } from './useStore';
 import { styles } from './Store.styles';
 import SafeScreen from '@/components/templates/SafeScreen';
 import { useShortAddress } from '@/hooks';
-import { ERewardProgramStrategy } from '@/services/stores/schema';
+import { EIndustryDisplayNames, EProgramStrategy } from '@/enums';
 
 export default function Store({ route }: RootScreenProps<Paths.STORE>) {
-  const { storeId } = route.params;
+  const { businessCode } = route.params;
 
   const {
     store,
@@ -24,7 +24,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
     handleOpenEmail,
     handleOpenPhone,
     handleOpenMaps,
-  } = useStore({ storeId });
+  } = useStore({ businessCode });
 
   const {
     shortAddress,
@@ -55,15 +55,14 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
 
   const {
     logoUrl,
-    name,
+    businessName,
     storeType,
     distance,
     lifetimeSavings,
     rewardPoints,
     spent,
-    email,
-    phone,
-    activeRewardProgram,
+    businessEmail,
+    businessPhone,
   } = store;
 
   return (
@@ -75,13 +74,14 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
 
         <View style={styles.storeInfoContainer}>
           <Typography fontVariant="medium" fontSize={30} color="#FFFFFF" textAlign="center">
-            {name}
+            {businessName}
           </Typography>
           <Typography fontVariant="medium" fontSize={16} color="#3C83F6" textAlign="center">
-            {activeRewardProgram &&
-            activeRewardProgram.strategy === ERewardProgramStrategy.PERCENT_BACK
-              ? `${activeRewardProgram.percentBack}% on purchases`
-              : `Spend ${activeRewardProgram.spendThreshold} to earn ${activeRewardProgram.rewardPercent}%`}
+            {store?.activeRewardProgram
+              ? store?.activeRewardProgram?.strategy === EProgramStrategy.PERCENT_BACK
+                ? `${store?.activeRewardProgram?.percentBack}% on purchases`
+                : `Spend ${store?.activeRewardProgram?.spendThreshold} to earn ${store?.activeRewardProgram?.rewardPercent}%`
+              : 'No specific reward program'}
           </Typography>
 
           <View style={styles.storeTypeAndDistanceContainer}>
@@ -89,7 +89,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
               {/* TODO: add icon for store type */}
               <IconByVariant path="bookstore" width={30} height={30} color="#8C8C8C" />
               <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
-                {storeType}
+                {EIndustryDisplayNames[storeType]}
               </Typography>
             </View>
             <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
@@ -99,7 +99,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
           {isQRCodeVisible && (
             <QrCodeSvg
               value={JSON.stringify({
-                value: store.id || '',
+                value: store?.businessCode || '',
                 type: 'store_profile',
               } satisfies QR_CODE)}
               frameSize={220}
@@ -133,7 +133,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
 
         <View style={styles.lifetimeSavingsContainer}>
           <Typography fontVariant="regular" fontSize={14} color="#D8E6FD">
-            Lifetime Savings in {name ?? 'this store'}
+            Lifetime Savings in {businessName ?? 'this store'}
           </Typography>
           <Typography fontVariant="medium" fontSize={20} color="#FFFFFF">
             {lifetimeSavings ? `$${lifetimeSavings.toFixed(2)}` : 'No savings yet'}
@@ -161,13 +161,13 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
           <TouchableOpacity style={styles.contactInfoItem} onPress={handleOpenEmail}>
             <IconByVariant path="email" width={20} height={20} color="#3069C5" />
             <Typography fontVariant="regular" fontSize={14} color="#F5F5F5">
-              {email ?? 'No email yet'}
+              {businessEmail ?? 'No email yet'}
             </Typography>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contactInfoItem} onPress={handleOpenPhone}>
             <IconByVariant path="phone" width={20} height={20} color="#3069C5" />
             <Typography fontVariant="regular" fontSize={14} color="#F5F5F5">
-              {phone ?? 'No phone yet'}
+              {businessPhone ?? 'No phone yet'}
             </Typography>
           </TouchableOpacity>
           <TouchableOpacity style={styles.contactInfoItem} onPress={handleOpenMaps}>

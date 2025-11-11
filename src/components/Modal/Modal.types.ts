@@ -2,6 +2,7 @@ import { StyleProp, ViewStyle } from 'react-native';
 
 export interface IModal {
   visible: boolean;
+  submitButtonType?: 'default' | 'delete';
   title: string;
   description: string;
   submitButtonLabel: string;

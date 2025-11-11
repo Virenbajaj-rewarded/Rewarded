@@ -125,6 +125,11 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
             consumerId: qrCode.value,
           });
           break;
+        case 'store_profile':
+          navigation.replace(Paths.SCAN_STORE, {
+            businessCode: qrCode.value,
+          });
+          break;
         default:
           throw new Error('Unknown type');
       }

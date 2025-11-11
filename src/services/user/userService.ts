@@ -1,26 +1,24 @@
 import { instance } from '@/services/instance';
 
-import { balanceSchema, BalanceType, User, userSchema, updateUserSchema } from './schema';
+import { IGetBalanceResponse, IGetUserResponse } from './user.types';
 
 export const UserServices = {
   fetchProfile: async () => {
-    const response = await instance.get<User>(`users/me`).json();
-    return userSchema.parse(response);
-  },
-  fetchMerchantBalance: async () => {
-    const response = await instance.get<BalanceType>(`merchants/balance`).json();
-    return balanceSchema.parse(response);
+    const response = await instance.get<IGetUserResponse>(`users/me`).json();
+    return response;
   },
   fetchCustomerBalance: async () => {
-    const response = await instance.get<BalanceType[]>(`users/me/balances`).json();
-    return response.map(balance => balanceSchema.parse(balance));
+    const response = await instance.get<IGetBalanceResponse>(`users/me/balances`).json();
+    return response;
   },
   fetchUserById: async (id: string) => {
-    const response = await instance.get<User>(`users/${id}`).json();
-    return userSchema.parse(response);
+    const response = await instance.get<IGetUserResponse>(`users/${id}`).json();
+    return response;
   },
-  updateUser: async (data: Partial<User>) => {
-    const response = await instance.patch<Partial<User>>(`users/me/profile`, { json: data }).json();
-    return updateUserSchema.parse(response);
+  updateUser: async (data: Partial<IGetUserResponse>) => {
+    const response = await instance
+      .patch<Partial<IGetUserResponse>>(`users/me/profile`, { json: data })
+      .json();
+    return response;
   },
 };

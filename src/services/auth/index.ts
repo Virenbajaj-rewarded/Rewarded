@@ -1,8 +1,8 @@
-import auth from "@react-native-firebase/auth";
+import auth from '@react-native-firebase/auth';
 
 let currentIdToken: string | null = null;
 
-auth().onIdTokenChanged(async (user) => {
+auth().onIdTokenChanged(async user => {
   currentIdToken = user ? await user.getIdToken() : null;
 });
 

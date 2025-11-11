@@ -2,6 +2,7 @@ import ky from 'ky';
 import { getIdToken, peekIdToken } from '@/services/auth';
 import Config from 'react-native-config';
 import Bugsnag from '@bugsnag/react-native';
+import { showToast } from '@/utils';
 
 const prefixUrl = Config.API_BASE_URL;
 
@@ -59,6 +60,12 @@ export const instance = ky.extend({
               status: response.status,
               body: errorBody,
             });
+          });
+
+          showToast({
+            type: 'error',
+            text1: 'Error',
+            text2: message,
           });
 
           throw new Error(message);

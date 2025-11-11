@@ -33,6 +33,24 @@ const geocodingClient = ky.create({
   },
 });
 
+export interface AddressSuggestion {
+  place_id: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+  address?: {
+    house_number?: string;
+    road?: string;
+    city?: string;
+    town?: string;
+    village?: string;
+    state?: string;
+    country?: string;
+    postcode?: string;
+    country_code?: string;
+  };
+}
+
 const formatAddress = (components: any): string => {
   const parts: string[] = [];
 
@@ -133,4 +151,32 @@ export const getShortAddress = async (latitude: number, longitude: number): Prom
   }
 
   return parts.length > 0 ? parts.join(', ') : 'Address not available';
+};
+
+export const searchAddresses = async (
+  query: string,
+  options: {
+    limit?: number;
+  } = {}
+): Promise<AddressSuggestion[]> => {
+  const { limit = 10 } = options;
+
+  if (!query || query.trim().length < 1) {
+    return [];
+  }
+
+  try {
+    const searchParams = new URLSearchParams({
+      format: 'json',
+      q: query.trim(),
+      addressdetails: '1',
+      limit: limit.toString(),
+    });
+
+    const data = await geocodingClient.get(`search?${searchParams}`).json<AddressSuggestion[]>();
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error('Address search error:', error);
+    return [];
+  }
 };

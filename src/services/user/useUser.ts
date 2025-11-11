@@ -1,35 +1,26 @@
 import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-
+import { useFirebaseAuthState } from '@/services/firebase/useFirebaseAuthState';
 import { UserServices } from './userService';
-import { User } from '@/services/user/schema';
+import { IGetUserResponse } from '@/services/user/user.types';
 
 export const enum UserQueryKey {
   fetchUserProfile = 'fetchUserProfile',
-  fetchMerchantBalance = 'fetchMerchantBalance',
   fetchCustomerBalance = 'fetchCustomerBalance',
   fetchCustomerById = 'fetchCustomerById',
   updateUser = 'patchUserProfile',
 }
 
-const useFetchProfileQuery = () =>
-  useQuery({
+const useFetchProfileQuery = () => {
+  const { isAuthenticated, isLoading: authLoading } = useFirebaseAuthState();
+
+  return useQuery({
     queryFn: () => UserServices.fetchProfile(),
     queryKey: [UserQueryKey.fetchUserProfile],
-    staleTime: 0,
+    enabled: isAuthenticated && !authLoading, // Only fetch if user is authenticated
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: false, // Don't retry if it fails
   });
-
-export const useFetchMerchantBalanceQuery = () =>
-  useQuery({
-    queryFn: () => UserServices.fetchMerchantBalance(),
-    queryKey: [UserQueryKey.fetchMerchantBalance],
-    staleTime: 300000,
-    refetchOnWindowFocus: 'always',
-    refetchOnReconnect: 'always',
-    placeholderData: {
-      type: 'PAID',
-      balance: 0,
-    },
-  });
+};
 
 export const useFetchCustomerBalanceQuery = () =>
   useQuery({
@@ -38,16 +29,10 @@ export const useFetchCustomerBalanceQuery = () =>
     staleTime: 300000,
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: 'always',
-    placeholderData: [
-      {
-        type: 'PAID',
-        balance: 0,
-      },
-      {
-        type: 'FREE',
-        balance: 0,
-      },
-    ],
+    placeholderData: {
+      type: 'PAID',
+      balance: 0,
+    },
   });
 
 export const useFetchCustomerById = (id?: string) =>
@@ -62,9 +47,11 @@ export const useUpdateUserMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Partial<User>) => UserServices.updateUser(data),
+    mutationFn: (data: Partial<IGetUserResponse>) => UserServices.updateUser(data),
     onSuccess: updatedUser => {
-      const currentUser = queryClient.getQueryData<User>([UserQueryKey.fetchUserProfile]);
+      const currentUser = queryClient.getQueryData<IGetUserResponse>([
+        UserQueryKey.fetchUserProfile,
+      ]);
       const mergedUser = currentUser ? { ...currentUser, ...updatedUser } : updatedUser;
       queryClient.setQueryData([UserQueryKey.fetchUserProfile], mergedUser);
       queryClient.invalidateQueries({
@@ -88,7 +75,7 @@ export const useUser = () => {
       options
     );
 
-  const setQueryData = (profile: User | null) => {
+  const setQueryData = (profile: IGetUserResponse | null) => {
     client.setQueryData([UserQueryKey.fetchUserProfile], profile);
   };
 

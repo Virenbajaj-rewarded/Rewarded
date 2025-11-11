@@ -1,8 +1,7 @@
 import { ActivityIndicator, View } from 'react-native';
 import { MerchantTabCombinedScreenProps } from '@/navigation/types.ts';
 import { MerchantTabPaths } from '@/navigation/paths.ts';
-import ScanQRButton from '@/components/molecules/ScanQRButton';
-import { useFetchMerchantBalanceQuery } from '@/services/user/useUser';
+import { useFetchMerchantBalanceQuery } from '@/services/merchant/useMerchant';
 import IconByVariant from '@/components/atoms/IconByVariant';
 import { styles } from './Balance.styles';
 import { Typography } from '@/components';
@@ -22,13 +21,12 @@ export default function Balance({}: MerchantTabCombinedScreenProps<MerchantTabPa
         ) : (
           <View style={styles.balanceLabel}>
             <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balance?.balance || 0}
+              {balance?.points || 0}
             </Typography>
             <IconByVariant path="coins" width={16} height={16} />
           </View>
         )}
       </View>
-      <ScanQRButton />
     </View>
   );
 }

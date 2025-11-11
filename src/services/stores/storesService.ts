@@ -1,13 +1,7 @@
 import { instance } from '@/services/instance';
 
-import {
-  StoreType,
-  storeSchema,
-  StoresResponseType,
-  storesResponseSchema,
-  SavingsResponseType,
-  savingsResponseSchema,
-} from './schema';
+import { IGetStoresResponse, ISavingsResponse } from './stores.types';
+import { IStore } from '@/interfaces';
 
 export const StoreServices = {
   fetchMyStores: async ({ pageParam = 1 }: { pageParam?: number }) => {
@@ -18,10 +12,10 @@ export const StoreServices = {
           limit: 12,
         },
       })
-      .json<StoresResponseType>();
-
-    return storesResponseSchema.parse(response);
+      .json<IGetStoresResponse>();
+    return response;
   },
+
   fetchRemovedStores: async ({ pageParam = 1 }: { pageParam?: number }) => {
     const response = await instance
       .get(`users/me/stores/excluded`, {
@@ -30,17 +24,17 @@ export const StoreServices = {
           limit: 12,
         },
       })
-      .json<StoresResponseType>();
+      .json<IGetStoresResponse>();
 
-    return storesResponseSchema.parse(response);
+    return response;
   },
-  fetchStore: async (id: string) => {
-    const response = await instance.get(`users/me/stores/${id}`).json<StoreType>();
-    return storeSchema.parse(response);
+  fetchStore: async (businessCode: string) => {
+    const response = await instance.get(`users/me/stores/code/${businessCode}`).json<IStore>();
+    return response;
   },
   fetchSavings: async () => {
-    const response = await instance.get(`users/me/savings`).json<SavingsResponseType>();
-    return savingsResponseSchema.parse(response);
+    const response = await instance.get(`users/me/savings`).json<ISavingsResponse>();
+    return response;
   },
   deleteStore: async (id: string) => {
     await instance.delete<void>(`users/me/stores/${id}`);

@@ -4,16 +4,14 @@ import {
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
-} from "react-native";
-import { styles } from "./styles";
-import IconByVariant from "@/components/atoms/IconByVariant";
-import { useTheme } from "@/theme";
-import { useAuth } from "@/services/auth/AuthProvider.tsx";
-import { useState } from "react";
+} from 'react-native';
+import { styles } from './styles';
+import IconByVariant from '@/components/atoms/IconByVariant';
+import { useTheme } from '@/theme';
+import { useAuth } from '@/services/auth/useAuth';
+import { useState } from 'react';
 
-export default function GoogleButton(
-  props: Omit<TouchableOpacityProps, "style">,
-) {
+export default function GoogleButton(props: Omit<TouchableOpacityProps, 'style'>) {
   const { fonts } = useTheme();
   const { signInWithGoogle } = useAuth();
 
@@ -26,14 +24,9 @@ export default function GoogleButton(
       await signInWithGoogle();
     } catch (e) {
       const error = e as Error;
-      Alert.alert(
-        error?.message || "Error",
-        "Please try again later",
-        [{ text: "OK" }],
-        {
-          cancelable: true,
-        },
-      );
+      Alert.alert(error?.message || 'Error', 'Please try again later', [{ text: 'OK' }], {
+        cancelable: true,
+      });
     } finally {
       setGoogleLoading(false);
     }
@@ -47,9 +40,7 @@ export default function GoogleButton(
     >
       <IconByVariant path="google" width={20} height={20} />
 
-      <Text style={[fonts.size_16, { color: "#FFFFFF" }]}>
-        Continue with Google
-      </Text>
+      <Text style={[fonts.size_16, { color: '#FFFFFF' }]}>Continue with Google</Text>
       {googleLoading && <ActivityIndicator />}
     </TouchableOpacity>
   );

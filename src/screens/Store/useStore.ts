@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Linking } from 'react-native';
 import { useMyStores } from '@/services/stores/useStores';
 
-export const useStore = ({ storeId }: { storeId: string }) => {
+export const useStore = ({ businessCode }: { businessCode: string }) => {
   const [isQRCodeVisible, setIsQRCodeVisible] = useState(false);
   const { useFetchStoreQuery } = useMyStores();
 
@@ -17,16 +17,16 @@ export const useStore = ({ storeId }: { storeId: string }) => {
     data: store,
     isLoading: isFetchStoreLoading,
     isError: isFetchStoreError,
-  } = useFetchStoreQuery(storeId);
+  } = useFetchStoreQuery(businessCode);
 
   const handleOpenEmail = async () => {
-    if (!store?.email) return;
-    await Linking.openURL(`mailto:${store.email}`);
+    if (!store?.businessEmail) return;
+    await Linking.openURL(`mailto:${store.businessEmail}`);
   };
 
   const handleOpenPhone = async () => {
-    if (!store?.phone) return;
-    const cleanPhone = store.phone.replace(/[\s\-()]/g, '');
+    if (!store?.businessPhone) return;
+    const cleanPhone = store.businessPhone.replace(/[\s\-()]/g, '');
     const phoneUrl = `tel:${cleanPhone}`;
     await Linking.openURL(phoneUrl);
   };

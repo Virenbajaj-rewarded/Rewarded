@@ -1,7 +1,7 @@
-import { StoreListItemType } from '@/services/stores/schema';
+import { IStoreListItem } from '@/services/stores/stores.types';
 
 export type MyStoreListProps = {
-  stores: StoreListItemType[];
+  stores: IStoreListItem[];
   isLoading: boolean;
   isError: boolean;
   fetchNextPage: () => void;

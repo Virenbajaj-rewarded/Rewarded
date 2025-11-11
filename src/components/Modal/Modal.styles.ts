@@ -37,9 +37,12 @@ export const styles = StyleSheet.create({
   buttonsContainer: {
     gap: 10,
   },
+  submitDeleteButton: {
+    backgroundColor: '#FF455C',
+  },
   submitButton: {
     height: 40,
-    backgroundColor: '#FF455C',
+    backgroundColor: '#3c83f6',
     paddingVertical: 6,
     paddingHorizontal: 15,
     borderRadius: 8,

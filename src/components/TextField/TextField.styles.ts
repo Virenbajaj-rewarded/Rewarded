@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
   container: {
     gap: 8,
   },
+  inputContainer: {
+    position: 'relative',
+  },
   input: {
     borderWidth: 1,
     color: '#FFFFFF',
@@ -11,8 +14,32 @@ export const styles = StyleSheet.create({
     backgroundColor: '#1F1F1F',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    height: 48,
+    height: 40,
     borderRadius: 8,
-    marginBottom: 12,
+    fontSize: 16,
+  },
+  inputWithMask: {
+    paddingLeft: 50,
+  },
+  inputWithButton: {
+    paddingRight: 50,
+  },
+  maskContainer: {
+    position: 'absolute',
+    left: 12,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    zIndex: 1,
+    pointerEvents: 'none',
+  },
+  rightAction: {
+    position: 'absolute',
+    right: 12,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
   },
 });

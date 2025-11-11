@@ -1,19 +1,20 @@
 import { memo } from 'react';
-import { StoreListItemType } from '@/services/stores/schema';
+import { IStoreListItem } from '@/services/stores/stores.types';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { styles } from './StoreListItem.styles';
 import IconByVariant from '@/components/atoms/IconByVariant';
 import { useNavigation } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths.ts';
 import { Typography } from '@/components';
+import { EIndustryDisplayNames } from '@/enums';
 
-const StoreListItem = (store: StoreListItemType) => {
+const StoreListItem = (store: IStoreListItem) => {
   const navigation = useNavigation();
-  const { logoUrl, name, rewardPoints, distance, id, storeType } = store || {};
+  const { logoUrl, name, rewardPoints, distance, businessCode, storeType } = store || {};
 
   const handleStorePress = () => {
     navigation.navigate(Paths.STORE, {
-      storeId: id,
+      businessCode,
     });
   };
 
@@ -41,13 +42,13 @@ const StoreListItem = (store: StoreListItemType) => {
             {/* TODO: add icon for store type */}
             <IconByVariant path="bookstore" width={20} height={20} color="#8C8C8C" />
             <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
-              {storeType}
+              {EIndustryDisplayNames[storeType]}
             </Typography>
           </View>
-          <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
-            {distance ? `${distance} miles from you` : 'Address not available'}
-          </Typography>
         </View>
+        <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
+          {distance ? `${distance} miles from you` : 'Address not available'}
+        </Typography>
         <View style={styles.infoItem}>
           <Typography fontVariant="medium" fontSize={14} color="#3C83F6">
             {rewardPoints ? `${rewardPoints} rewards points` : 'No rewards points'}

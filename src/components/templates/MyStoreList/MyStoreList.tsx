@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { styles } from './MyStoreList.styles';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import Store from '@/components/molecules/Store';
-import { StoreListItemType } from '@/services/stores/schema';
+import { IStoreListItem } from '@/services/stores/stores.types';
 import { MyStoreListProps } from './types';
 import { Typography } from '@/components';
 
@@ -19,7 +19,7 @@ const MyStoreList = ({
   refetch,
   isRefetching,
 }: MyStoreListProps) => {
-  const renderItem = useCallback(({ item }: ListRenderItemInfo<StoreListItemType>) => {
+  const renderItem = useCallback(({ item }: ListRenderItemInfo<IStoreListItem>) => {
     return <Store {...item} />;
   }, []);
 
@@ -42,7 +42,7 @@ const MyStoreList = ({
   }
 
   return (
-    <FlashList<StoreListItemType>
+    <FlashList<IStoreListItem>
       data={stores}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}

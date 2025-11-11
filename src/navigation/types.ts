@@ -24,17 +24,35 @@ export type RootStackParamList = {
   [Paths.USER_TABS]: NavigatorScreenParams<UserTabStackParamList>;
   [Paths.MERCHANT_TABS]: NavigatorScreenParams<MerchantTabStackParamList>;
   [Paths.STORE]: {
-    storeId: string;
+    businessCode: string;
+  };
+  [Paths.SCAN_STORE]: {
+    businessCode: string;
   };
   [Paths.QR_SCANNER]: undefined;
+  [Paths.QR_CODE]: {
+    id: string;
+  };
   [Paths.MERCHANT_QR_PAYMENT]: {
     consumerId: string;
   };
   [Paths.LOGIN]: undefined;
-  [Paths.SIGN_UP]: undefined;
-  [Paths.USER_PROFILE]: undefined;
-  [Paths.MERCHANT_PROFILE]: undefined;
+  [Paths.FORGOT_PASSWORD]: undefined;
+  [Paths.SIGNUP_MERCHANT]: undefined;
+  [Paths.SIGNUP_USER]: undefined;
+  [Paths.SIGNUP_CHOOSE_ROLE]: undefined;
+  [Paths.SIGNUP_MERCHANT_SUCCESS]: {
+    email: string;
+  };
+  [Paths.CONFIRM_EMAIL]: {
+    email: string;
+  };
+  [Paths.PROFILE]: undefined;
   [Paths.CHANGE_PASSWORD]: undefined;
+  [Paths.SET_MERCHANT_PASSWORD]: {
+    token: string;
+  };
+  [Paths.CREATE_PROGRAM]: undefined;
 };
 
 export type UserTabStackParamList = {

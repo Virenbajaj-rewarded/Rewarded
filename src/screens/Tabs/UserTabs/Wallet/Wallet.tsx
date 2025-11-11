@@ -1,7 +1,7 @@
 import { ActivityIndicator, View } from 'react-native';
 import { UserTabCombinedScreenProps } from '@/navigation/types.ts';
 import { UserTabPaths } from '@/navigation/paths.ts';
-import { useAuth } from '@/services/auth/AuthProvider.tsx';
+import { useAuth } from '@/services/auth/useAuth';
 import { QrCodeSvg } from 'react-native-qr-svg';
 import { QR_CODE } from '@/types';
 import { useFetchCustomerBalanceQuery } from '@/services/user/useUser';
@@ -10,7 +10,9 @@ import { Typography } from '@/components';
 import { styles } from './Wallet.styles';
 
 export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLET>) {
-  const { user } = useAuth();
+  const { useFetchProfileQuery } = useAuth();
+
+  const { data: user } = useFetchProfileQuery();
 
   const { isLoading, isRefetching, data: balances } = useFetchCustomerBalanceQuery();
 
@@ -28,7 +30,7 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
         ) : (
           <View style={styles.balanceContainer}>
             <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balances?.find(balance => balance.type === 'FREE')?.balance || 0}
+              {balances?.balance || 0}
             </Typography>
             <IconByVariant path="coins" width={16} height={16} />
           </View>
@@ -44,7 +46,7 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
         ) : (
           <View style={styles.balanceContainer}>
             <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balances?.find(balance => balance.type === 'PAID')?.balance || 0}
+              {balances?.balance || 0}
             </Typography>
             <IconByVariant path="coins" width={16} height={16} />
           </View>

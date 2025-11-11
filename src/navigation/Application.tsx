@@ -9,24 +9,34 @@ import { Paths } from '@/navigation/paths';
 import { useTheme } from '@/theme';
 
 import {
-  UserTabNavigator,
-  MerchantTabNavigator,
   Login,
-  SignUp,
+  ForgotPassword,
   Store,
+  ScanStore,
+  ConfirmEmail,
   QRScanner,
   MerchantQRPayment,
-  UserProfile,
-  MerchantProfile,
+  Profile,
+  SignupUser,
+  SignupMerchant,
+  SignupChooseRole,
   ChangePassword,
+  SignupMerchantSuccess,
+  QRCode,
+  CreateProgram,
 } from '@/screens';
-import { useAuth } from '@/services/auth/AuthProvider.tsx';
+import BottomTabNavigator from '@/navigation/BottomTabNavigator';
+import { useAuth } from '@/services/auth/useAuth';
+import { BackButton } from '@/components';
+import { ERole } from '@/enums';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function ApplicationNavigator() {
   const { navigationTheme, variant } = useTheme();
-  const { user } = useAuth();
+  const { useFetchProfileQuery } = useAuth();
+
+  const { data: profile } = useFetchProfileQuery();
 
   return (
     <SafeAreaProvider>
@@ -35,70 +45,116 @@ function ApplicationNavigator() {
           key={variant}
           screenOptions={{
             headerShown: false,
+            headerStyle: {
+              backgroundColor: '#000',
+            },
+            headerTintColor: '#ffffff',
+            headerTitleStyle: {
+              color: '#ffffff',
+            },
+            headerLeft: () => <BackButton />,
           }}
         >
-          {!user ? (
+          {!profile ? (
             <>
-              <Stack.Screen component={Login} name={Paths.LOGIN} />
-              <Stack.Screen component={SignUp} name={Paths.SIGN_UP} />
+              <Stack.Screen options={{ headerShown: false }} component={Login} name={Paths.LOGIN} />
+              <Stack.Screen
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Forgot Password',
+                }}
+                component={ForgotPassword}
+                name={Paths.FORGOT_PASSWORD}
+              />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: 'Create Your account' }}
+                component={SignupUser}
+                name={Paths.SIGNUP_USER}
+              />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: 'Create Your account' }}
+                component={SignupMerchant}
+                name={Paths.SIGNUP_MERCHANT}
+              />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: 'Choose Your Role' }}
+                component={SignupChooseRole}
+                name={Paths.SIGNUP_CHOOSE_ROLE}
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                  gestureEnabled: false,
+                  headerBackVisible: false,
+                }}
+                component={SignupMerchantSuccess}
+                name={Paths.SIGNUP_MERCHANT_SUCCESS}
+              />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: 'Confirm your email' }}
+                component={ConfirmEmail}
+                name={Paths.CONFIRM_EMAIL}
+              />
             </>
           ) : (
             <>
-              {user.role === 'USER' ? (
-                <Stack.Group>
-                  <Stack.Screen component={UserTabNavigator} name={Paths.USER_TABS} />
-                  <Stack.Group
-                    screenOptions={{
-                      headerShown: true,
-                    }}
-                  >
-                    <Stack.Screen
-                      component={Store}
-                      name={Paths.STORE}
-                      options={{
-                        headerTitle: 'Store',
-                        headerTitleStyle: {
-                          color: '#ffffff',
-                        },
-                        headerBackTitle: 'Back',
-                        headerTintColor: '#ffffff',
-                      }}
-                    />
-                    <Stack.Screen
-                      component={UserProfile}
-                      name={Paths.USER_PROFILE}
-                      options={{
-                        headerTitle: 'Profile',
-                        headerTitleStyle: {
-                          color: '#ffffff',
-                        },
-                        headerBackTitle: 'Back',
-                        headerTintColor: '#ffffff',
-                      }}
-                    />
-                  </Stack.Group>
-                </Stack.Group>
-              ) : (
-                <Stack.Group>
-                  <Stack.Screen component={MerchantTabNavigator} name={Paths.MERCHANT_TABS} />
+              {profile.role === ERole.USER ? (
+                <Stack.Group screenOptions={{ headerShown: true }}>
                   <Stack.Screen
-                    component={MerchantProfile}
-                    name={Paths.MERCHANT_PROFILE}
+                    options={{ headerShown: false }}
+                    component={BottomTabNavigator}
+                    name={Paths.USER_TABS}
+                  />
+                  <Stack.Screen
+                    component={Store}
+                    name={Paths.STORE}
+                    options={{
+                      headerTitle: 'Store',
+                    }}
+                  />
+                  <Stack.Screen
+                    component={ScanStore}
+                    name={Paths.SCAN_STORE}
+                    options={{
+                      headerTitle: 'Store',
+                    }}
+                  />
+                  <Stack.Screen
+                    component={Profile}
+                    name={Paths.PROFILE}
                     options={{
                       headerShown: true,
                       headerTitle: 'Profile',
-                      headerTitleStyle: {
-                        color: '#ffffff',
-                      },
-                      headerBackTitle: 'Back',
-                      headerTintColor: '#ffffff',
+                    }}
+                  />
+                </Stack.Group>
+              ) : (
+                <Stack.Group>
+                  <Stack.Screen component={BottomTabNavigator} name={Paths.MERCHANT_TABS} />
+                  <Stack.Screen
+                    options={{ headerShown: true, headerTitle: 'Create New Program' }}
+                    component={CreateProgram}
+                    name={Paths.CREATE_PROGRAM}
+                  />
+                  <Stack.Screen
+                    component={Profile}
+                    name={Paths.PROFILE}
+                    options={{
+                      headerShown: true,
+                      headerTitle: 'Profile',
                     }}
                   />
                 </Stack.Group>
               )}
             </>
           )}
+
           <Stack.Screen name={Paths.QR_SCANNER} component={QRScanner} />
+          <Stack.Screen
+            options={{ headerShown: true, headerTitle: 'My QR Code' }}
+            name={Paths.QR_CODE}
+            component={QRCode}
+          />
           <Stack.Screen name={Paths.MERCHANT_QR_PAYMENT} component={MerchantQRPayment} />
           <Stack.Screen
             component={ChangePassword}
@@ -106,11 +162,6 @@ function ApplicationNavigator() {
             options={{
               headerShown: true,
               headerTitle: 'Change Password',
-              headerTitleStyle: {
-                color: '#ffffff',
-              },
-              headerBackTitle: 'Profile',
-              headerTintColor: '#ffffff',
             }}
           />
         </Stack.Navigator>

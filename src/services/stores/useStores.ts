@@ -5,7 +5,7 @@ import {
   InvalidateOptions,
   useMutation,
 } from '@tanstack/react-query';
-import { StoresResponseType } from './schema';
+import { IGetStoresResponse } from './stores.types';
 import { StoreServices } from '@/services/stores/storesService';
 
 export const enum StoreQueryKey {
@@ -81,7 +81,7 @@ export const useDeleteStore = () => {
   return useMutation({
     mutationFn: (id: string) => StoreServices.deleteStore(id),
     onSuccess: id => {
-      client.setQueryData<{ pages: StoresResponseType[]; pageParams: unknown[] } | undefined>(
+      client.setQueryData<{ pages: IGetStoresResponse[]; pageParams: unknown[] } | undefined>(
         [StoreQueryKey.fetchMyStores],
         oldData => {
           if (!oldData) {
@@ -111,7 +111,7 @@ export const useRestoreStore = () => {
   return useMutation({
     mutationFn: (id: string) => StoreServices.restoreStore(id),
     onSuccess: id => {
-      client.setQueryData<{ pages: StoresResponseType[]; pageParams: unknown[] } | undefined>(
+      client.setQueryData<{ pages: IGetStoresResponse[]; pageParams: unknown[] } | undefined>(
         [StoreQueryKey.fetchDeletedStores],
         oldData => {
           if (!oldData) {

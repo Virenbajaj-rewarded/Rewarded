@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { StyleProp, TextStyle } from 'react-native';
-import { FontVariant } from './types';
+import { FontVariant, ITypography } from './Typography.types';
 
 const getFontFamily = (fontVariant: FontVariant): string => {
   switch (fontVariant) {
@@ -25,14 +24,8 @@ const Typography = ({
   fontSize = 16,
   color = '#FFFFFF',
   textAlign = 'left',
-}: {
-  children: React.ReactNode;
-  style?: StyleProp<TextStyle>;
-  fontVariant: FontVariant;
-  fontSize: number;
-  color: string;
-  textAlign?: 'left' | 'center' | 'right';
-}) => {
+  numberOfLines,
+}: ITypography) => {
   const dynamicStyle = useMemo(
     () =>
       StyleSheet.create({
@@ -47,7 +40,11 @@ const Typography = ({
     [fontVariant, fontSize, color, textAlign]
   );
 
-  return <Text style={[dynamicStyle.text, style]}>{children}</Text>;
+  return (
+    <Text style={[dynamicStyle.text, style]} numberOfLines={numberOfLines}>
+      {children}
+    </Text>
+  );
 };
 
 export default Typography;
