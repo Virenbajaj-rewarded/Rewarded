@@ -1,7 +1,18 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-apply plugin: 'com.google.gms.google-services'
+
+project.ext.envConfigFiles = [
+        devDebug              : ".env.development",
+        devRelease            : ".env.development",
+        devReleaseDevelopment : ".env.development",
+        stageDebug            : ".env.staging",
+        stageRelease          : ".env.staging",
+        stageReleaseStaging   : ".env.staging",
+        prodDebug             : ".env.production",
+        prodRelease           : ".env.production"
+]
+
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
@@ -90,8 +101,10 @@ android {
         applicationId "com.rewarded.app2025"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
+        versionCode 17
         versionName "0.0.1"
+        buildConfigField "int", "VERSION_CODE", "16"
+        buildConfigField "String", "VERSION_NAME", "\"0.0.1\""
     }
     signingConfigs {
         release {
@@ -115,15 +128,19 @@ android {
             dimension "env"
             versionNameSuffix "-dev"
             resValue "string", "app_name", "Rewarded DEV"
+            resValue "string", "build_config_package", "com.rewarded.app2025"
         }
         stage {
             dimension "env"
+            applicationIdSuffix ".stage"
             versionNameSuffix "-stage"
             resValue "string", "app_name", "Rewarded STAGE"
+            resValue "string", "build_config_package", "com.rewarded.app2025"
         }
         prod {
             dimension "env"
             resValue "string", "app_name", "Rewarded"
+            resValue "string", "build_config_package", "com.rewarded.app2025"
         }
     }
     buildTypes {
@@ -164,3 +181,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

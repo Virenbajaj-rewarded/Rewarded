@@ -4,8 +4,13 @@ import { IGetBalanceResponse, IGetUserResponse } from './user.types';
 
 export const UserServices = {
   fetchProfile: async () => {
-    const response = await instance.get<IGetUserResponse>(`users/me`).json();
-    return response;
+    try {
+      const response = await instance.get<IGetUserResponse>(`users/me`).json();
+      return response;
+    } catch (error) {
+      console.error('error', error);
+      throw error;
+    }
   },
   fetchCustomerBalance: async () => {
     const response = await instance.get<IGetBalanceResponse>(`users/me/balances`).json();

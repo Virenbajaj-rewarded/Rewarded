@@ -7,9 +7,11 @@ import { styles } from './Login.styles';
 import GoogleButton from '@/components/molecules/GoogleButton';
 import { Paths } from '@/navigation/paths';
 import { useLogin } from './useLogin';
+import { getAppVersionInfo } from '@/utils';
 
 function Login({}: RootScreenProps<Paths.LOGIN>) {
   const { formik, loading, navigateToSignup, navigateToForgotPassword } = useLogin();
+  const { appVersion, buildNumber, envType } = getAppVersionInfo();
 
   return (
     <FormikProvider value={formik}>
@@ -74,6 +76,25 @@ function Login({}: RootScreenProps<Paths.LOGIN>) {
                 style={styles.signupButton}
                 textStyle={styles.signupText}
               />
+            </View>
+
+            <View style={styles.versionInfo}>
+              <Typography
+                fontVariant="regular"
+                fontSize={11}
+                color="#666666"
+                style={styles.versionText}
+              >
+                {`Environment: ${envType.toUpperCase()}`}
+              </Typography>
+              <Typography
+                fontVariant="regular"
+                fontSize={11}
+                color="#666666"
+                style={styles.versionText}
+              >
+                {`Version: ${appVersion} (Build: ${buildNumber})`}
+              </Typography>
             </View>
           </View>
         </View>

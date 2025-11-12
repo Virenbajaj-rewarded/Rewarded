@@ -37,4 +37,13 @@ export const styles = StyleSheet.create({
   signupText: {
     color: '#3c83f6',
   },
+  versionInfo: {
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#2a2a2a',
+  },
+  versionText: {
+    textAlign: 'center',
+  },
 });
