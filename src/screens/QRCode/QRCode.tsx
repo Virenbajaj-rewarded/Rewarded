@@ -5,6 +5,7 @@ import { Paths } from '@/navigation/paths';
 import { QrCodeSvg } from 'react-native-qr-svg';
 import { QR_CODE } from '@/types';
 import { styles } from './QRCode.styles';
+import { ERole } from '@/enums';
 
 export default function QRCode({ route }: RootScreenProps<Paths.QR_CODE>) {
   const { id } = route.params;
@@ -14,6 +15,7 @@ export default function QRCode({ route }: RootScreenProps<Paths.QR_CODE>) {
         value={JSON.stringify({
           value: id || '',
           type: 'store_profile',
+          role: ERole.USER,
         } satisfies QR_CODE)}
         frameSize={220}
         backgroundColor={'transparent'}

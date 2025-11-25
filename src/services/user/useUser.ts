@@ -5,7 +5,7 @@ import { IGetUserResponse } from '@/services/user/user.types';
 
 export const enum UserQueryKey {
   fetchUserProfile = 'fetchUserProfile',
-  fetchCustomerBalance = 'fetchCustomerBalance',
+  fetchBalance = 'fetchBalance',
   fetchCustomerById = 'fetchCustomerById',
   updateUser = 'patchUserProfile',
 }
@@ -22,17 +22,14 @@ const useFetchProfileQuery = () => {
   });
 };
 
-export const useFetchCustomerBalanceQuery = () =>
+export const useFetchBalanceQuery = () =>
   useQuery({
-    queryFn: () => UserServices.fetchCustomerBalance(),
-    queryKey: [UserQueryKey.fetchCustomerBalance],
+    queryFn: () => UserServices.fetchBalance(),
+    queryKey: [UserQueryKey.fetchBalance],
     staleTime: 300000,
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: 'always',
-    placeholderData: {
-      type: 'PAID',
-      balance: 0,
-    },
+    placeholderData: 0,
   });
 
 export const useFetchCustomerById = (id?: string) =>

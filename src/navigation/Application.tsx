@@ -2,10 +2,12 @@ import type { RootStackParamList } from '@/navigation/types';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Paths } from '@/navigation/paths';
+import { navigationRef, resetToLogin } from '@/navigation/navigationRef';
 import { useTheme } from '@/theme';
 
 import {
@@ -24,7 +26,9 @@ import {
   SignupMerchantSuccess,
   QRCode,
   CreateProgram,
+  EditProgram,
 } from '@/screens';
+import { EditBusiness } from '@/screens/Tabs/MerchantTabs/Business';
 import BottomTabNavigator from '@/navigation/BottomTabNavigator';
 import { useAuth } from '@/services/auth/useAuth';
 import { BackButton } from '@/components';
@@ -38,9 +42,15 @@ function ApplicationNavigator() {
 
   const { data: profile } = useFetchProfileQuery();
 
+  useEffect(() => {
+    if (!profile && navigationRef.isReady()) {
+      resetToLogin();
+    }
+  }, [profile]);
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer theme={navigationTheme}>
+      <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <Stack.Navigator
           key={variant}
           screenOptions={{
@@ -137,11 +147,24 @@ function ApplicationNavigator() {
                     name={Paths.CREATE_PROGRAM}
                   />
                   <Stack.Screen
+                    options={{ headerShown: true, headerTitle: 'Edit Program' }}
+                    component={EditProgram}
+                    name={Paths.EDIT_PROGRAM}
+                  />
+                  <Stack.Screen
                     component={Profile}
                     name={Paths.PROFILE}
                     options={{
                       headerShown: true,
                       headerTitle: 'Profile',
+                    }}
+                  />
+                  <Stack.Screen
+                    component={EditBusiness}
+                    name={Paths.EDIT_BUSINESS}
+                    options={{
+                      headerShown: true,
+                      headerTitle: 'Edit Business',
                     }}
                   />
                 </Stack.Group>

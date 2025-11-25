@@ -1,5 +1,5 @@
 import { IProgram } from '@/interfaces';
-import { EProgramStrategy, EOfferType, EProgramStatus } from '@/enums';
+import { EProgramStrategy, EOfferType } from '@/enums';
 
 export interface IGetProgramsResponse {
   items: IProgram[];
@@ -12,14 +12,13 @@ export interface ICreateProgramPayload {
   name: string;
   strategy: EProgramStrategy;
   offerType: EOfferType;
-  capPerTransaction: string | number;
-  budget: string | number;
-  percentBack?: string | number;
-  spendThreshold?: string | number;
-  rewardPercent?: string | number;
+  maxDailyBudget: number | null;
+  budget: number | null;
+  percentBack?: number | null;
+  spendThreshold?: number | null;
+  rewardPercent?: number | null;
 }
 
-export interface IEditProgramPayload extends IProgram {
-  status: EProgramStatus;
+export interface IEditProgramPayload extends ICreateProgramPayload {
   id: string;
 }

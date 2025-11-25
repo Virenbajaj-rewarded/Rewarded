@@ -1,18 +1,24 @@
 import ProgramList from '@/screens/Tabs/MerchantTabs/Program/components/ProgramList/ProgramList';
-import { EProgramStatus } from '@/enums';
-import { useProgram } from '@/services/program/useProgram';
 import { View, ActivityIndicator } from 'react-native';
 import { Typography } from '@/components';
-import { styles } from '../Program.styles';
+import { styles } from '../../pages/Program/Program.styles';
+import { useStoppedPrograms } from './useStoppedPrograms';
 
 export default function StoppedPrograms() {
-  const { useFetchProgramsQuery } = useProgram();
   const {
-    data,
-    isLoading: isFetchProgramsLoading,
-    isError: isFetchProgramsError,
-  } = useFetchProgramsQuery();
-  const programs = data?.items || [];
+    stoppedPrograms,
+    handleRenewProgram,
+    renewProgramLoading,
+    handleWithdrawProgram,
+    withdrawProgramLoading,
+    isFetchProgramsLoading,
+    isFetchProgramsError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    isRefetching,
+  } = useStoppedPrograms();
 
   if (isFetchProgramsLoading) {
     return (
@@ -49,5 +55,18 @@ export default function StoppedPrograms() {
     );
   }
 
-  return <ProgramList programs={programs} status={EProgramStatus.STOPPED} />;
+  return (
+    <ProgramList
+      programs={stoppedPrograms}
+      handleRenewProgram={handleRenewProgram}
+      renewProgramLoading={renewProgramLoading}
+      handleWithdrawProgram={handleWithdrawProgram}
+      withdrawProgramLoading={withdrawProgramLoading}
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      refetch={refetch}
+      isRefetching={isRefetching}
+    />
+  );
 }

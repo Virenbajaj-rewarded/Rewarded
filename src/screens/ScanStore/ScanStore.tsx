@@ -9,7 +9,7 @@ import { useScanStore } from './useScanStore';
 import { styles } from './ScanStore.styles';
 import SafeScreen from '@/components/templates/SafeScreen';
 import { useShortAddress } from '@/hooks';
-import { EIndustryDisplayNames, EProgramStrategy } from '@/enums';
+import { EIndustryDisplayNames, EProgramStrategy, ERole } from '@/enums';
 
 export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) {
   const { businessCode } = route.params;
@@ -91,6 +91,7 @@ export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) 
               value={JSON.stringify({
                 value: store?.businessCode || '',
                 type: 'store_profile',
+                role: ERole.USER,
               } satisfies QR_CODE)}
               frameSize={220}
               backgroundColor={'transparent'}

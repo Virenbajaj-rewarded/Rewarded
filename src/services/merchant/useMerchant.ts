@@ -1,11 +1,10 @@
-import { InvalidateOptions, useQuery, useQueryClient } from '@tanstack/react-query';
+import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useFirebaseAuthState } from '@/services/firebase/useFirebaseAuthState';
 import { MerchantServices } from './merchantServices';
-import { IGetMerchantResponse } from './merchant.types';
+import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
 
 export const enum MerchantQueryKey {
   fetchMerchantProfile = 'fetchMerchantProfile',
-  fetchMerchantBalance = 'fetchMerchantBalance',
   fetchMerchantByBusinessCode = 'fetchMerchantByBusinessCode',
 }
 
@@ -28,19 +27,52 @@ export const useFetchMerchantByBusinessCodeQuery = (businessCode: string) =>
     enabled: !!businessCode,
   });
 
-export const useFetchMerchantBalanceQuery = () =>
-  useQuery({
-    queryFn: () => MerchantServices.fetchMerchantBalance(),
-    queryKey: [MerchantQueryKey.fetchMerchantBalance],
-    staleTime: 300000,
-    refetchOnWindowFocus: 'always',
-    refetchOnReconnect: 'always',
-    placeholderData: {
-      points: 0,
-      usd: 0,
-      usdc: 0,
+export const useUpdateMerchantMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: IUpdateMerchantPayload) => MerchantServices.updateMerchant(data),
+    onSuccess: updatedMerchant => {
+      const currentMerchant = queryClient.getQueryData<IGetMerchantResponse>([
+        MerchantQueryKey.fetchMerchantProfile,
+      ]);
+      const mergedMerchant = currentMerchant
+        ? { ...currentMerchant, ...updatedMerchant }
+        : updatedMerchant;
+      queryClient.setQueryData([MerchantQueryKey.fetchMerchantProfile], mergedMerchant);
+      queryClient.invalidateQueries({
+        queryKey: [MerchantQueryKey.fetchMerchantProfile],
+      });
+    },
+    onError: error => {
+      console.error('Failed to update merchant:', error);
     },
   });
+};
+
+export const useUploadMerchantLogoMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      logoUri,
+      fileName,
+      type,
+    }: {
+      logoUri: string;
+      fileName: string;
+      type: string;
+    }) => MerchantServices.uploadMerchantLogo(logoUri, fileName, type),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [MerchantQueryKey.fetchMerchantProfile],
+      });
+    },
+    onError: error => {
+      console.error('Failed to upload merchant logo:', error);
+    },
+  });
+};
 
 export const useMerchant = () => {
   const client = useQueryClient();
@@ -61,5 +93,7 @@ export const useMerchant = () => {
     invalidateQuery,
     useFetchMerchantProfileQuery,
     setQueryData,
+    useUpdateMerchantMutation,
+    useUploadMerchantLogoMutation,
   };
 };

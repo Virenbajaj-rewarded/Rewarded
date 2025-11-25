@@ -27,6 +27,7 @@ interface AddressAutocompleteProps {
   debounceMs?: number;
   label?: string;
   error?: string;
+  required?: boolean;
 }
 
 export default function AddressAutocomplete({
@@ -39,6 +40,7 @@ export default function AddressAutocomplete({
   listViewStyle,
   debounceMs = 500,
   label,
+  required,
   error,
 }: AddressAutocompleteProps) {
   const [searchText, setSearchText] = useState(value);
@@ -110,6 +112,7 @@ export default function AddressAutocomplete({
   return (
     <View style={[styles.container, containerStyle]}>
       <TextField
+        required={required}
         label={label || 'Address'}
         style={style}
         placeholder={placeholder}

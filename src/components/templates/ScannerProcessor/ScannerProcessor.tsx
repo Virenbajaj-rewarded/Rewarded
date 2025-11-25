@@ -1,22 +1,14 @@
-import { useMemo, useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Platform,
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import {
-  Camera,
-  Code,
-  CodeScannerFrame,
-  useCameraDevice,
-  useCameraFormat,
-  useCodeScanner,
-} from 'react-native-vision-camera';
+import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
 import MaterialIcons from '@react-native-vector-icons/material-design-icons';
 import { styles } from './ScannerProcessor.styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,7 +16,11 @@ import { ACCESSIBLE_QR_TYPES, QR_CODE } from '@/types';
 import { safeJsonParse } from '@/utils/helpers.ts';
 import { Paths } from '@/navigation/paths.ts';
 import { RootScreenProps } from '@/navigation/types.ts';
-import { useFocusEffect } from '@react-navigation/native';
+import { useUser } from '@/services/user/useUser';
+import { ERole } from '@/enums';
+import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
+import { Typography } from '@/components';
+import IconByVariant from '@/components/atoms/IconByVariant';
 
 const { width, height } = Dimensions.get('window');
 const SCAN_SIZE = Math.min(width * 0.7, 350);
@@ -37,73 +33,38 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
   const overlayTop = (height - SCAN_SIZE) / 2;
   const overlaySide = (width - SCAN_SIZE) / 2;
 
+  const { useFetchProfileQuery } = useUser();
+  const { data: profile } = useFetchProfileQuery();
+
   const [torchOn, setTorchOn] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [roleMismatchError, setRoleMismatchError] = useState(false);
 
-  const lastScannedValue = useRef<string | null>(null);
-
-  useFocusEffect(() => {
-    lastScannedValue.current = null;
-  });
-
-  const format = useCameraFormat(device, [{ videoResolution: { width: 720, height: 1280 } }]);
-
-  const regionOfInterest = useMemo(() => {
-    if (!format) return undefined;
-
-    const camW = format.videoWidth;
-    const camH = format.videoHeight;
-
-    const scale = Math.max(width / camW, height / camH);
-    const scaledW = camW * scale;
-    const scaledH = camH * scale;
-
-    const offsetX = (scaledW - width) / 2;
-    const offsetY = (scaledH - height) / 2;
-
-    const roiX = (overlaySide + offsetX) / scaledW;
-    const roiY = (overlayTop + offsetY) / scaledH;
-    const roiWidth = SCAN_SIZE / scaledW;
-    const roiHeight = SCAN_SIZE / scaledH;
-
-    return { x: roiX, y: roiY, width: roiWidth, height: roiHeight };
-  }, [format, overlaySide, overlayTop]);
-
-  const isCodeInsideROI = (code: Code, frame: CodeScannerFrame) => {
-    if (!code?.frame || !frame || !regionOfInterest) {
-      return false;
-    }
-
-    const { x: codeX, y: codeY, width: codeW, height: codeH } = code.frame;
-
-    const centerX = codeY + codeW / 2;
-    const centerY = codeX + codeH / 2;
-    const normalizedLeft = 1 - centerX / frame.height;
-    const normalizedTop = centerY / frame.width;
-    return (
-      normalizedLeft >= regionOfInterest.x &&
-      normalizedLeft <= regionOfInterest.x + regionOfInterest.width &&
-      normalizedTop >= regionOfInterest.y &&
-      normalizedTop <= regionOfInterest.y + regionOfInterest.height
-    );
-  };
+  // Track last processed QR code to prevent duplicate processing
+  const lastProcessedQRRef = useRef<string | null>(null);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
-    onCodeScanned: (codes, frame) => {
-      const qr = codes[0];
-      let isInside = true;
-      if (Platform.OS !== 'ios') isInside = isCodeInsideROI(qr, frame); // On IOS, we use regionOfInterest
-
-      if (!isInside || !qr.value || qr.value === lastScannedValue.current) {
+    onCodeScanned: codes => {
+      if (roleMismatchError || loading) {
         return;
       }
 
-      lastScannedValue.current = qr.value;
+      const qr = codes && codes.length > 0 ? codes[0] : null;
+      if (!qr?.value) {
+        return;
+      }
+
+      // Prevent processing the same QR code multiple times
+      if (lastProcessedQRRef.current === qr.value) {
+        return;
+      }
 
       const parsedQR = safeJsonParse(qr.value) as unknown as QR_CODE;
 
       if (!parsedQR || !parsedQR.type || !ACCESSIBLE_QR_TYPES.includes(parsedQR.type)) {
+        // Mark as processed to prevent multiple alerts
+        lastProcessedQRRef.current = qr.value;
         Alert.alert(
           'Invalid QR Code',
           'This QR code is not supported. Please try a different one.'
@@ -111,14 +72,22 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
         return;
       }
 
+      // Mark this QR code as processed and process it
+      lastProcessedQRRef.current = qr.value;
       processQR(parsedQR);
     },
-    regionOfInterest, // Note: works only on IOS
   });
 
   async function processQR(qrCode: QR_CODE) {
     try {
       setLoading(true);
+
+      if (profile?.role && qrCode.role && profile.role !== qrCode.role) {
+        setRoleMismatchError(true);
+        setLoading(false);
+        return;
+      }
+
       switch (qrCode.type) {
         case 'customer_profile':
           navigation.replace(Paths.MERCHANT_QR_PAYMENT, {
@@ -141,6 +110,23 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
     }
   }
 
+  const handleTryAgain = () => {
+    setRoleMismatchError(false);
+    // Reset ref to allow scanning again
+    lastProcessedQRRef.current = null;
+  };
+
+  const getErrorMessage = () => {
+    if (profile?.role === ERole.USER) {
+      return 'It looks like you scanned another user’s QR code, not a store’s. Please try scanning a store QR code instead.';
+    }
+
+    if (profile?.role === ERole.MERCHANT) {
+      return 'It looks like you scanned another merchant’s QR code, not a user’s. Please try scanning a user QR code instead.';
+    }
+    return 'It looks like you scanned invalid QR code. Please try scanning another QR code instead.';
+  };
+
   const onGoBack = () => {
     navigation.goBack();
   };
@@ -157,6 +143,21 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
     );
   }
 
+  if (roleMismatchError) {
+    return (
+      <View style={styles.errorContainer}>
+        <IconByVariant path="warning-triangle" width={80} height={80} />
+        <Typography fontVariant="bold" fontSize={24} color="#FFFFFF" style={styles.errorTitle}>
+          Wrong QR Code
+        </Typography>
+        <Typography fontVariant="regular" fontSize={14} color="#FFFFFF" textAlign="center">
+          {getErrorMessage()}
+        </Typography>
+        <PrimaryButton label="Try Again" onPress={handleTryAgain} style={styles.tryAgainButton} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Camera
@@ -165,7 +166,6 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
         isActive={true}
         torch={torchOn ? 'on' : 'off'}
         codeScanner={codeScanner}
-        format={format}
       />
 
       <View style={[styles.header, { top: insets.top + 16 }]}>
@@ -235,7 +235,7 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
 
       <View style={styles.footer}>
         <Text style={styles.hint}>
-          Can’t scan the QR code?{'\n'}
+          Can&apos;t scan the QR code?{'\n'}
           Try:{'\n'}- tapping on the screen to focus{'\n'}- adjusting the distance between the phone
           and the QR code{'\n'}- turning the flashlight on or off{'\n'}- restarting the app
         </Text>

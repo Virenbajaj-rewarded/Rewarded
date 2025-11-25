@@ -1,10 +1,10 @@
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, ReactNode } from 'react-native';
 
 export interface IModal {
   visible: boolean;
   submitButtonType?: 'default' | 'delete';
   title: string;
-  description: string;
+  description?: string;
   submitButtonLabel: string;
   cancelButtonLabel: string;
   onSubmit: () => void;
@@ -14,4 +14,5 @@ export interface IModal {
   submitButtonTextStyle?: StyleProp<ViewStyle>;
   cancelButtonStyle?: StyleProp<ViewStyle>;
   cancelButtonTextStyle?: StyleProp<ViewStyle>;
+  children?: ReactNode;
 }

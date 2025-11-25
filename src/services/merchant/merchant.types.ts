@@ -1,4 +1,6 @@
-import { ERole } from '@/enums';
+import { EIndustry, ERole } from '@/enums';
+import { ILocation } from '@/interfaces/ILocation';
+import { IActiveRewardProgram } from '@/interfaces/IStore';
 
 export interface IGetMerchantResponse {
   id: string;
@@ -7,6 +9,10 @@ export interface IGetMerchantResponse {
   businessPhoneNumber: string;
   businessAddress: string;
   businessCode: string | null;
+  activeRewardProgram: IActiveRewardProgram;
+  location: ILocation;
+  storeType?: EIndustry;
+  description?: string;
   tgUsername: string | null;
   whatsppUsername: string | null;
   logoKey: string | null;
@@ -22,8 +28,13 @@ export interface IGetMerchantResponse {
   logoUrl: string;
 }
 
-export interface IGetMerchantBalanceResponse {
-  points: number;
-  usd: number;
-  usdc: number;
+export interface IUpdateMerchantPayload {
+  businessName?: string;
+  businessEmail?: string;
+  businessPhoneNumber?: string;
+  location?: ILocation;
+  storeType?: EIndustry | null;
+  description?: string;
+  tgUsername?: string | null;
+  whatsppUsername?: string | null;
 }

@@ -10,7 +10,7 @@ export const useCreateLedger = () => {
     mutationFn: payload => LedgerService.create(payload),
     onSuccess: () => {
       client.invalidateQueries({
-        queryKey: [UserQueryKey.fetchMerchantBalance],
+        queryKey: [UserQueryKey.fetchBalance],
       });
     },
   });

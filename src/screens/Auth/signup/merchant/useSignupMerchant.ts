@@ -5,10 +5,11 @@ import { Paths } from '@/navigation/paths';
 import { IMerchantSignupFormValues } from './SignupMerchant.types';
 import { useFormik } from 'formik';
 import { merchantSignupSchema } from './SignupMerchant.validation';
+import { showToast } from '@/utils';
 
 export const useSignupMerchant = () => {
   const navigation = useNavigation();
-  const { signupMerchant, signupMerchantLoading } = useAuth();
+  const { signupMerchant, signupMerchantLoading, healthCheck } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 2;
 
@@ -28,12 +29,22 @@ export const useSignupMerchant = () => {
   }, []);
 
   const handleSubmit = async (values: IMerchantSignupFormValues) => {
-    try {
-      await signupMerchant(values);
-      navigation.navigate(Paths.SIGNUP_MERCHANT_SUCCESS, { email: values.email });
-    } catch (error) {
-      console.error(error);
-    }
+    await healthCheck()
+      .then(async () => {
+        try {
+          await signupMerchant(values);
+          navigation.navigate(Paths.SIGNUP_MERCHANT_SUCCESS, { email: values.email });
+        } catch (error) {
+          console.error(error);
+        }
+      })
+      .catch(error => {
+        showToast({
+          type: 'error',
+          text1: 'Please try again later',
+        });
+        throw error;
+      });
   };
 
   const formik = useFormik<IMerchantSignupFormValues>({

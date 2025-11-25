@@ -10,7 +10,14 @@ import { useLogin } from './useLogin';
 import { getAppVersionInfo } from '@/utils';
 
 function Login({}: RootScreenProps<Paths.LOGIN>) {
-  const { formik, loading, navigateToSignup, navigateToForgotPassword } = useLogin();
+  const {
+    formik,
+    loading,
+    navigateToSignup,
+    navigateToForgotPassword,
+    handleSignInWithGoogle,
+    signInWithGoogleLoading,
+  } = useLogin();
   const { appVersion, buildNumber, envType } = getAppVersionInfo();
 
   return (
@@ -64,7 +71,11 @@ function Login({}: RootScreenProps<Paths.LOGIN>) {
               style={styles.loginButton}
             />
 
-            <GoogleButton disabled={loading} />
+            <GoogleButton
+              disabled={loading}
+              onPress={handleSignInWithGoogle}
+              loading={signInWithGoogleLoading}
+            />
 
             <View style={styles.signupContainer}>
               <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">

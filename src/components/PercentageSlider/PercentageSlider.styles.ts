@@ -12,6 +12,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
   },
+  sliderWrapper: {
+    flex: 1,
+    overflow: 'hidden',
+  },
   slider: {
     flex: 1,
     height: 40,

@@ -1,15 +1,18 @@
 import { View, ScrollView } from 'react-native';
+import { useState } from 'react';
 import {
   Typography,
   TextField,
   PrimaryButton,
-  HorizontalRadioGroup,
+  CircularRadioGroup,
   PercentageSlider,
+  PaymentMethodModal,
 } from '@/components';
-import { Paths } from '@/navigation/paths';
-import { RootScreenProps } from '@/navigation/types';
-import { useCreateProgram } from './useCreateProgram';
-import { styles } from './CreateProgram.styles';
+import { FormikProps } from 'formik';
+import { ICreateProgramPayload, IEditProgramPayload } from '@/services/program/program.types';
+import { IProgram } from '@/interfaces';
+
+import { styles } from './ProgramForm.styles';
 import { FormikProvider } from 'formik';
 import SafeScreen from '@/components/templates/SafeScreen';
 import {
@@ -17,12 +20,31 @@ import {
   EProgramStrategyDisplayNames,
   EOfferType,
   EOfferTypeDisplayNames,
+  EPaymentMethod,
 } from '@/enums';
+import ActivateProgramModal from '../ActivateProgramModal/ActivateProgramModal';
 
-export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREATE_PROGRAM>) {
-  const { formik, handleStrategyChange, handleOfferTypeChange, handleGoBack } = useCreateProgram({
-    navigation,
-  });
+interface ProgramFormProps {
+  formik: FormikProps<ICreateProgramPayload> | FormikProps<IEditProgramPayload>;
+  handleGoBack: () => void;
+  handlePayProgram: (selectedPaymentMethod: EPaymentMethod) => Promise<IProgram | undefined>;
+  activateProgram: (id: string) => Promise<IProgram>;
+  loading: boolean;
+  initialBudget?: number;
+}
+
+export default function ProgramForm({
+  formik,
+  loading,
+  handleGoBack,
+  handlePayProgram,
+  activateProgram,
+  initialBudget,
+}: ProgramFormProps) {
+  const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] = useState(false);
+  const [isActivateModalVisible, setIsActivateModalVisible] = useState(false);
+  const [programToActivate, setProgramToActivate] = useState<IProgram | null>(null);
+
   const {
     touched,
     errors,
@@ -34,16 +56,78 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
     dirty,
     handleSubmit,
   } = formik;
+
+  const showPaymentMethodModal = () => setIsPaymentMethodModalVisible(true);
+  const hidePaymentMethodModal = () => setIsPaymentMethodModalVisible(false);
+
+  const handlePaymentMethodSubmit = async (selectedPaymentMethod: EPaymentMethod) => {
+    hidePaymentMethodModal();
+    const program = await handlePayProgram(selectedPaymentMethod);
+    if (program) {
+      setProgramToActivate(program);
+      setIsActivateModalVisible(true);
+    }
+  };
+
+  const handleActivateProgram = async () => {
+    if (programToActivate?.id) {
+      try {
+        await activateProgram(programToActivate.id);
+        setIsActivateModalVisible(false);
+        setProgramToActivate(null);
+        handleGoBack();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleSaveAsDraft = () => {
+    setIsActivateModalVisible(false);
+    setProgramToActivate(null);
+    handleGoBack();
+  };
+
   const {
     name,
     strategy,
     offerType,
     budget,
-    capPerTransaction,
+    maxDailyBudget,
     percentBack,
     spendThreshold,
     rewardPercent,
   } = values;
+
+  const handleStrategyChange = (value: string) => {
+    formik.setFieldValue('strategy', value);
+
+    if (value === EProgramStrategy.PERCENT_BACK) {
+      formik.setFieldValue('spendThreshold', '');
+      formik.setFieldValue('rewardPercent', '');
+      formik.setFieldTouched('spendThreshold', false);
+      formik.setFieldTouched('rewardPercent', false);
+    } else if (value === EProgramStrategy.SPEND_TO_EARN) {
+      formik.setFieldValue('percentBack', '');
+      formik.setFieldTouched('percentBack', false);
+    }
+  };
+
+  const handleOfferTypeChange = (value: string) => {
+    formik.setFieldValue('offerType', value);
+
+    const currentStrategy = formik.values.strategy;
+
+    if (currentStrategy === EProgramStrategy.PERCENT_BACK) {
+      formik.setFieldValue('percentBack', '');
+      formik.setFieldTouched('percentBack', false);
+    } else if (currentStrategy === EProgramStrategy.SPEND_TO_EARN) {
+      formik.setFieldValue('spendThreshold', '');
+      formik.setFieldValue('rewardPercent', '');
+      formik.setFieldTouched('spendThreshold', false);
+      formik.setFieldTouched('rewardPercent', false);
+    }
+  };
 
   const renderOfferTypeFields = () => {
     if (strategy === EProgramStrategy.PERCENT_BACK && offerType === EOfferType.POINTS_CASHBACK) {
@@ -151,7 +235,7 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
               error={touched.name && errors.name ? errors.name : undefined}
             />
 
-            <HorizontalRadioGroup
+            <CircularRadioGroup
               value={strategy}
               onValueChange={handleStrategyChange}
               options={[
@@ -171,7 +255,7 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
               <TextField
                 keyboardType="numeric"
                 label="Budget"
-                value={budget.toString()}
+                value={budget?.toString()}
                 onChangeText={handleChange('budget')}
                 onBlur={handleBlur('budget')}
                 placeholder="Enter Budget"
@@ -184,16 +268,14 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
             </View>
             <TextField
               keyboardType="numeric"
-              label="Cap per Transaction"
-              value={capPerTransaction.toString()}
-              onChangeText={handleChange('capPerTransaction')}
-              onBlur={handleBlur('capPerTransaction')}
-              placeholder="Enter Cap"
+              label="Max Daily Budget"
+              value={maxDailyBudget?.toString()}
+              onChangeText={handleChange('maxDailyBudget')}
+              onBlur={handleBlur('maxDailyBudget')}
+              placeholder="Enter Max Daily Budget"
               mask="CAD"
               error={
-                touched.capPerTransaction && errors.capPerTransaction
-                  ? errors.capPerTransaction
-                  : undefined
+                touched.maxDailyBudget && errors.maxDailyBudget ? errors.maxDailyBudget : undefined
               }
             />
           </View>
@@ -201,7 +283,7 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
             <Typography fontVariant="medium" fontSize={24} color="#FFFFFF">
               Offer Type
             </Typography>
-            <HorizontalRadioGroup
+            <CircularRadioGroup
               value={offerType}
               onValueChange={handleOfferTypeChange}
               options={[
@@ -219,9 +301,13 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
             />
             {renderOfferTypeFields()}
           </View>
-          <PrimaryButton label="Pay" disabled={!isValid || !dirty} onPress={() => {}} />
           <PrimaryButton
-            label="Save as Draft"
+            label="Pay"
+            disabled={!isValid || !dirty || Number(initialBudget) === Number(values.budget)}
+            onPress={showPaymentMethodModal}
+          />
+          <PrimaryButton
+            label={loading ? 'Saving...' : 'Save as Draft'}
             disabled={!isValid || !dirty}
             style={styles.draftButton}
             textStyle={styles.draftButtonText}
@@ -235,6 +321,21 @@ export default function CreateProgram({ navigation }: RootScreenProps<Paths.CREA
           />
         </ScrollView>
       </SafeScreen>
+      <PaymentMethodModal
+        visible={isPaymentMethodModalVisible}
+        onClose={hidePaymentMethodModal}
+        onCancel={hidePaymentMethodModal}
+        onSubmit={handlePaymentMethodSubmit}
+      />
+      {programToActivate && (
+        <ActivateProgramModal
+          visible={isActivateModalVisible}
+          program={programToActivate}
+          onClose={handleSaveAsDraft}
+          onCancel={handleSaveAsDraft}
+          onSubmit={handleActivateProgram}
+        />
+      )}
     </FormikProvider>
   );
 }

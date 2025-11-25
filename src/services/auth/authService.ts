@@ -4,7 +4,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { IUserSignupFormValues } from '@/screens/Auth/signup/user/SignupUser.types';
 import { IMerchantSignupFormValues } from '@/screens/Auth/signup/merchant/SignupMerchant.types';
-import { ERole } from '@/enums';
+import { ISignupUserResponse, IHealthCheckResponse, ISignupMerchantResponse } from './auth.types';
 import auth, {
   getAuth,
   GoogleAuthProvider,
@@ -12,26 +12,11 @@ import auth, {
 } from '@react-native-firebase/auth';
 import { showToast } from '@/utils';
 
-type ISignupUserResponse = {
-  email: string;
-  id: string;
-  isEmailConfirmed: boolean;
-  phoneNumber: string;
-  role: ERole;
-};
-
-type ISignupMerchantResponse = {
-  id: string;
-  businessName: string;
-  businessEmail: string;
-  businessPhoneNumber: string;
-  businessAddress: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export const AuthServices = {
+  healthCheck: async () => {
+    const response = await instance.get<IHealthCheckResponse>('health');
+    return response.json();
+  },
   login: async (email: string, password: string) => {
     try {
       const response = await auth().signInWithEmailAndPassword(email.trim(), password);
@@ -48,6 +33,7 @@ export const AuthServices = {
   signOut: async () => {
     try {
       await auth().signOut();
+      await GoogleSignin.signOut();
     } catch (error) {
       showToast({
         type: 'error',
@@ -92,7 +78,6 @@ export const AuthServices = {
     });
     return signupMerchantResponse.json();
   },
-
   signInWithGoogle: async () => {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
@@ -106,13 +91,44 @@ export const AuthServices = {
       }
 
       const googleCredential = GoogleAuthProvider.credential(idToken);
-
       await signInWithCredential(getAuth(), googleCredential);
+
+      try {
+        const signupUserResponse = await instance.post<ISignupUserResponse>('auth/register');
+        return signupUserResponse.json();
+      } catch (registerError: any) {
+        showToast({
+          type: 'error',
+          text1: 'Failed to sign in with Google',
+          text2: registerError instanceof Error ? registerError.message : 'Unknown error',
+        });
+        if (registerError?.status === 409 || registerError?.status === 400) {
+          throw registerError;
+        }
+        throw registerError;
+      }
     } catch (error) {
       showToast({
         type: 'error',
         text1: 'Failed to sign in with Google',
         text2: error instanceof Error ? error.message : 'Unknown error',
+      });
+      throw error;
+    }
+  },
+  changePassword: async (oldPassword: string, newPassword: string) => {
+    try {
+      const changePasswordResponse = await instance.post('auth/change-password', {
+        json: {
+          oldPassword,
+          newPassword,
+        },
+      });
+      return changePasswordResponse.json();
+    } catch (error) {
+      showToast({
+        type: 'error',
+        text1: 'An error occurred. Please try again later.',
       });
       throw error;
     }

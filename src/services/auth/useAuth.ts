@@ -1,16 +1,17 @@
 import { InvalidateOptions, useQueryClient, useMutation } from '@tanstack/react-query';
 
 import { UserQueryKey } from '@/services/user/useUser';
-import { MerchantQueryKey } from '@/services/merchant/useMerchant';
 import { AuthServices } from './authService';
 import { useUser } from '@/services/user/useUser';
 import { IUserSignupFormValues } from '@/screens/Auth/signup/user/SignupUser.types';
 import { IMerchantSignupFormValues } from '@/screens/Auth/signup/merchant/SignupMerchant.types';
+import { showToast } from '@/utils';
 
 export const enum AuthQueryKey {
   login = 'login',
   signup = 'signup',
   signInWithGoogle = 'signInWithGoogle',
+  changePassword = 'changePassword',
 }
 
 export const useAuth = () => {
@@ -19,6 +20,17 @@ export const useAuth = () => {
   const { refetch } = useFetchProfileQuery();
 
   const client = useQueryClient();
+
+  const healthCheckMutation = useMutation({
+    mutationFn: () => AuthServices.healthCheck(),
+    onError: error => {
+      showToast({
+        type: 'error',
+        text1: 'Health check failed',
+        text2: error instanceof Error ? error.message : 'Unknown error',
+      });
+    },
+  });
 
   const loginMutation = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
@@ -36,17 +48,11 @@ export const useAuth = () => {
     mutationFn: async (userData: IUserSignupFormValues) => {
       return await AuthServices.signupUser(userData);
     },
-    onSuccess: data => {
-      console.log('data', data);
-    },
   });
 
   const signupMerchantMutation = useMutation({
     mutationFn: async (userData: IMerchantSignupFormValues) => {
       return await AuthServices.signupMerchant(userData);
-    },
-    onSuccess: data => {
-      console.log('data', data);
     },
   });
 
@@ -57,8 +63,7 @@ export const useAuth = () => {
     onSuccess: () => {
       setUserQueryData(null);
       client.removeQueries({ queryKey: [UserQueryKey.fetchUserProfile] });
-      client.removeQueries({ queryKey: [MerchantQueryKey.fetchMerchantBalance] });
-      client.removeQueries({ queryKey: [UserQueryKey.fetchCustomerBalance] });
+      client.removeQueries({ queryKey: [UserQueryKey.fetchBalance] });
     },
   });
 
@@ -67,6 +72,20 @@ export const useAuth = () => {
     onSuccess: data => {
       refetch();
       client.setQueryData([AuthQueryKey.signInWithGoogle], data);
+    },
+    onError: error => {
+      console.error('error', error);
+    },
+  });
+
+  const changePasswordMutation = useMutation({
+    mutationFn: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) =>
+      AuthServices.changePassword(oldPassword, newPassword),
+    onSuccess: () => {
+      showToast({
+        type: 'success',
+        text1: 'Your password was successfully updated',
+      });
     },
     onError: error => {
       console.error('error', error);
@@ -92,7 +111,10 @@ export const useAuth = () => {
     signOutLoading: signOutMutation.isPending,
     signInWithGoogle: signInWithGoogleMutation.mutateAsync,
     signInWithGoogleLoading: signInWithGoogleMutation.isPending,
+    changePassword: changePasswordMutation.mutateAsync,
+    changePasswordLoading: changePasswordMutation.isPending,
     invalidateQuery,
     useFetchProfileQuery,
+    healthCheck: healthCheckMutation.mutateAsync,
   };
 };

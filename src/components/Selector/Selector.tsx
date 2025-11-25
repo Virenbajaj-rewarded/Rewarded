@@ -16,6 +16,7 @@ interface SelectorProps<T = string> {
   placeholder?: string;
   error?: string;
   style?: any;
+  required?: boolean;
 }
 
 export default function Selector<T = string>({
@@ -26,6 +27,7 @@ export default function Selector<T = string>({
   placeholder = 'Select an option',
   error,
   style,
+  required,
 }: SelectorProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,9 +48,16 @@ export default function Selector<T = string>({
   return (
     <View style={[styles.container, style]}>
       {label && (
-        <Typography fontVariant="regular" fontSize={14} color="#FFFFFF" style={styles.label}>
-          {label}
-        </Typography>
+        <View style={styles.labelContainer}>
+          {required && (
+            <Typography fontVariant="regular" fontSize={14} color="#FF4D4F">
+              {'*'}
+            </Typography>
+          )}
+          <Typography fontVariant="regular" fontSize={14} color="#FFFFFF" style={styles.label}>
+            {label}
+          </Typography>
+        </View>
       )}
 
       <View style={styles.inputContainer}>

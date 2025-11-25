@@ -25,7 +25,7 @@ import SliderButton from '@/components/atoms/SwipeButton';
 import LottieView from 'lottie-react-native';
 import { styles } from './styles';
 import { useFetchCustomerById } from '@/services/user/useUser';
-import { useFetchMerchantBalanceQuery } from '@/services/merchant/useMerchant';
+import { useFetchBalanceQuery } from '@/services/user/useUser';
 import { useCreateLedger } from '@/services/ledger/useLedger';
 import uuid from 'react-native-uuid';
 import { Skeleton } from '@/components/atoms/Skeleton';
@@ -54,7 +54,7 @@ export default function MerchantQRPayment({
     isRefetching: isRefetchingBalance,
     isLoading: isLoadingBalance,
     data: balance,
-  } = useFetchMerchantBalanceQuery();
+  } = useFetchBalanceQuery();
 
   const amountInputRef = useRef<TextInput>(null);
   const commentInputRef = useRef<TextInput>(null);
@@ -163,7 +163,7 @@ export default function MerchantQRPayment({
     setAmount(formatted);
 
     const numericValue = parseFloat(formatted);
-    if (!isNaN(numericValue) && numericValue > balance!.points && isTopUp) {
+    if (!isNaN(numericValue) && numericValue > balance && isTopUp) {
       setWarning(true);
     } else {
       setWarning(false);
@@ -220,7 +220,7 @@ export default function MerchantQRPayment({
                 {isLoadingBalance || isRefetchingBalance ? (
                   <ActivityIndicator size="small" color="#ffffff" />
                 ) : (
-                  <Text style={styles.balanceLabel}>{balance?.points || 0}</Text>
+                  <Text style={styles.balanceLabel}>{balance || 0}</Text>
                 )}
                 <IconByVariant path="coins" width={16} height={16} />
               </View>
@@ -250,7 +250,7 @@ export default function MerchantQRPayment({
                 ]}
                 onPress={() => {
                   const numericValue = parseFloat(amount || '0');
-                  if (!isNaN(numericValue) && numericValue > balance!.points) {
+                  if (!isNaN(numericValue) && numericValue > (balance ?? 0)) {
                     setWarning(true);
                   }
 

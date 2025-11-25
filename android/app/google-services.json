@@ -1,48 +1,56 @@
 {
   "project_info": {
-    "project_number": "665333587507",
-    "project_id": "rewardedapp-stage",
-    "storage_bucket": "rewardedapp-stage.firebasestorage.app"
+    "project_number": "1014701049072",
+    "project_id": "rewardedapp-2ee82",
+    "storage_bucket": "rewardedapp-2ee82.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:665333587507:android:de8ebe86af2540c3aa0d46",
+        "mobilesdk_app_id": "1:1014701049072:android:9ade4ff845eb876b8a2e35",
         "android_client_info": {
-          "package_name": "com.rewarded.app2025.stage"
+          "package_name": "com.rewarded.app2025"
         }
       },
       "oauth_client": [
         {
-          "client_id": "665333587507-tgnpimq5an8tn8i6mg30dkc8aal1h9vd.apps.googleusercontent.com",
+          "client_id": "1014701049072-se28oecqtldnlfdffeu8roolu5v0jart.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.rewarded.app2025.stage",
+            "package_name": "com.rewarded.app2025",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "665333587507-iuitvfgk19ms3s8vg6udd87f77moo8f0.apps.googleusercontent.com",
+          "client_id": "1014701049072-u849kj4jg392tbqqf1n04bgmljn6bo1t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rewarded.app2025",
+            "certificate_hash": "82b48f27c82ef8356362918e2fe03b26e6443611"
+          }
+        },
+        {
+          "client_id": "1014701049072-67i6vqhkf1t2ml87lvjoj3u7f6ns3n31.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCpnGxMwTOg6uPqqb4m9HrON5sqxw5qfj8"
+          "current_key": "AIzaSyAhGnMfeJIBMXhVHOMX4654F8mQ6K8b-58"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "665333587507-iuitvfgk19ms3s8vg6udd87f77moo8f0.apps.googleusercontent.com",
+              "client_id": "1014701049072-67i6vqhkf1t2ml87lvjoj3u7f6ns3n31.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "665333587507-4f90r0anvlppoapsipsj9fdhnvvr0q85.apps.googleusercontent.com",
+              "client_id": "1014701049072-9rmk8370qlqm4vuc64jesh4oph11c517.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.rewarded"
+                "bundle_id": "com.rewarded.app"
               }
             }
           ]

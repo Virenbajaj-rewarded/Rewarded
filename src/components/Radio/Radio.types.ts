@@ -1,3 +1,5 @@
+import { StyleProp, ViewStyle } from 'react-native';
+
 export interface ICircularRadioProps {
   selected: boolean;
   color?: string;
@@ -34,17 +36,19 @@ export interface IRadioList {
   uncheckedColor?: string;
 }
 
-export interface IHorizontalRadioOption {
+export interface ICircularRadioOption {
   value: string;
   label: string;
 }
 
-export interface IHorizontalRadioGroup {
+export interface ICircularRadioGroup {
   value: string;
   onValueChange: (value: string) => void;
-  options: IHorizontalRadioOption[];
+  options: ICircularRadioOption[];
   color?: string;
   uncheckedColor?: string;
+  direction?: 'horizontal' | 'vertical';
+  style?: StyleProp<ViewStyle>;
 }
 
 export interface IRadioOptionProps {

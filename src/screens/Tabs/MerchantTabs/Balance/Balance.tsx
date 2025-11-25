@@ -1,13 +1,13 @@
 import { ActivityIndicator, View } from 'react-native';
 import { MerchantTabCombinedScreenProps } from '@/navigation/types.ts';
 import { MerchantTabPaths } from '@/navigation/paths.ts';
-import { useFetchMerchantBalanceQuery } from '@/services/merchant/useMerchant';
+import { useFetchBalanceQuery } from '@/services/user/useUser';
 import IconByVariant from '@/components/atoms/IconByVariant';
 import { styles } from './Balance.styles';
 import { Typography } from '@/components';
 
 export default function Balance({}: MerchantTabCombinedScreenProps<MerchantTabPaths.BALANCE>) {
-  const { isRefetching, isLoading, data: balance } = useFetchMerchantBalanceQuery();
+  const { isRefetching, isLoading, data: balance } = useFetchBalanceQuery();
 
   return (
     <View style={styles.container}>
@@ -21,7 +21,7 @@ export default function Balance({}: MerchantTabCombinedScreenProps<MerchantTabPa
         ) : (
           <View style={styles.balanceLabel}>
             <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balance?.points || 0}
+              {balance || 0}
             </Typography>
             <IconByVariant path="coins" width={16} height={16} />
           </View>

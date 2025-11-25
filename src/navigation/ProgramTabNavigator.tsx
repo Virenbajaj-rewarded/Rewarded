@@ -1,7 +1,7 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import ActivePrograms from '@/screens/Tabs/MerchantTabs/Program/tabs/ActivePrograms';
-import DraftPrograms from '@/screens/Tabs/MerchantTabs/Program/tabs/DraftPrograms';
-import StoppedPrograms from '@/screens/Tabs/MerchantTabs/Program/tabs/StoppedPrograms';
+import ActivePrograms from '@/screens/Tabs/MerchantTabs/Program/tabs/active-program/ActivePrograms';
+import DraftPrograms from '@/screens/Tabs/MerchantTabs/Program/tabs/draft-programs/DraftPrograms';
+import StoppedPrograms from '@/screens/Tabs/MerchantTabs/Program/tabs/stopped-programs/StoppedPrograms';
 
 export type ProgramTabParamList = {
   Active: undefined;
@@ -15,6 +15,7 @@ export function ProgramTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
+        lazy: true,
         tabBarStyle: {
           backgroundColor: '#000000',
           borderBottomWidth: 1,

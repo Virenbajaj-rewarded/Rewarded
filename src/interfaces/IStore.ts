@@ -22,19 +22,19 @@ export interface IStore {
   isLiked: boolean;
   createdAt: string;
   updatedAt: string;
-  activeRewardProgram: ActiveRewardProgram;
+  activeRewardProgram: IActiveRewardProgram;
   lifetimeSavings: number;
   rewardPoints: number;
   spent: number;
 }
 
-export interface ActiveRewardProgram {
+export interface IActiveRewardProgram {
   id: string;
   name: string;
   strategy: EProgramStrategy;
   percentBack?: number;
   spendThreshold?: number;
   rewardPercent?: number;
-  capPerTransaction?: number;
+  maxDailyBudget?: number;
   offerType: EOfferType;
 }

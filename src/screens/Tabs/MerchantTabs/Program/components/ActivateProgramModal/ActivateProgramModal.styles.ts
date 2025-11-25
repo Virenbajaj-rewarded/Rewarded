@@ -1,13 +1,17 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  horizontalRadioGroup: {
-    flexDirection: 'row',
-    gap: 24,
+  programDetailsContainer: {
+    marginBottom: 24,
+    gap: 16,
   },
-  radioItem: {
+  programDetailItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
+  },
+  detailText: {
+    flex: 1,
   },
 });
+

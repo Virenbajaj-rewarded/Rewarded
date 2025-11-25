@@ -1,6 +1,7 @@
-import { TouchableOpacity, Text, StyleProp, ViewStyle, TextStyle, View } from 'react-native';
+import { TouchableOpacity, StyleProp, ViewStyle, TextStyle, View } from 'react-native';
 import { styles } from './PrimaryButton.styles';
 import IconByVariant from '../atoms/IconByVariant';
+import Typography from '../Typography/Typography';
 
 interface Props {
   label: string;
@@ -45,7 +46,14 @@ export default function PrimaryButton({
             color={icon.color || '#3c83f6'}
           />
         )}
-        <Text style={[styles.label, textStyle]}>{label}</Text>
+        <Typography
+          fontVariant="regular"
+          fontSize={16}
+          color={disabled ? '#434343' : '#FFFFFF'}
+          style={textStyle}
+        >
+          {label}
+        </Typography>
       </View>
     </TouchableOpacity>
   );

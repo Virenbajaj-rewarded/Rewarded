@@ -2,19 +2,26 @@ import { View, TouchableOpacity } from 'react-native';
 import { Typography } from '@/components';
 import { RadioGroup } from '../../Radio';
 import { CircularRadio } from '../CircularRadio';
-import { styles } from './HorizontalRadioGroup.styles';
-import { IHorizontalRadioGroup } from '@/components/Radio/Radio.types';
+import { styles } from './CircularRadioGroup.styles';
+import { ICircularRadioGroup } from '@/components/Radio/Radio.types';
 
-export function HorizontalRadioGroup({
+export function CircularRadioGroup({
   value,
   onValueChange,
   options,
   color = '#3c83f6',
   uncheckedColor = '#FFFFFF',
-}: IHorizontalRadioGroup) {
+  direction = 'horizontal',
+  style,
+}: ICircularRadioGroup) {
   return (
     <RadioGroup value={value} onValueChange={onValueChange}>
-      <View style={styles.horizontalRadioGroup}>
+      <View
+        style={[
+          direction === 'horizontal' ? styles.horizontalRadioGroup : styles.verticalRadioGroup,
+          style,
+        ]}
+      >
         {options.map(option => (
           <TouchableOpacity
             key={option.value}

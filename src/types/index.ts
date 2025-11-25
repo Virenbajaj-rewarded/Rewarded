@@ -1,3 +1,5 @@
+import { ERole } from '@/enums';
+
 export const ACCESSIBLE_QR_TYPES = [
   'customer_profile',
   'store_profile',
@@ -11,4 +13,5 @@ export type QRCodeType = (typeof ACCESSIBLE_QR_TYPES)[number];
 export type QR_CODE = {
   type: QRCodeType;
   value: string;
+  role: ERole;
 };

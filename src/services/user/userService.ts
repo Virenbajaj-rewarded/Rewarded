@@ -1,6 +1,6 @@
 import { instance } from '@/services/instance';
 
-import { IGetBalanceResponse, IGetUserResponse } from './user.types';
+import { IGetUserResponse } from './user.types';
 
 export const UserServices = {
   fetchProfile: async () => {
@@ -12,8 +12,8 @@ export const UserServices = {
       throw error;
     }
   },
-  fetchCustomerBalance: async () => {
-    const response = await instance.get<IGetBalanceResponse>(`users/me/balances`).json();
+  fetchBalance: async () => {
+    const response = await instance.get<number>(`users/me/balance`).json();
     return response;
   },
   fetchUserById: async (id: string) => {

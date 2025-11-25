@@ -1,12 +1,12 @@
 import * as Yup from 'yup';
 
-export const createProgramValidationSchema = Yup.object().shape({
+export const programFormValidationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   strategy: Yup.string().required('Strategy is required'),
-  capPerTransaction: Yup.string()
-    .required('Cap per transaction is required')
+  maxDailyBudget: Yup.string()
+    .required('Max daily budget is required')
     .matches(/^\d+(\.\d+)?$/, 'Only numbers are allowed')
-    .test('not-exceed-budget', 'Cap per transaction cant be higher than budget', function (value) {
+    .test('not-exceed-budget', 'Max daily budget cant be higher than budget', function (value) {
       const { budget } = this.parent;
       if (!value || !budget) return true;
       return parseFloat(value) <= parseFloat(budget);

@@ -1,18 +1,22 @@
 import ProgramList from '@/screens/Tabs/MerchantTabs/Program/components/ProgramList/ProgramList';
-import { EProgramStatus } from '@/enums';
-import { useProgram } from '@/services/program/useProgram';
 import { View, ActivityIndicator } from 'react-native';
 import { Typography } from '@/components';
-import { styles } from '../Program.styles';
+import { styles } from '../../pages/Program/Program.styles';
+import { useDraftPrograms } from './useDraftPrograms';
 
 export default function DraftPrograms() {
-  const { useFetchProgramsQuery } = useProgram();
   const {
-    data,
-    isLoading: isFetchProgramsLoading,
-    isError: isFetchProgramsError,
-  } = useFetchProgramsQuery();
-  const programs = data?.items || [];
+    draftPrograms,
+    isFetchProgramsLoading,
+    isFetchProgramsError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    isRefetching,
+    handleActivateProgram,
+    activateProgramLoading,
+  } = useDraftPrograms();
 
   if (isFetchProgramsLoading) {
     return (
@@ -48,5 +52,16 @@ export default function DraftPrograms() {
       </View>
     );
   }
-  return <ProgramList programs={programs} status={EProgramStatus.DRAFT} />;
+  return (
+    <ProgramList
+      programs={draftPrograms}
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      refetch={refetch}
+      isRefetching={isRefetching}
+      handleActivateProgram={handleActivateProgram}
+      activateProgramLoading={activateProgramLoading}
+    />
+  );
 }

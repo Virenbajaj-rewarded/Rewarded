@@ -1,47 +1,39 @@
-import {
-  ActivityIndicator,
-  Alert,
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { styles } from './styles';
 import IconByVariant from '@/components/atoms/IconByVariant';
-import { useTheme } from '@/theme';
-import { useAuth } from '@/services/auth/useAuth';
-import { useState } from 'react';
+import Typography from '@/components/Typography/Typography';
 
-export default function GoogleButton(props: Omit<TouchableOpacityProps, 'style'>) {
-  const { fonts } = useTheme();
-  const { signInWithGoogle } = useAuth();
+interface GoogleButtonProps extends Omit<TouchableOpacityProps, 'style' | 'onPress'> {
+  onPress: () => void;
+  loading?: boolean;
+  text?: string;
+}
 
-  const [googleLoading, setGoogleLoading] = useState(false);
-
-  const handleSignInWithGoogle = async () => {
+export default function GoogleButton({ onPress, loading, text, ...props }: GoogleButtonProps) {
+  const handlePress = async () => {
     try {
-      setGoogleLoading(true);
-
-      await signInWithGoogle();
+      await onPress();
     } catch (e) {
       const error = e as Error;
       Alert.alert(error?.message || 'Error', 'Please try again later', [{ text: 'OK' }], {
         cancelable: true,
       });
-    } finally {
-      setGoogleLoading(false);
     }
   };
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={handleSignInWithGoogle}
-      disabled={props?.disabled || googleLoading}
+      onPress={handlePress}
+      disabled={props?.disabled || loading}
+      {...props}
     >
       <IconByVariant path="google" width={20} height={20} />
 
-      <Text style={[fonts.size_16, { color: '#FFFFFF' }]}>Continue with Google</Text>
-      {googleLoading && <ActivityIndicator />}
+      <Typography fontVariant="regular" fontSize={16} color="#FFFFFF">
+        {text || 'Continue with Google'}
+      </Typography>
+      {loading && <ActivityIndicator />}
     </TouchableOpacity>
   );
 }

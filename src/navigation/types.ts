@@ -2,6 +2,7 @@ import { MerchantTabPaths, Paths, UserTabPaths } from '@/navigation/paths';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { IProgram } from '@/interfaces';
 
 export type RootScreenProps<S extends keyof RootStackParamList = keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, S>;
@@ -53,6 +54,10 @@ export type RootStackParamList = {
     token: string;
   };
   [Paths.CREATE_PROGRAM]: undefined;
+  [Paths.EDIT_PROGRAM]: {
+    program: IProgram;
+  };
+  [Paths.EDIT_BUSINESS]: undefined;
 };
 
 export type UserTabStackParamList = {

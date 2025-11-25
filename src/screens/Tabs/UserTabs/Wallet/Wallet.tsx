@@ -4,17 +4,18 @@ import { UserTabPaths } from '@/navigation/paths.ts';
 import { useAuth } from '@/services/auth/useAuth';
 import { QrCodeSvg } from 'react-native-qr-svg';
 import { QR_CODE } from '@/types';
-import { useFetchCustomerBalanceQuery } from '@/services/user/useUser';
+import { useFetchBalanceQuery } from '@/services/user/useUser';
 import IconByVariant from '@/components/atoms/IconByVariant';
 import { Typography } from '@/components';
 import { styles } from './Wallet.styles';
+import { ERole } from '@/enums';
 
 export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLET>) {
   const { useFetchProfileQuery } = useAuth();
 
   const { data: user } = useFetchProfileQuery();
 
-  const { isLoading, isRefetching, data: balances } = useFetchCustomerBalanceQuery();
+  const { isLoading, isRefetching, data: balance } = useFetchBalanceQuery();
 
   return (
     <View style={styles.container}>
@@ -30,7 +31,7 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
         ) : (
           <View style={styles.balanceContainer}>
             <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balances?.balance || 0}
+              {balance || 0}
             </Typography>
             <IconByVariant path="coins" width={16} height={16} />
           </View>
@@ -46,7 +47,7 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
         ) : (
           <View style={styles.balanceContainer}>
             <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balances?.balance || 0}
+              {balance || 0}
             </Typography>
             <IconByVariant path="coins" width={16} height={16} />
           </View>
@@ -60,6 +61,7 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
         value={JSON.stringify({
           value: user?.id || '',
           type: 'customer_profile',
+          role: ERole.MERCHANT,
         } satisfies QR_CODE)}
         frameSize={200}
         backgroundColor={'transparent'}

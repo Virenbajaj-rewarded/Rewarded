@@ -70,4 +70,9 @@ export default StyleSheet.create({
   errorText: {
     marginTop: 4,
   },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
 });

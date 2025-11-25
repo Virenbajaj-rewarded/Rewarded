@@ -3,7 +3,7 @@ export { RadioGroup } from './Radio';
 
 export { CircularRadio } from './components/CircularRadio';
 export { RadioList } from './components/RadioList';
-export { HorizontalRadioGroup } from './components/HorizontalRadioGroup';
+export { CircularRadioGroup } from './components/CircularRadioGroup';
 
 export type {
   IRadio,
@@ -11,7 +11,7 @@ export type {
   IRadioOption,
   IRadioList,
   ICircularRadioProps,
-  IHorizontalRadioGroup,
-  IHorizontalRadioOption,
+  ICircularRadioGroup,
+  ICircularRadioOption,
   IRadioOptionProps,
 } from './Radio.types';

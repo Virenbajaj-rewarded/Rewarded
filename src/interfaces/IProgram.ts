@@ -4,15 +4,15 @@ export interface IProgram {
   id: string;
   name: string;
   strategy: EProgramStrategy;
-  percentBack: string;
-  spendThreshold: string;
-  rewardPercent: string;
-  capPerTransaction: string;
-  budget: string;
-  fundedAmount: string;
-  spentAmount: string;
+  percentBack: number;
+  spendThreshold: number;
+  rewardPercent: number;
+  maxDailyBudget: number;
+  budget: number;
+  fundedAmount: number;
+  spentAmount: number;
   offerType: EOfferType;
   status: EProgramStatus;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

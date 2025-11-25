@@ -11,11 +11,6 @@ export interface IGetUserResponse {
   updatedAt: string;
 }
 
-export interface IGetBalanceResponse {
-  balance: number;
-  type: 'PAID' | 'FREE';
-}
-
 export interface IGetMerchantBalanceResponse {
   points: number;
   usd: number;

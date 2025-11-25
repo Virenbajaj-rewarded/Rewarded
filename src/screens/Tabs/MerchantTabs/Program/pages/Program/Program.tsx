@@ -4,7 +4,7 @@ import { MerchantTabPaths, Paths } from '@/navigation/paths.ts';
 import { styles } from './Program.styles';
 import { Typography } from '@/components';
 import { ProgramTabNavigator } from '@/navigation/ProgramTabNavigator';
-import { useFetchMerchantBalanceQuery } from '@/services/merchant/useMerchant';
+import { useFetchBalanceQuery } from '@/services/user/useUser';
 import IconByVariant from '@/components/atoms/IconByVariant';
 import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
 import { useMerchant } from '@/services/merchant/useMerchant';
@@ -16,7 +16,7 @@ export default function Program({
 
   const { data: profile } = useFetchMerchantProfileQuery();
 
-  const { data: merchantBalance } = useFetchMerchantBalanceQuery();
+  const { data: merchantBalance } = useFetchBalanceQuery();
 
   const handleNavigateToQR = () => {
     if (!profile?.businessCode) return;
@@ -33,7 +33,7 @@ export default function Program({
             Points Issued
           </Typography>
           <Typography fontVariant="medium" fontSize={24} color="#FFFFFF">
-            {merchantBalance?.points ?? 'No points yet'}
+            {merchantBalance ?? 'No points yet'}
           </Typography>
         </View>
 
@@ -45,7 +45,7 @@ export default function Program({
             <View style={styles.availableUSDBalanceContainer}>
               <View style={styles.availableUSDBalanceText}>
                 <Typography fontVariant="medium" fontSize={20} color="#FFFFFF">
-                  ${merchantBalance?.usd}
+                  ${merchantBalance}
                 </Typography>
               </View>
               <IconByVariant path="usd" width={24} height={24} color="#FFFFFF" />
@@ -59,7 +59,7 @@ export default function Program({
             <View style={styles.availableUSDBalanceContainer}>
               <View style={styles.availableUSDBalanceText}>
                 <Typography fontVariant="medium" fontSize={20} color="#FFFFFF">
-                  ${merchantBalance?.usdc}
+                  ${merchantBalance}
                 </Typography>
               </View>
               <IconByVariant path="usd" width={24} height={24} color="#FFFFFF" />

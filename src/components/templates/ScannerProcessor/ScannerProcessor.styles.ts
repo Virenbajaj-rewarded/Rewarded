@@ -77,4 +77,19 @@ export const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
+  errorContainer: {
+    flex: 1,
+    backgroundColor: '#000000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  errorTitle: {
+    marginTop: 32,
+    marginBottom: 16,
+  },
+  tryAgainButton: {
+    width: '100%',
+    marginTop: 16,
+  },
 });

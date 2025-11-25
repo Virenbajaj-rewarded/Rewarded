@@ -18,6 +18,7 @@ export default function Modal({
   cancelButtonStyle,
   cancelButtonTextStyle,
   submitButtonType = 'default',
+  children,
 }: IModal) {
   return (
     <NativeModal
@@ -46,14 +47,18 @@ export default function Modal({
             </TouchableOpacity>
           </View>
 
-          <Typography
-            fontVariant="regular"
-            fontSize={14}
-            color="#BFBFBF"
-            style={styles.description}
-          >
-            {description}
-          </Typography>
+          {description && (
+            <Typography
+              fontVariant="regular"
+              fontSize={14}
+              color="#BFBFBF"
+              style={styles.description}
+            >
+              {description}
+            </Typography>
+          )}
+
+          {children}
 
           <View style={styles.buttonsContainer}>
             <PrimaryButton

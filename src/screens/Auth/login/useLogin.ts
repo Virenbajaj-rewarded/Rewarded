@@ -4,10 +4,11 @@ import { Paths } from '@/navigation/paths';
 import { useNavigation } from '@react-navigation/native';
 import { loginValidationSchema } from './Login.validation';
 import { useFormik } from 'formik';
+import { Alert } from 'react-native';
 
 export const useLogin = () => {
   const navigation = useNavigation();
-  const { login, loginLoading } = useAuth();
+  const { login, loginLoading, signInWithGoogle, signInWithGoogleLoading, healthCheck } = useAuth();
 
   const onLogin = async (values: LoginForm) => {
     try {
@@ -34,10 +35,32 @@ export const useLogin = () => {
   const navigateToForgotPassword = () => {
     navigation.navigate(Paths.FORGOT_PASSWORD);
   };
+
+  const handleSignInWithGoogle = async () => {
+    await healthCheck()
+      .then(async () => {
+        try {
+          await signInWithGoogle();
+        } catch (e) {
+          const error = e as Error;
+          Alert.alert(error?.message || 'Error', 'Please try again later', [{ text: 'OK' }], {
+            cancelable: true,
+          });
+        }
+      })
+      .catch(error => {
+        Alert.alert(error?.message || 'Error', 'Please try again later', [{ text: 'OK' }], {
+          cancelable: true,
+        });
+      });
+  };
+
   return {
     formik,
     loading: loginLoading,
     navigateToSignup,
     navigateToForgotPassword,
+    signInWithGoogleLoading,
+    handleSignInWithGoogle,
   };
 };

@@ -13,18 +13,20 @@ export default function PercentageSlider({ value, onValueChange, label }: Percen
         </Typography>
       )}
       <View style={styles.sliderContainer}>
-        <Slider
-          style={styles.slider}
-          value={value}
-          onValueChange={onValueChange}
-          minimumValue={0}
-          maximumValue={100}
-          tapToSeek
-          step={1}
-          minimumTrackTintColor={value > 0 ? '#3c83f6' : '#1F1F1F'}
-          maximumTrackTintColor="#1F1F1F"
-          thumbTintColor="transparent"
-        />
+        <View style={styles.sliderWrapper}>
+          <Slider
+            style={styles.slider}
+            value={value}
+            onValueChange={onValueChange}
+            minimumValue={0}
+            maximumValue={100}
+            tapToSeek
+            step={1}
+            minimumTrackTintColor={value > 0 ? '#3c83f6' : '#1F1F1F'}
+            maximumTrackTintColor="#1F1F1F"
+            thumbTintColor="transparent"
+          />
+        </View>
         <View style={styles.valueContainer}>
           <Typography fontVariant="medium" fontSize={16} color="#FFFFFF">
             {Math.round(value)}%

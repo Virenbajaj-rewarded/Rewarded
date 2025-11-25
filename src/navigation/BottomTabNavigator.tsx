@@ -13,9 +13,9 @@ import Discover from '@/screens/Tabs/UserTabs/Discover/Discover';
 import Expenses from '@/screens/Tabs/UserTabs/Expenses/Expenses';
 
 import Customers from '@/screens/Tabs/MerchantTabs/Customers/Customers';
-import Business from '@/screens/Tabs/MerchantTabs/Business/Business';
+import Business from '@/screens/Tabs/MerchantTabs/Business/business-profile/Business';
 import Request from '@/screens/Tabs/MerchantTabs/Request/Request';
-import Program from '@/screens/Tabs/MerchantTabs/Program/Program';
+import Program from '@/screens/Tabs/MerchantTabs/Program/pages/Program/Program';
 import Balance from '@/screens/Tabs/MerchantTabs/Balance/Balance';
 
 import IconByVariant from '@/components/atoms/IconByVariant';

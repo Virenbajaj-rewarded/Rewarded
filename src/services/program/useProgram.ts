@@ -1,15 +1,29 @@
-import { useQuery, useQueryClient, InvalidateOptions, useMutation } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQueryClient,
+  InvalidateOptions,
+  useMutation,
+} from '@tanstack/react-query';
 import { ProgramServices } from './programService';
 import { ICreateProgramPayload, IEditProgramPayload } from './program.types';
+import { showToast } from '@/utils';
+import { EProgramStatus } from '@/enums';
+import { UserQueryKey } from '@/services/user/useUser';
 
 export const enum ProgramQueryKey {
   fetchPrograms = 'fetchPrograms',
 }
 
-const useFetchProgramsQuery = () =>
-  useQuery({
-    queryKey: [ProgramQueryKey.fetchPrograms],
-    queryFn: () => ProgramServices.fetchPrograms(),
+const useFetchProgramsQuery = (status: EProgramStatus) =>
+  useInfiniteQuery({
+    queryKey: [ProgramQueryKey.fetchPrograms, status],
+    queryFn: ({ pageParam = 1 }) => ProgramServices.fetchPrograms({ page: pageParam, status }),
+    getNextPageParam: lastPage => {
+      const { page, limit, total } = lastPage;
+      const hasMore = page < Math.ceil(total / limit);
+      return hasMore ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
     staleTime: 180000,
   });
 
@@ -21,6 +35,13 @@ export const useProgram = () => {
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program created successfully',
       });
     },
     onError: error => {
@@ -34,9 +55,127 @@ export const useProgram = () => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
       });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program edited successfully',
+      });
     },
     onError: error => {
       console.error('Failed to edit program:', error);
+    },
+  });
+
+  const activateProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.activateProgram(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program activated successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to activate program:', error);
+      showToast({
+        type: 'error',
+        text1: 'Please try again later',
+      });
+    },
+  });
+
+  const stopProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.stopProgram(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program stopped successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to stop program:', error);
+    },
+  });
+
+  const renewProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.renewProgram(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program renewed successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to renew program:', error);
+    },
+  });
+
+  const withdrawProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.withdrawProgram(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program withdrawn successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to withdraw program:', error);
+    },
+  });
+
+  const topUpProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.topUpProgram(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program topped up successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to top up program:', error);
+    },
+  });
+
+  const requestProgramActivationMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.requestProgramActivation(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+    },
+    onError: error => {
+      console.error('Failed to request program activation:', error);
     },
   });
 
@@ -53,6 +192,18 @@ export const useProgram = () => {
     createProgramLoading: createProgramMutation.isPending,
     editProgram: editProgramMutation.mutateAsync,
     editProgramLoading: editProgramMutation.isPending,
+    activateProgram: activateProgramMutation.mutateAsync,
+    activateProgramLoading: activateProgramMutation.isPending,
+    stopProgram: stopProgramMutation.mutateAsync,
+    stopProgramLoading: stopProgramMutation.isPending,
+    renewProgram: renewProgramMutation.mutateAsync,
+    renewProgramLoading: renewProgramMutation.isPending,
+    withdrawProgram: withdrawProgramMutation.mutateAsync,
+    withdrawProgramLoading: withdrawProgramMutation.isPending,
+    topUpProgram: topUpProgramMutation.mutateAsync,
+    topUpProgramLoading: topUpProgramMutation.isPending,
+    requestProgramActivation: requestProgramActivationMutation.mutateAsync,
+    requestProgramActivationLoading: requestProgramActivationMutation.isPending,
     invalidateQuery,
     useFetchProgramsQuery,
   };
