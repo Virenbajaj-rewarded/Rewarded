@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { AddressAutocomplete } from '@/components/ui/address-autocomplete';
 import { EIndustry, EIndustryDisplayNames } from '@/enums';
 import {
@@ -65,8 +63,8 @@ const SignupMerchant = () => {
               {currentStep === 1 && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
                     <Input
+                      label="Full Name"
                       id="fullName"
                       name="fullName"
                       placeholder="Enter your full name"
@@ -78,8 +76,8 @@ const SignupMerchant = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
                     <Input
+                      label="Email"
                       id="email"
                       name="email"
                       type="email"
@@ -93,8 +91,8 @@ const SignupMerchant = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
                     <Input
+                      label="Phone Number"
                       id="phoneNumber"
                       name="phoneNumber"
                       type="tel"
@@ -118,8 +116,8 @@ const SignupMerchant = () => {
               {currentStep === 2 && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="businessName">Business Name</Label>
                     <Input
+                      label="Business Name"
                       id="businessName"
                       name="businessName"
                       placeholder="Enter your business name"
@@ -135,13 +133,15 @@ const SignupMerchant = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="industry">Industry</Label>
                     <Select
+                      label="Industry"
+                      required
                       value={formik.values.industry}
                       onValueChange={value => {
                         formik.setFieldValue('industry', value);
                         formik.setFieldTouched('industry', true, false);
                       }}
+                      error={formik.touched.industry && formik.errors.industry}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select your industry" />
@@ -154,16 +154,12 @@ const SignupMerchant = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {formik.touched.industry && formik.errors.industry && (
-                      <p className="text-sm text-red-500">
-                        {formik.errors.industry}
-                      </p>
-                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="address">Business Address</Label>
                     <AddressAutocomplete
+                      required
+                      label="Business Address"
                       placeholder="Enter your business address"
                       value={formik.values.location?.address ?? ''}
                       onChange={value => {

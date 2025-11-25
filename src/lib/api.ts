@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { auth } from './firebase';
+import { auth } from '@/lib/firebase';
 import { toast } from 'sonner';
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {

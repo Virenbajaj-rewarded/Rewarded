@@ -1,10 +1,46 @@
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { Label } from './label';
 
 import { cn } from '@/lib/utils';
 
-const Select = SelectPrimitive.Root;
+interface SelectProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
+  label?: string;
+  required?: boolean;
+  error?: string;
+}
+
+const Select = ({
+  label,
+  required,
+  error,
+  children,
+  ...props
+}: SelectProps) => {
+  const selectContent = (
+    <SelectPrimitive.Root {...props}>{children}</SelectPrimitive.Root>
+  );
+
+  if (label || error) {
+    return (
+      <div className="flex flex-col w-full gap-2">
+        {label && (
+          <Label>
+            {required && <span className="text-[#F5222D] mr-1">*</span>}
+            {label}{' '}
+          </Label>
+        )}
+        {selectContent}
+        {error && <p className="text-[14px] text-[#F5222D]">{error}</p>}
+      </div>
+    );
+  }
+
+  return selectContent;
+};
+Select.displayName = 'Select';
 
 const SelectGroup = SelectPrimitive.Group;
 

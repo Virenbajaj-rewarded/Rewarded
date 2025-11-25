@@ -7,9 +7,11 @@ import { FormikProvider } from 'formik';
 import { useLogin } from './useLogin';
 import { ROUTES } from '@/routes';
 import StarIcon from '@/assets/star.svg?react';
+import GoogleButton from '@/components/auth/GoogleButton';
 
 const Login = () => {
-  const { formik, loading } = useLogin();
+  const { formik, loading, handleSignInWithGoogle, isSignInWithGoogleLoading } =
+    useLogin();
 
   return (
     <FormikProvider value={formik}>
@@ -67,6 +69,12 @@ const Login = () => {
                 {loading ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
+            <GoogleButton
+              disabled={isSignInWithGoogleLoading || loading}
+              onPress={handleSignInWithGoogle}
+              loading={isSignInWithGoogleLoading}
+              className="mt-4"
+            />
 
             <div className="mt-6  text-sm">
               <span className="text-muted-foreground">

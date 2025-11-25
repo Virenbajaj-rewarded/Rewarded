@@ -8,7 +8,13 @@ import { ROUTES } from '@/routes';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { login, isLoginLoading } = useAuth();
+  const {
+    login,
+    isLoginLoading,
+    signInWithGoogle,
+    isSignInWithGoogleLoading,
+    healthCheck,
+  } = useAuth();
 
   const onLogin = async (values: LoginForm) => {
     try {
@@ -34,8 +40,28 @@ export const useLogin = () => {
     enableReinitialize: true,
   });
 
+  const handleSignInWithGoogle = async () => {
+    await healthCheck()
+      .then(async () => {
+        try {
+          await signInWithGoogle();
+          toast.success('Welcome back!');
+          navigate(ROUTES.ROOT);
+        } catch (e) {
+          const error = e as Error;
+          toast.error(error?.message || 'Error. Please try again later.');
+        }
+      })
+      .catch(error => {
+        toast.error('Please try again later.');
+        throw error;
+      });
+  };
+
   return {
     formik,
     loading: isLoginLoading,
+    handleSignInWithGoogle,
+    isSignInWithGoogleLoading,
   };
 };

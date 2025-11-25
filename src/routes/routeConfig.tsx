@@ -16,8 +16,13 @@ import { ROUTES } from './routeNames';
 import ChangePassword from '../pages/change-password/ChangePassword';
 import ForgotPassword from '../pages/forgot-password/ForgotPassword';
 import SignupMerchantSuccess from '../pages/signup/signup-merchant-success/SignupMerchantSuccess';
-import Programs from '../pages/programs/Programs';
-import Business from '../pages/business/Business';
+import ActivePrograms from '../pages/programs/pages/active-programs/ActivePrograms';
+import DraftPrograms from '../pages/programs/pages/draft-programs/DraftPrograms';
+import StoppedPrograms from '../pages/programs/pages/stopped-programs/StoppedPrograms';
+import CreateProgram from '../pages/programs/pages/create-program/CreateProgram';
+import EditProgram from '../pages/programs/pages/edit-program/EditProgram';
+import Business from '../pages/business/business-profile/Business';
+import EditBusiness from '../pages/business/edit-business-profile/EditBusiness';
 import Balance from '../pages/balance/Balance';
 import Request from '../pages/request/Request';
 import Discover from '../pages/discover/Discover';
@@ -73,12 +78,32 @@ export const protectedRoutes: ProtectedRouteConfig[] = [
     element: <ChangePassword />,
   },
   {
-    path: ROUTES.PROGRAMS,
-    element: <Programs />,
+    path: ROUTES.PROGRAMS_ACTIVE,
+    element: <ActivePrograms />,
+  },
+  {
+    path: ROUTES.PROGRAMS_DRAFTS,
+    element: <DraftPrograms />,
+  },
+  {
+    path: ROUTES.PROGRAMS_STOPPED,
+    element: <StoppedPrograms />,
+  },
+  {
+    path: ROUTES.CREATE_PROGRAM,
+    element: <CreateProgram />,
+  },
+  {
+    path: ROUTES.EDIT_PROGRAM,
+    element: <EditProgram />,
   },
   {
     path: ROUTES.BUSINESS,
     element: <Business />,
+  },
+  {
+    path: ROUTES.EDIT_BUSINESS_PROFILE,
+    element: <EditBusiness />,
   },
   {
     path: ROUTES.CUSTOMERS,

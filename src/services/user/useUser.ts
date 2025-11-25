@@ -5,13 +5,13 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 
-import { UserServices } from './userService';
-import { User } from './userService';
+import { UserServices, User } from './userService';
 import { getIsAuthenticated } from '../auth';
 import { toast } from 'sonner';
 
 export const enum UserQueryKey {
   fetchUserProfile = 'fetchUserProfile',
+  fetchBalance = 'fetchBalance',
   fetchCustomerById = 'fetchCustomerById',
   updateUser = 'patchUserProfile',
 }
@@ -30,6 +30,16 @@ export const useFetchCustomerById = (id?: string) =>
     queryKey: [UserQueryKey.fetchCustomerById, id],
     staleTime: 60 * 1000,
     enabled: !!id,
+  });
+
+export const useFetchBalanceQuery = () =>
+  useQuery({
+    queryFn: () => UserServices.fetchBalance(),
+    queryKey: [UserQueryKey.fetchBalance],
+    staleTime: 300000,
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: 'always',
+    placeholderData: 0,
   });
 
 export const useUpdateUserMutation = () => {

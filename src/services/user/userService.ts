@@ -13,7 +13,10 @@ export type User = {
 export const UserServices = {
   fetchProfile: async () => {
     const response = await api.get<User>(`users/me`);
-    console.log('response', response);
+    return response.data;
+  },
+  fetchBalance: async () => {
+    const response = await api.get<number>(`/users/me/balance`);
     return response.data;
   },
 

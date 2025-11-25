@@ -18,7 +18,7 @@ const Root = () => {
   }
 
   const redirectPath =
-    user.role === ERole.MERCHANT ? ROUTES.PROGRAMS : ROUTES.DISCOVER;
+    user.role === ERole.MERCHANT ? ROUTES.PROGRAMS_ACTIVE : ROUTES.DISCOVER;
 
   return <Navigate to={redirectPath} replace />;
 };

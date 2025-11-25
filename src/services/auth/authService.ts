@@ -3,39 +3,29 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from 'firebase/auth';
 import { api } from '@/lib/api';
 import { IUserSignupFormValues } from '../../pages/signup/user/SignupUser.types';
 import { IMerchantSignupFormValues } from '../../pages/signup/merchant/SignupMerchant.types';
-import { ERole } from '@/enums';
+import { toast } from 'sonner';
+import {
+  IHealthCheckResponse,
+  ISignupUserResponse,
+  ISignupMerchantResponse,
+  IOnboardMerchantResponse,
+  ChangePasswordPayload,
+} from './auth.types';
 
 export const getIsAuthenticated = (): boolean => {
   const stored = localStorage.getItem('isAuthenticated');
   return stored === 'true';
 };
 
-type ISignupUserResponse = {
-  email: string;
-  id: string;
-  isEmailConfirmed: boolean;
-  phoneNumber: string;
-  role: ERole;
-};
-
-type ISignupMerchantResponse = {
-  id: string;
-  businessName: string;
-  businessEmail: string;
-  businessPhoneNumber: string;
-  businessAddress: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type IOnboardMerchantResponse = {
-  id: string;
-  email: string;
+export const healthCheck = async () => {
+  const response = await api.get<IHealthCheckResponse>('/health');
+  return response.data;
 };
 
 export const loginUser = async (
@@ -124,4 +114,47 @@ export const logoutUser = async (): Promise<void> => {
   await signOut(auth);
   localStorage.setItem('isAuthenticated', 'false');
   localStorage.removeItem('userRole');
+};
+
+export const changePassword = async (
+  data: ChangePasswordPayload
+): Promise<boolean> => {
+  const response = await api.post<{ success: boolean }>(
+    '/auth/change-password',
+    data
+  );
+  return response.data.success;
+};
+
+export const signInWithGoogle = async (): Promise<ISignupUserResponse> => {
+  try {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account',
+    });
+
+    await signInWithPopup(auth, provider);
+
+    try {
+      const signupUserResponse =
+        await api.post<ISignupUserResponse>('/auth/register');
+
+      if (signupUserResponse) {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userRole', signupUserResponse.data.role);
+      }
+
+      return signupUserResponse.data;
+    } catch (registerError: unknown) {
+      toast.error('Failed to sign up');
+      throw registerError;
+    }
+  } catch (error: unknown) {
+    const firebaseError = error as { code?: string };
+    if (firebaseError.code === 'auth/popup-closed-by-user') {
+      throw new Error('Sign up cancelled');
+    }
+    toast.error('Failed to sign up with Google');
+    throw error;
+  }
 };

@@ -1,3 +1,4 @@
+import type { ComponentType, SVGProps } from 'react';
 import { ERole } from '../../enums';
 
 import ProgramsIcon from '@/assets/menu.svg?react';
@@ -10,12 +11,37 @@ import WalletIcon from '@/assets/wallet.svg?react';
 import FavouritesIcon from '@/assets/heart.svg?react';
 import { ROUTES } from '@/routes/routeNames';
 
-export const sidebarRoutes = [
+export type SidebarRoute = {
+  name: string;
+  href?: string;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
+  role: ERole;
+  children?: Array<{
+    name: string;
+    href: string;
+    role?: ERole;
+  }>;
+};
+
+export const sidebarRoutes: SidebarRoute[] = [
   {
-    name: 'Programs',
-    href: ROUTES.PROGRAMS,
+    name: 'Program',
     icon: ProgramsIcon,
     role: ERole.MERCHANT,
+    children: [
+      {
+        name: 'Active',
+        href: ROUTES.PROGRAMS_ACTIVE,
+      },
+      {
+        name: 'Drafts',
+        href: ROUTES.PROGRAMS_DRAFTS,
+      },
+      {
+        name: 'Stopped',
+        href: ROUTES.PROGRAMS_STOPPED,
+      },
+    ],
   },
   {
     name: 'Customers',

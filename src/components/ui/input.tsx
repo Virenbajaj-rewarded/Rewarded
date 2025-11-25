@@ -1,28 +1,70 @@
 import * as React from 'react';
 import { Label } from '@/components/ui/label';
 
-import { cn } from '@/lib/utils';
-
-interface InputProps extends React.ComponentProps<'input'> {
+interface InputProps
+  extends Omit<React.ComponentProps<'input'>, 'value' | 'onChange'> {
   error?: string;
   label?: string;
+  leftMask?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+import { buildInputClasses } from './input-helpers';
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, label, ...props }, ref) => {
+  (
+    {
+      className,
+      type,
+      error,
+      label,
+      leftMask,
+      value,
+      onChange,
+      required,
+      ...props
+    },
+    ref
+  ) => {
+    const inputValue = value !== undefined ? String(value) : undefined;
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (onChange) {
+        onChange(e);
+      }
+    };
+
+    const hasValue = inputValue !== undefined && inputValue !== '';
+    const showMask = leftMask && hasValue;
+
     return (
       <div className="flex flex-col w-full gap-2">
-        {label && <Label htmlFor={props.id}>{label}</Label>}
-        <input
-          type={type}
-          className={cn(
-            'flex h-10 w-full rounded-[8px] border-none border-input bg-[#1F1F1F] px-3 py-2 text-white ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-            error && 'border-[#FF4D4F] focus-visible:ring-[#FF4D4F]',
-            className
+        {label && (
+          <Label htmlFor={props.id}>
+            {required && <span className="text-[#F5222D] mr-1">*</span>}
+            {label}{' '}
+          </Label>
+        )}
+        <div className="relative">
+          {showMask && (
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none z-10">
+              {leftMask}
+            </span>
           )}
-          ref={ref}
-          {...props}
-        />
+          <input
+            type={type}
+            className={buildInputClasses(
+              error,
+              className,
+              showMask ? 'pl-14' : undefined
+            )}
+            ref={ref}
+            value={inputValue}
+            onChange={handleChange}
+            {...props}
+          />
+        </div>
         {error && <p className="text-[14px] text-[#F5222D]">{error}</p>}
       </div>
     );

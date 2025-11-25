@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from './input';
+import { Label } from './label';
 import { Button } from './button';
 import { X, MapPin, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { buildInputClasses } from './input-helpers';
 
 interface AddressData {
   address: string;
@@ -38,9 +39,13 @@ interface AddressAutocompleteProps {
   containerClassName?: string;
   listClassName?: string;
   error?: string;
+  label?: string;
+  required?: boolean;
 }
 
 export const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
+  label,
+  required,
   placeholder = 'Enter your address',
   onAddressSelect,
   onClear,
@@ -165,33 +170,42 @@ export const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       ref={containerRef}
       className={cn('relative w-full', containerClassName)}
     >
-      <div className="relative">
-        <Input
-          placeholder={placeholder}
-          value={searchText || ''}
-          onChange={handleInputChange}
-          onFocus={handleInputFocus}
-          className={cn('pr-10', className)}
-          error={error}
-        />
-
-        {searchText.length > 0 && !loading && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted"
-            onClick={handleClearText}
-          >
-            <X className="h-4 w-4" />
-          </Button>
+      <div className="flex flex-col w-full gap-2">
+        {label && (
+          <Label>
+            {required && <span className="text-[#F5222D] mr-1">*</span>}
+            {label}{' '}
+          </Label>
         )}
+        <div className="relative">
+          <input
+            type="text"
+            placeholder={placeholder}
+            value={searchText || ''}
+            onChange={handleInputChange}
+            onFocus={handleInputFocus}
+            className={buildInputClasses(error, cn('pr-10', className))}
+          />
 
-        {loading && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2">
-            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-          </div>
-        )}
+          {searchText.length > 0 && !loading && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted"
+              onClick={handleClearText}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+
+          {loading && (
+            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+            </div>
+          )}
+        </div>
+        {error && <p className="text-[14px] text-[#F5222D]">{error}</p>}
       </div>
 
       {showSuggestions &&

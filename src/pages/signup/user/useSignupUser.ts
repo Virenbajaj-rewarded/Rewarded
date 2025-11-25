@@ -16,27 +16,30 @@ const initialValues = {
 };
 
 export const useSignupUser = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { signupUser } = useAuth();
+  const { signupUser, isSignupUserLoading, healthCheck } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (values: IUserSignupFormValues) => {
-    setIsLoading(true);
-    try {
-      const response = await signupUser(values);
-      if (!response.isEmailConfirmed) {
-        navigate(ROUTES.CONFIRM_EMAIL, {
-          state: { email: response.email },
-        });
-      } else {
-        toast.success('Account created successfully!');
-        navigate(ROUTES.ROOT);
-      }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    healthCheck()
+      .then(async () => {
+        try {
+          const response = await signupUser(values);
+          if (!response.isEmailConfirmed) {
+            navigate(ROUTES.CONFIRM_EMAIL, {
+              state: { email: response.email },
+            });
+          } else {
+            toast.success('Account created successfully!');
+            navigate(ROUTES.ROOT);
+          }
+        } catch (error) {
+          toast.error('An error occurred. Please try again.');
+        }
+      })
+      .catch(error => {
+        toast.error('An error occurred. Please try again.');
+        throw error;
+      });
   };
 
   const formik = useFormik<IUserSignupFormValues>({
@@ -46,5 +49,5 @@ export const useSignupUser = () => {
     enableReinitialize: true,
   });
 
-  return { formik, isLoading };
+  return { formik, isLoading: isSignupUserLoading };
 };

@@ -9,7 +9,7 @@ import { ROUTES } from '@/routes';
 
 export const useSignupMerchant = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const { signupMerchant, isSignupMerchantLoading } = useAuth();
+  const { signupMerchant, isSignupMerchantLoading, healthCheck } = useAuth();
   const navigate = useNavigate();
 
   const initialValues = {
@@ -26,19 +26,26 @@ export const useSignupMerchant = () => {
   };
 
   const handleSubmit = async (values: IMerchantSignupFormValues) => {
-    try {
-      const success = await signupMerchant(values);
-      if (success) {
-        toast.success('Account created successfully!');
-        navigate(ROUTES.SIGNUP_MERCHANT_SUCCESS, {
-          state: { email: values.email },
-        });
-      } else {
-        toast.error('An account with this email already exists');
-      }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.');
-    }
+    healthCheck()
+      .then(async () => {
+        try {
+          const success = await signupMerchant(values);
+          if (success) {
+            toast.success('Account created successfully!');
+            navigate(ROUTES.SIGNUP_MERCHANT_SUCCESS, {
+              state: { email: values.email },
+            });
+          } else {
+            toast.error('An account with this email already exists');
+          }
+        } catch (error) {
+          toast.error('An error occurred. Please try again.');
+        }
+      })
+      .catch(error => {
+        toast.error('An error occurred. Please try again.');
+        throw error;
+      });
   };
 
   const formik = useFormik<IMerchantSignupFormValues>({
