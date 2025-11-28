@@ -1,5 +1,5 @@
 import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { useFirebaseAuthState } from '@/services/firebase/useFirebaseAuthState';
+import { getAuthState } from '@/services/auth/authStorage';
 import { MerchantServices } from './merchantServices';
 import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
 
@@ -9,12 +9,10 @@ export const enum MerchantQueryKey {
 }
 
 export const useFetchMerchantProfileQuery = () => {
-  const { isAuthenticated, isLoading: authLoading } = useFirebaseAuthState();
-
   return useQuery({
     queryFn: () => MerchantServices.fetchMerchantProfile(),
     queryKey: [MerchantQueryKey.fetchMerchantProfile],
-    enabled: isAuthenticated && !authLoading,
+    enabled: getAuthState(),
     staleTime: 5 * 60 * 1000,
     retry: false,
   });

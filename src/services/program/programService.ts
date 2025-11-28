@@ -23,6 +23,10 @@ export const ProgramServices = {
       .json();
     return response;
   },
+  fetchProgram: async (id: string) => {
+    const response = await instance.get<IProgram>(`reward-programs/${id}`).json();
+    return response;
+  },
   createProgram: async (program: ICreateProgramPayload) => {
     const response = await instance.post<IProgram>(`reward-programs`, { json: program }).json();
     return response;

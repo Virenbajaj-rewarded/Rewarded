@@ -3,15 +3,17 @@ import {
   useQueryClient,
   InvalidateOptions,
   useMutation,
+  useQuery,
 } from '@tanstack/react-query';
-import { ProgramServices } from './programService';
-import { ICreateProgramPayload, IEditProgramPayload } from './program.types';
 import { showToast } from '@/utils';
 import { EProgramStatus } from '@/enums';
 import { UserQueryKey } from '@/services/user/useUser';
+import { ProgramServices } from './programService';
+import { ICreateProgramPayload, IEditProgramPayload } from './program.types';
 
 export const enum ProgramQueryKey {
   fetchPrograms = 'fetchPrograms',
+  fetchProgram = 'fetchProgram',
 }
 
 const useFetchProgramsQuery = (status: EProgramStatus) =>
@@ -49,6 +51,13 @@ export const useProgram = () => {
     },
   });
 
+  const useFetchProgramQuery = (id: string) =>
+    useQuery({
+      queryKey: [ProgramQueryKey.fetchProgram, id],
+      queryFn: () => ProgramServices.fetchProgram(id),
+      staleTime: 180000,
+    });
+
   const editProgramMutation = useMutation({
     mutationFn: (program: IEditProgramPayload) => ProgramServices.editProgram(program),
     onSuccess: () => {
@@ -84,10 +93,6 @@ export const useProgram = () => {
     },
     onError: error => {
       console.error('Failed to activate program:', error);
-      showToast({
-        type: 'error',
-        text1: 'Please try again later',
-      });
     },
   });
 
@@ -206,5 +211,6 @@ export const useProgram = () => {
     requestProgramActivationLoading: requestProgramActivationMutation.isPending,
     invalidateQuery,
     useFetchProgramsQuery,
+    useFetchProgramQuery,
   };
 };

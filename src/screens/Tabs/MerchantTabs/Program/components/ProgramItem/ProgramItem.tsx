@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { EProgramStatus, EProgramStrategyDisplayNames } from '@/enums';
 import { IProgram } from '@/interfaces';
 import { PrimaryButton, Tag, Typography } from '@/components';
@@ -110,31 +110,41 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
     [status, navigation, props]
   );
 
+  const handleItemPress = () => {
+    navigation.navigate(Paths.PROGRAM_DETAILS, { programId: program.id });
+  };
+
   return (
     <View style={styles.programItem}>
-      <View style={styles.programItemHeader}>
-        <Typography fontVariant="regular" fontSize={20} color="#FFFFFF">
-          {program.name}
-        </Typography>
-        <Typography fontVariant="semibold" fontSize={20} color="#FFFFFF">
-          ${program.budget}
-        </Typography>
-      </View>
-      <View style={styles.programItemTags}>
-        <Tag
-          textColor={getProgramStatusTextColor(program.status)}
-          backgroundColor={getProgramStatusBackgroundColor(program.status)}
-        >
-          {capitalize(program.status)}
-        </Tag>
-        <Tag
-          textColor={getProgramStrategyTextColor(program.strategy)}
-          backgroundColor={getProgramStrategyBackground(program.strategy)}
-        >
-          {EProgramStrategyDisplayNames[program.strategy]}{' '}
-          {program.percentBack ? `${program.percentBack}%` : ''}
-        </Tag>
-      </View>
+      <TouchableOpacity
+        onPress={handleItemPress}
+        activeOpacity={0.8}
+        style={styles.programItemClickable}
+      >
+        <View style={styles.programItemHeader}>
+          <Typography fontVariant="regular" fontSize={20} color="#FFFFFF">
+            {program.name}
+          </Typography>
+          <Typography fontVariant="semibold" fontSize={20} color="#FFFFFF">
+            ${program.budget}
+          </Typography>
+        </View>
+        <View style={styles.programItemTags}>
+          <Tag
+            textColor={getProgramStatusTextColor(program.status)}
+            backgroundColor={getProgramStatusBackgroundColor(program.status)}
+          >
+            {capitalize(program.status)}
+          </Tag>
+          <Tag
+            textColor={getProgramStrategyTextColor(program.strategy)}
+            backgroundColor={getProgramStrategyBackground(program.strategy)}
+          >
+            {EProgramStrategyDisplayNames[program.strategy]}{' '}
+            {program.percentBack ? `${program.percentBack}%` : ''}
+          </Tag>
+        </View>
+      </TouchableOpacity>
       <View style={styles.programItemButtons}>{renderButtons(program)}</View>
     </View>
   );

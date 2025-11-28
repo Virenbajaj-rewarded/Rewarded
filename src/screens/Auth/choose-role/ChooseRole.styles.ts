@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   content: {
     flex: 1,
     gap: 16,
+    marginTop: 70,
   },
   buttonsContainer: {
     width: '100%',

@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     borderColor: '#3c83f6',
   },
   stepCircleCompleted: {
-    backgroundColor: '#3c83f6',
+    backgroundColor: '#000',
     borderColor: '#3c83f6',
   },
   stepTitleContainer: {

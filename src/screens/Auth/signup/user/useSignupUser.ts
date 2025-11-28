@@ -5,6 +5,8 @@ import { IUserSignupFormValues } from './SignupUser.types';
 import { useFormik } from 'formik';
 import { userValidationSchema } from './SignupUser.validation';
 import { showToast } from '@/utils';
+import { ERole } from '@/enums';
+import { AuthServices } from '@/services/auth/authService';
 
 const initialValues = {
   fullName: '',
@@ -12,6 +14,7 @@ const initialValues = {
   phoneNumber: '',
   password: '',
   confirmPassword: '',
+  agreedToTerms: false,
 };
 
 export const useSignupUser = () => {
@@ -25,10 +28,14 @@ export const useSignupUser = () => {
           if (!response.isEmailConfirmed) {
             navigation.navigate(Paths.CONFIRM_EMAIL, { email: values.email });
           } else {
-            navigation.navigate(Paths.LOGIN);
+            navigation.navigate(Paths.LOGIN, { role: ERole.USER });
           }
         } catch (error) {
-          console.error(error);
+          const errorMessage = AuthServices.getFirebaseErrorMessage(error);
+          showToast({
+            type: 'error',
+            text1: errorMessage,
+          });
         }
       })
       .catch(error => {

@@ -3,6 +3,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { IProgram } from '@/interfaces';
+import { ERole } from '@/enums';
 
 export type RootScreenProps<S extends keyof RootStackParamList = keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, S>;
@@ -37,11 +38,20 @@ export type RootStackParamList = {
   [Paths.MERCHANT_QR_PAYMENT]: {
     consumerId: string;
   };
-  [Paths.LOGIN]: undefined;
+  [Paths.LOGIN]: {
+    role: ERole;
+  };
   [Paths.FORGOT_PASSWORD]: undefined;
+  [Paths.CONFIRM_FORGOT_PASSWORD]: {
+    email: string;
+  };
+  [Paths.SET_NEW_PASSWORD]: {
+    email: string;
+    code: string;
+  };
   [Paths.SIGNUP_MERCHANT]: undefined;
   [Paths.SIGNUP_USER]: undefined;
-  [Paths.SIGNUP_CHOOSE_ROLE]: undefined;
+  [Paths.CHOOSE_ROLE]: undefined;
   [Paths.SIGNUP_MERCHANT_SUCCESS]: {
     email: string;
   };
@@ -56,6 +66,9 @@ export type RootStackParamList = {
   [Paths.CREATE_PROGRAM]: undefined;
   [Paths.EDIT_PROGRAM]: {
     program: IProgram;
+  };
+  [Paths.PROGRAM_DETAILS]: {
+    programId: string;
   };
   [Paths.EDIT_BUSINESS]: undefined;
 };

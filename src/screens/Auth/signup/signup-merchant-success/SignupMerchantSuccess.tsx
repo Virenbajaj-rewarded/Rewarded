@@ -20,11 +20,15 @@ const SignupMerchantSuccess = ({ route }: RootScreenProps<Paths.SIGNUP_MERCHANT_
           Complete Your Business Setup
         </Typography>
         <Typography fontVariant="regular" fontSize={14} color="#BFBFBF" textAlign="center">
-          Verification may take up to 24 hours. Once complete, we’ll send a link to ${email} to
+          Verification may take up to 24 hours. Once complete, we’ll send a link to {email} to
           finalize your business setup. If verification fails, you’ll receive an email with
           instructions to try again.
         </Typography>
-        <PrimaryButton label="Go to Login" onPress={handleNavigateToLogin} style={styles.button} />
+        <PrimaryButton
+          label="Back to Authorization"
+          onPress={handleNavigateToLogin}
+          style={styles.button}
+        />
       </View>
     </SafeScreen>
   );

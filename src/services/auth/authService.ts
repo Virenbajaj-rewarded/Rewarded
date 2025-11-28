@@ -13,6 +13,24 @@ import auth, {
 import { showToast } from '@/utils';
 
 export const AuthServices = {
+  getFirebaseErrorMessage: (error: unknown): string => {
+    const firebaseError = error as { code?: string; message?: string };
+
+    if (firebaseError.code === 'auth/email-already-in-use') {
+      return 'This email is already registered. Please use a different email or try logging in.';
+    }
+    if (firebaseError.code === 'auth/invalid-email') {
+      return 'Invalid email address. Please check your email and try again.';
+    }
+    if (firebaseError.code === 'auth/weak-password') {
+      return 'Password is too weak. Please choose a stronger password.';
+    }
+    if (firebaseError.code === 'auth/network-request-failed') {
+      return 'Network error. Please check your connection and try again.';
+    }
+
+    return firebaseError.message || 'An error occurred during signup. Please try again.';
+  },
   healthCheck: async () => {
     const response = await instance.get<IHealthCheckResponse>('health');
     return response.json();
@@ -128,9 +146,31 @@ export const AuthServices = {
     } catch (error) {
       showToast({
         type: 'error',
-        text1: 'An error occurred. Please try again later.',
+        text1: 'Failed to change password',
+        text2: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
+  },
+  requestPasswordReset: async (email: string): Promise<boolean> => {
+    const response = await instance.post<{ success: boolean }>('auth/forgot-password/request', {
+      json: { email },
+    });
+
+    return (await response.json()).success;
+  },
+
+  verifyPasswordResetCode: async (email: string, code: string): Promise<boolean> => {
+    const response = await instance.post<{ success: boolean }>('auth/forgot-password/verify', {
+      json: { email, code },
+    });
+    return (await response.json()).success;
+  },
+
+  resetPassword: async (email: string, code: string, newPassword: string): Promise<boolean> => {
+    const response = await instance.post<{ success: boolean }>('auth/forgot-password/reset', {
+      json: { email, code, newPassword },
+    });
+    return (await response.json()).success;
   },
 };

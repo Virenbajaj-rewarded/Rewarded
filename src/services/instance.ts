@@ -61,6 +61,7 @@ export const instance = ky.extend({
               body: errorBody,
             });
           });
+          console.error('error message', message);
 
           showToast({
             type: 'error',

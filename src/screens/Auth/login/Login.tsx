@@ -8,8 +8,10 @@ import GoogleButton from '@/components/molecules/GoogleButton';
 import { Paths } from '@/navigation/paths';
 import { useLogin } from './useLogin';
 import { getAppVersionInfo } from '@/utils';
+import { ERole } from '@/enums';
 
-function Login({}: RootScreenProps<Paths.LOGIN>) {
+function Login({ route }: RootScreenProps<Paths.LOGIN>) {
+  const { role: chosenRole } = route.params as { role: ERole };
   const {
     formik,
     loading,
@@ -17,7 +19,7 @@ function Login({}: RootScreenProps<Paths.LOGIN>) {
     navigateToForgotPassword,
     handleSignInWithGoogle,
     signInWithGoogleLoading,
-  } = useLogin();
+  } = useLogin(chosenRole);
   const { appVersion, buildNumber, envType } = getAppVersionInfo();
 
   return (
@@ -70,12 +72,13 @@ function Login({}: RootScreenProps<Paths.LOGIN>) {
               disabled={!(formik.isValid && formik.dirty)}
               style={styles.loginButton}
             />
-
-            <GoogleButton
-              disabled={loading}
-              onPress={handleSignInWithGoogle}
-              loading={signInWithGoogleLoading}
-            />
+            {chosenRole === ERole.USER && (
+              <GoogleButton
+                disabled={loading}
+                onPress={handleSignInWithGoogle}
+                loading={signInWithGoogleLoading}
+              />
+            )}
 
             <View style={styles.signupContainer}>
               <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">

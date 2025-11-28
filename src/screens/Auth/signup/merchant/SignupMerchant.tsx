@@ -1,6 +1,6 @@
 import type { RootScreenProps } from '@/navigation/types';
 
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, TouchableOpacity } from 'react-native';
 
 import { Paths } from '@/navigation/paths';
 
@@ -12,6 +12,7 @@ import {
   AddressAutocomplete,
   Selector,
   Stepper,
+  Checkbox,
 } from '@/components';
 import { styles } from './SignupMerchant.styles';
 import { useSignupMerchant } from './useSignupMerchant';
@@ -26,6 +27,7 @@ const SignupMerchant = ({}: RootScreenProps<Paths.SIGNUP_MERCHANT>) => {
     handleNextStep,
     handlePreviousStep,
     signupMerchantLoading,
+    isStep1Valid,
   } = useSignupMerchant();
 
   const stepTitles = ['Personal Info', 'Business Details'];
@@ -114,6 +116,32 @@ const SignupMerchant = ({}: RootScreenProps<Paths.SIGNUP_MERCHANT>) => {
             : undefined
         }
       />
+
+      <TouchableOpacity
+        style={styles.checkboxContainer}
+        onPress={() => formik.setFieldValue('agreedToTerms', !formik.values.agreedToTerms)}
+        activeOpacity={0.7}
+      >
+        <Checkbox
+          checked={formik.values.agreedToTerms}
+          onPress={() => formik.setFieldValue('agreedToTerms', !formik.values.agreedToTerms)}
+        />
+        {/* TODO: Add Terms and Conditions */}
+        <Typography
+          fontVariant="regular"
+          fontSize={14}
+          color="#FFFFFF"
+          style={styles.checkboxLabel}
+        >
+          By signing up, you agree to our Terms and Conditions. Please read the full Terms and
+          Conditions before completing registration.
+        </Typography>
+      </TouchableOpacity>
+      {formik.touched.agreedToTerms && formik.errors.agreedToTerms && (
+        <Typography fontVariant="regular" fontSize={12} color="#FF6B6B">
+          {formik.errors.agreedToTerms}
+        </Typography>
+      )}
     </>
   );
   return (
@@ -136,6 +164,10 @@ const SignupMerchant = ({}: RootScreenProps<Paths.SIGNUP_MERCHANT>) => {
             totalSteps={totalSteps}
             stepTitles={stepTitles}
             onStepPress={stepNumber => {
+              // Disable stepper clicks if on step 1 and form is not valid
+              if (currentStep === 1 && !isStep1Valid()) {
+                return;
+              }
               if (stepNumber === 1) {
                 handlePreviousStep();
               } else if (stepNumber === 2) {
@@ -150,11 +182,16 @@ const SignupMerchant = ({}: RootScreenProps<Paths.SIGNUP_MERCHANT>) => {
 
         <View style={styles.buttonContainer}>
           {currentStep < totalSteps ? (
-            <PrimaryButton label="Next" onPress={handleNextStep} style={styles.button} />
+            <PrimaryButton
+              label="Next"
+              onPress={handleNextStep}
+              disabled={currentStep === 1 && !isStep1Valid()}
+              style={styles.button}
+            />
           ) : (
             <PrimaryButton
               label={signupMerchantLoading ? 'Loading...' : 'Send Request'}
-              disabled={!formik.isValid && !formik.dirty}
+              disabled={!formik.isValid || !formik.dirty}
               onPress={formik.handleSubmit}
               style={styles.button}
             />

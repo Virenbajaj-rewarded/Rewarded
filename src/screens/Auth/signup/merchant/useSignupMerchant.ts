@@ -25,6 +25,7 @@ export const useSignupMerchant = () => {
         longitude: 0,
       },
       industry: null,
+      agreedToTerms: false,
     };
   }, []);
 
@@ -54,8 +55,32 @@ export const useSignupMerchant = () => {
     enableReinitialize: true,
   });
 
+  const isStep1Valid = () => {
+    const { fullName, email, phoneNumber } = formik.values;
+    const {
+      fullName: fullNameTouched,
+      email: emailTouched,
+      phoneNumber: phoneNumberTouched,
+    } = formik.touched;
+
+    return (
+      fullName &&
+      email &&
+      phoneNumber &&
+      !formik.errors.fullName &&
+      !formik.errors.email &&
+      !formik.errors.phoneNumber &&
+      fullNameTouched &&
+      emailTouched &&
+      phoneNumberTouched
+    );
+  };
+
   const handleNextStep = () => {
     if (currentStep < totalSteps) {
+      if (currentStep === 1 && !isStep1Valid()) {
+        return;
+      }
       setCurrentStep(currentStep + 1);
     }
   };
@@ -73,5 +98,6 @@ export const useSignupMerchant = () => {
     handleNextStep,
     handlePreviousStep,
     signupMerchantLoading,
+    isStep1Valid,
   };
 };

@@ -15,4 +15,13 @@ export const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 24,
   },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  checkboxLabel: {
+    flex: 1,
+    marginLeft: 8,
+  },
 });

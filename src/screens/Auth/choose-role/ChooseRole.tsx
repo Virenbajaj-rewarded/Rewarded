@@ -1,12 +1,12 @@
 import { View } from 'react-native';
 import { Typography, PrimaryButton, RadioList } from '@/components';
-import { styles } from './SignupChooseRole.styles';
+import { styles } from './ChooseRole.styles';
 import { useChooseRole } from './useChooseRole';
 import { ERole } from '@/enums';
 import SafeScreen from '@/components/templates/SafeScreen';
 
-const SignupChooseRole = () => {
-  const { handleSelectRole, handleNavigateToSignup, selectedRole } = useChooseRole();
+const ChooseRole = () => {
+  const { handleSelectRole, handleNavigateToLogin, selectedRole } = useChooseRole();
 
   const roleOptions = [
     {
@@ -26,6 +26,9 @@ const SignupChooseRole = () => {
   return (
     <SafeScreen style={styles.container}>
       <View style={styles.content}>
+        <Typography textAlign="center" fontVariant="bold" fontSize={24} color="#FFFFFF">
+          Choose Your Role
+        </Typography>
         <Typography textAlign="left" fontVariant="regular" fontSize={14} color="#BFBFBF">
           Set up your rewards program & payment system today
         </Typography>
@@ -40,9 +43,9 @@ const SignupChooseRole = () => {
         </View>
       </View>
 
-      <PrimaryButton label="Next" onPress={handleNavigateToSignup} style={styles.button} />
+      <PrimaryButton label="Next" onPress={handleNavigateToLogin} style={styles.button} />
     </SafeScreen>
   );
 };
 
-export default SignupChooseRole;
+export default ChooseRole;

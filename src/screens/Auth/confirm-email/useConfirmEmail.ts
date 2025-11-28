@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { confirmCodeValidationSchema } from './ConfirmEmail.validation';
 import { useFormik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
-import { Paths } from '@/navigation/paths';
 import { useEmailConfirmation } from '@/services/email/useEmailConfirmation';
 
 export const useConfirmEmail = () => {
@@ -18,9 +17,9 @@ export const useConfirmEmail = () => {
   const [canResend, setCanResend] = useState(false);
 
   const handleConfirmEmail = async (values: { code: string }) => {
+    const code = values.code.toString();
     try {
-      await confirmEmail(values.code);
-      navigation.navigate(Paths.LOGIN);
+      await confirmEmail(code);
     } catch (error) {
       console.error('Failed to confirm email:', error);
     }
@@ -67,6 +66,10 @@ export const useConfirmEmail = () => {
     enableReinitialize: true,
   });
 
+  const handleChangeEmail = () => {
+    navigation.goBack();
+  };
+
   return {
     handleConfirmEmail,
     formik,
@@ -74,5 +77,6 @@ export const useConfirmEmail = () => {
     canResend,
     handleResendCode,
     confirmEmailLoading,
+    handleChangeEmail,
   };
 };

@@ -24,4 +24,13 @@ export const styles = StyleSheet.create({
   button: {
     flex: 1,
   },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  checkboxLabel: {
+    flex: 1,
+    marginLeft: 8,
+  },
 });

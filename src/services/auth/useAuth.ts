@@ -6,6 +6,7 @@ import { useUser } from '@/services/user/useUser';
 import { IUserSignupFormValues } from '@/screens/Auth/signup/user/SignupUser.types';
 import { IMerchantSignupFormValues } from '@/screens/Auth/signup/merchant/SignupMerchant.types';
 import { showToast } from '@/utils';
+import { clearAuthState, setAuthState } from './authStorage';
 
 export const enum AuthQueryKey {
   login = 'login',
@@ -17,7 +18,7 @@ export const enum AuthQueryKey {
 export const useAuth = () => {
   const { useFetchProfileQuery, setQueryData: setUserQueryData } = useUser();
 
-  const { refetch } = useFetchProfileQuery();
+  const { refetch, data: profile } = useFetchProfileQuery();
 
   const client = useQueryClient();
 
@@ -38,6 +39,7 @@ export const useAuth = () => {
     onSuccess: data => {
       refetch();
       client.setQueryData([AuthQueryKey.login], data);
+      setAuthState(true, profile?.role);
     },
     onError: error => {
       console.error('error', error);
@@ -61,6 +63,7 @@ export const useAuth = () => {
       await AuthServices.signOut();
     },
     onSuccess: () => {
+      clearAuthState();
       setUserQueryData(null);
       client.removeQueries({ queryKey: [UserQueryKey.fetchUserProfile] });
       client.removeQueries({ queryKey: [UserQueryKey.fetchBalance] });
@@ -72,6 +75,7 @@ export const useAuth = () => {
     onSuccess: data => {
       refetch();
       client.setQueryData([AuthQueryKey.signInWithGoogle], data);
+      setAuthState(true, profile?.role);
     },
     onError: error => {
       console.error('error', error);
@@ -89,6 +93,71 @@ export const useAuth = () => {
     },
     onError: error => {
       console.error('error', error);
+    },
+  });
+
+  const requestPasswordResetMutation = useMutation({
+    mutationFn: async (email: string) => {
+      return await AuthServices.requestPasswordReset(email);
+    },
+    onSuccess: () => {
+      showToast({
+        type: 'success',
+        text1: 'A password reset code has been sent to your email address',
+      });
+    },
+    onError: error => {
+      console.error('Failed to request password reset:', error);
+      showToast({
+        type: 'error',
+        text1: error instanceof Error ? error.message : 'Unknown error',
+      });
+    },
+  });
+
+  const verifyPasswordResetCodeMutation = useMutation({
+    mutationFn: async ({ email, code }: { email: string; code: string }) => {
+      return await AuthServices.verifyPasswordResetCode(email, code);
+    },
+    onSuccess: () => {
+      showToast({
+        type: 'success',
+        text1: 'Password reset code verified successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to verify password reset code:', error);
+      showToast({
+        type: 'error',
+        text1: error instanceof Error ? error.message : 'Unknown error',
+      });
+    },
+  });
+
+  const resetPasswordMutation = useMutation({
+    mutationFn: async ({
+      email,
+      code,
+      newPassword,
+    }: {
+      email: string;
+      code: string;
+      newPassword: string;
+    }) => {
+      return await AuthServices.resetPassword(email, code, newPassword);
+    },
+    onSuccess: () => {
+      showToast({
+        type: 'success',
+        text1: 'Password reset successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to reset password:', error);
+      showToast({
+        type: 'error',
+        text1: error instanceof Error ? error.message : 'Unknown error',
+      });
     },
   });
 
@@ -113,6 +182,12 @@ export const useAuth = () => {
     signInWithGoogleLoading: signInWithGoogleMutation.isPending,
     changePassword: changePasswordMutation.mutateAsync,
     changePasswordLoading: changePasswordMutation.isPending,
+    requestPasswordReset: requestPasswordResetMutation.mutateAsync,
+    requestPasswordResetLoading: requestPasswordResetMutation.isPending,
+    verifyPasswordResetCode: verifyPasswordResetCodeMutation.mutateAsync,
+    verifyPasswordResetCodeLoading: verifyPasswordResetCodeMutation.isPending,
+    resetPassword: resetPasswordMutation.mutateAsync,
+    resetPasswordLoading: resetPasswordMutation.isPending,
     invalidateQuery,
     useFetchProfileQuery,
     healthCheck: healthCheckMutation.mutateAsync,

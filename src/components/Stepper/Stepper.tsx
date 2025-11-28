@@ -35,7 +35,11 @@ const Stepper: React.FC<StepperProps> = ({
                     isCompleted && styles.stepCircleCompleted,
                   ]}
                 >
-                  <Typography fontSize={16} fontVariant="medium" color="#FFFFFF">
+                  <Typography
+                    fontSize={16}
+                    fontVariant="medium"
+                    color={isCompleted ? '#3c83f6' : '#FFFFFF'}
+                  >
                     {isCompleted ? '✓' : stepNumber}
                   </Typography>
                 </View>

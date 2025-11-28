@@ -4,4 +4,5 @@ export interface IUserSignupFormValues {
   phoneNumber: string;
   password: string;
   confirmPassword: string;
+  agreedToTerms: boolean;
 }

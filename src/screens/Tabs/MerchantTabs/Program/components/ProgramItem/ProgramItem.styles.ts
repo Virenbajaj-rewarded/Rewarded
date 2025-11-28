@@ -7,6 +7,9 @@ export const styles = StyleSheet.create({
     backgroundColor: '#141414',
     borderRadius: 16,
   },
+  programItemClickable: {
+    gap: 12,
+  },
   programItemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

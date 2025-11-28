@@ -4,8 +4,13 @@ import {
   resendEmailVerificationCode,
   confirmEmail,
 } from './emailService';
+import { ERole } from '@/enums';
+import { setAuthState } from '../auth/authStorage';
+import { useUser } from '../user/useUser';
 
 export const useEmailConfirmation = () => {
+  const { useFetchProfileQuery } = useUser();
+  const { refetch: refetchProfile } = useFetchProfileQuery();
   const sendEmailVerificationCodeMutation = useMutation({
     mutationFn: async () => {
       return await sendEmailVerificationCode();
@@ -34,8 +39,9 @@ export const useEmailConfirmation = () => {
     mutationFn: async (code: string) => {
       return await confirmEmail(code);
     },
-    onSuccess: () => {
-      console.log('Email confirmed successfully!');
+    onSuccess: async () => {
+      setAuthState(true, ERole.USER);
+      refetchProfile();
     },
     onError: error => {
       console.error('Failed to confirm email:', error);

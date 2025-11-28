@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Paths } from '@/navigation/paths';
-import { navigationRef, resetToLogin } from '@/navigation/navigationRef';
+import { navigationRef, resetToChooseRole } from '@/navigation/navigationRef';
 import { useTheme } from '@/theme';
 
 import {
@@ -21,12 +21,15 @@ import {
   Profile,
   SignupUser,
   SignupMerchant,
-  SignupChooseRole,
+  ChooseRole,
   ChangePassword,
   SignupMerchantSuccess,
   QRCode,
   CreateProgram,
   EditProgram,
+  ProgramDetails,
+  ConfirmForgotPassword,
+  SetNewPassword,
 } from '@/screens';
 import { EditBusiness } from '@/screens/Tabs/MerchantTabs/Business';
 import BottomTabNavigator from '@/navigation/BottomTabNavigator';
@@ -44,7 +47,7 @@ function ApplicationNavigator() {
 
   useEffect(() => {
     if (!profile && navigationRef.isReady()) {
-      resetToLogin();
+      resetToChooseRole();
     }
   }, [profile]);
 
@@ -67,6 +70,13 @@ function ApplicationNavigator() {
         >
           {!profile ? (
             <>
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                component={ChooseRole}
+                name={Paths.CHOOSE_ROLE}
+              />
               <Stack.Screen options={{ headerShown: false }} component={Login} name={Paths.LOGIN} />
               <Stack.Screen
                 options={{
@@ -75,6 +85,16 @@ function ApplicationNavigator() {
                 }}
                 component={ForgotPassword}
                 name={Paths.FORGOT_PASSWORD}
+              />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: 'Check your email' }}
+                component={ConfirmForgotPassword}
+                name={Paths.CONFIRM_FORGOT_PASSWORD}
+              />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: 'Reset your password' }}
+                component={SetNewPassword}
+                name={Paths.SET_NEW_PASSWORD}
               />
               <Stack.Screen
                 options={{ headerShown: true, headerTitle: 'Create Your account' }}
@@ -86,11 +106,7 @@ function ApplicationNavigator() {
                 component={SignupMerchant}
                 name={Paths.SIGNUP_MERCHANT}
               />
-              <Stack.Screen
-                options={{ headerShown: true, headerTitle: 'Choose Your Role' }}
-                component={SignupChooseRole}
-                name={Paths.SIGNUP_CHOOSE_ROLE}
-              />
+
               <Stack.Screen
                 options={{
                   headerShown: false,
@@ -150,6 +166,11 @@ function ApplicationNavigator() {
                     options={{ headerShown: true, headerTitle: 'Edit Program' }}
                     component={EditProgram}
                     name={Paths.EDIT_PROGRAM}
+                  />
+                  <Stack.Screen
+                    options={{ headerShown: true }}
+                    component={ProgramDetails}
+                    name={Paths.PROGRAM_DETAILS}
                   />
                   <Stack.Screen
                     component={Profile}

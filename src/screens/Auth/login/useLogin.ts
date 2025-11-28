@@ -5,8 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { loginValidationSchema } from './Login.validation';
 import { useFormik } from 'formik';
 import { Alert } from 'react-native';
+import { ERole } from '@/enums';
 
-export const useLogin = () => {
+export const useLogin = (chosenRole: ERole) => {
   const navigation = useNavigation();
   const { login, loginLoading, signInWithGoogle, signInWithGoogleLoading, healthCheck } = useAuth();
 
@@ -29,7 +30,7 @@ export const useLogin = () => {
   });
 
   const navigateToSignup = () => {
-    navigation.navigate(Paths.SIGNUP_CHOOSE_ROLE);
+    navigation.navigate(chosenRole === ERole.USER ? Paths.SIGNUP_USER : Paths.SIGNUP_MERCHANT);
   };
 
   const navigateToForgotPassword = () => {

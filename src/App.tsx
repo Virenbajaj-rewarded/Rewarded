@@ -55,7 +55,6 @@ export const storage = new MMKV();
 
 function AppContent() {
   const { useFetchProfileQuery } = useUser();
-
   const { data: profile } = useFetchProfileQuery();
   const [bootSplashHidden, setBootSplashHidden] = useState(false);
 

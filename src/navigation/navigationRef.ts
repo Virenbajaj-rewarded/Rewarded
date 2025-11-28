@@ -11,12 +11,12 @@ export function navigate(name: keyof RootStackParamList, params?: any) {
   }
 }
 
-export function resetToLogin() {
+export function resetToChooseRole() {
   if (navigationRef.isReady()) {
     navigationRef.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: Paths.LOGIN }],
+        routes: [{ name: Paths.CHOOSE_ROLE }],
       })
     );
   }

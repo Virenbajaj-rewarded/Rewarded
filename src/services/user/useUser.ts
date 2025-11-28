@@ -1,7 +1,7 @@
 import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { useFirebaseAuthState } from '@/services/firebase/useFirebaseAuthState';
 import { UserServices } from './userService';
 import { IGetUserResponse } from '@/services/user/user.types';
+import { getAuthState } from '@/services/auth/authStorage';
 
 export const enum UserQueryKey {
   fetchUserProfile = 'fetchUserProfile',
@@ -11,14 +11,12 @@ export const enum UserQueryKey {
 }
 
 const useFetchProfileQuery = () => {
-  const { isAuthenticated, isLoading: authLoading } = useFirebaseAuthState();
-
   return useQuery({
     queryFn: () => UserServices.fetchProfile(),
     queryKey: [UserQueryKey.fetchUserProfile],
-    enabled: isAuthenticated && !authLoading, // Only fetch if user is authenticated
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: false, // Don't retry if it fails
+    enabled: getAuthState(),
+    staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 };
 

@@ -1,11 +1,11 @@
 import type { RootScreenProps } from '@/navigation/types';
 
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, TouchableOpacity } from 'react-native';
 
 import { Paths } from '@/navigation/paths';
 
 import SafeScreen from '@/components/templates/SafeScreen';
-import { TextField, PrimaryButton, Typography } from '@/components';
+import { TextField, PrimaryButton, Typography, Checkbox } from '@/components';
 import { styles } from './SignupUser.styles';
 import { useSignupUser } from './useSignupUser';
 import { FormikProvider } from 'formik';
@@ -17,7 +17,7 @@ const SignupUser = ({}: RootScreenProps<Paths.SIGNUP_USER>) => {
     <FormikProvider value={formik}>
       <SafeScreen style={styles.container}>
         <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
-          <Typography textAlign="center" fontVariant="medium" fontSize={14} color="#BFBFBF">
+          <Typography fontVariant="medium" fontSize={14} color="#BFBFBF">
             Enter your details to start
           </Typography>
 
@@ -82,11 +82,36 @@ const SignupUser = ({}: RootScreenProps<Paths.SIGNUP_USER>) => {
                 : undefined
             }
           />
+          <TouchableOpacity
+            style={styles.checkboxContainer}
+            onPress={() => formik.setFieldValue('agreedToTerms', !formik.values.agreedToTerms)}
+            activeOpacity={0.7}
+          >
+            <Checkbox
+              checked={formik.values.agreedToTerms}
+              onPress={() => formik.setFieldValue('agreedToTerms', !formik.values.agreedToTerms)}
+            />
+            {/* // TODO: Add Terms and Conditions */}
+            <Typography
+              fontVariant="regular"
+              fontSize={14}
+              color="#FFFFFF"
+              style={styles.checkboxLabel}
+            >
+              By signing up, you agree to our Terms and Conditions. Please read the full Terms and
+              Conditions before completing registration.
+            </Typography>
+          </TouchableOpacity>
+          {formik.touched.agreedToTerms && formik.errors.agreedToTerms && (
+            <Typography fontVariant="regular" fontSize={12} color="#FF6B6B">
+              {formik.errors.agreedToTerms}
+            </Typography>
+          )}
         </ScrollView>
 
         <View style={styles.buttonContainer}>
           <PrimaryButton
-            label={signupUserLoading ? 'Loading...' : 'Create account'}
+            label={signupUserLoading ? 'Loading...' : 'Next'}
             disabled={!formik.dirty || !formik.isValid}
             onPress={formik.handleSubmit}
           />
