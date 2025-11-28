@@ -1,11 +1,11 @@
 import { useFormik } from 'formik';
-import { useState, useEffect, useCallback } from 'react';
 import { userValidationSchema } from './SignupUser.validation';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/services/auth';
 import { IUserSignupFormValues } from './SignupUser.types';
 import { ROUTES } from '@/routes';
+import { getFirebaseErrorMessage } from '@/services/auth/authService';
 
 const initialValues = {
   fullName: '',
@@ -13,6 +13,7 @@ const initialValues = {
   phoneNumber: '',
   password: '',
   confirmPassword: '',
+  agreedToTerms: false,
 };
 
 export const useSignupUser = () => {
@@ -33,11 +34,11 @@ export const useSignupUser = () => {
             navigate(ROUTES.ROOT);
           }
         } catch (error) {
-          toast.error('An error occurred. Please try again.');
+          const errorMessage = getFirebaseErrorMessage(error);
+          toast.error(errorMessage);
         }
       })
       .catch(error => {
-        toast.error('An error occurred. Please try again.');
         throw error;
       });
   };

@@ -21,7 +21,7 @@ export const useProfile = () => {
 
   const handleLogout = () => {
     logout();
-    navigate(ROUTES.LOGIN);
+    navigate(ROUTES.CHOOSE_ROLE);
   };
 
   const formik = useFormik<Profile>({

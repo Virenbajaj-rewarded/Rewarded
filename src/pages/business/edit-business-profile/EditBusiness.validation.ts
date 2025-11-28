@@ -14,7 +14,10 @@ export const editBusinessValidationSchema = Yup.object().shape({
     .email('Invalid email format')
     .required('Email is required'),
   businessPhoneNumber: Yup.string()
-    .min(8, 'Phone number is required')
+    .matches(
+      /^\+?\d{8,}$/,
+      'Phone number must contain only numbers and optionally start with +'
+    )
     .required('Phone number is required'),
   location: Yup.object()
     .shape({

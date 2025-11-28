@@ -5,6 +5,7 @@ import {
   confirmEmail,
 } from './emailService';
 import { toast } from 'sonner';
+import { ERole } from '@/enums';
 
 export const useEmailConfirmation = () => {
   const sendEmailVerificationCodeMutation = useMutation({
@@ -30,6 +31,8 @@ export const useEmailConfirmation = () => {
       return await confirmEmail(code);
     },
     onSuccess: () => {
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userRole', ERole.USER);
       toast.success('Email confirmed successfully!');
     },
   });

@@ -27,6 +27,7 @@ export interface ISignupMerchantResponse {
 export interface IOnboardMerchantResponse {
   id: string;
   email: string;
+  businessName: string;
 }
 export interface IHealthCheckResponse {
   status: string;

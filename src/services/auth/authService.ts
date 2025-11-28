@@ -42,6 +42,28 @@ export const loginUser = async (
   }
 };
 
+export const getFirebaseErrorMessage = (error: unknown): string => {
+  const firebaseError = error as { code?: string; message?: string };
+
+  if (firebaseError.code === 'auth/email-already-in-use') {
+    return 'This email is already registered. Please use a different email or try logging in.';
+  }
+  if (firebaseError.code === 'auth/invalid-email') {
+    return 'Invalid email address. Please check your email and try again.';
+  }
+  if (firebaseError.code === 'auth/weak-password') {
+    return 'Password is too weak. Please choose a stronger password.';
+  }
+  if (firebaseError.code === 'auth/network-request-failed') {
+    return 'Network error. Please check your connection and try again.';
+  }
+
+  return (
+    firebaseError.message ||
+    'An error occurred during signup. Please try again.'
+  );
+};
+
 export const signupUser = async (
   userData: IUserSignupFormValues
 ): Promise<ISignupUserResponse> => {
@@ -59,6 +81,7 @@ export const signupUser = async (
     return signupUserResponse.data;
   } catch (e) {
     console.error('Signup error:', e);
+    throw e;
   }
 };
 
@@ -157,4 +180,35 @@ export const signInWithGoogle = async (): Promise<ISignupUserResponse> => {
     toast.error('Failed to sign up with Google');
     throw error;
   }
+};
+
+export const requestPasswordReset = async (email: string): Promise<boolean> => {
+  const response = await api.post<{ success: boolean }>(
+    '/auth/forgot-password/request',
+    { email }
+  );
+  return response.data.success;
+};
+
+export const verifyPasswordResetCode = async (
+  email: string,
+  code: string
+): Promise<boolean> => {
+  const response = await api.post<{ success: boolean }>(
+    '/auth/forgot-password/verify',
+    { email, code }
+  );
+  return response.data.success;
+};
+
+export const resetPassword = async (
+  email: string,
+  code: string,
+  newPassword: string
+): Promise<boolean> => {
+  const response = await api.post<{ success: boolean }>(
+    '/auth/forgot-password/reset',
+    { email, code, newPassword }
+  );
+  return response.data.success;
 };

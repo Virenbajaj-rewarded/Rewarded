@@ -19,6 +19,7 @@ const ConfirmEmail = () => {
     canResend,
     handleResendCode,
     sendEmailVerificationCodeLoading,
+    handleChangeEmail,
   } = useConfirmEmail();
 
   return (
@@ -74,7 +75,9 @@ const ConfirmEmail = () => {
           disabled={!(formik.isValid && formik.dirty)}
           className="mt-10 w-full"
         >
-          {sendEmailVerificationCodeLoading ? 'Confirming...' : 'Confirm Code'}
+          {sendEmailVerificationCodeLoading
+            ? 'Confirming...'
+            : 'Create Account'}
         </Button>
 
         <div className="mt-4 text-center">
@@ -87,6 +90,15 @@ const ConfirmEmail = () => {
           >
             <RequestIcon />
             {canResend ? 'Resend Code' : `Resend in ${timeLeft}s`}
+          </Button>
+          <Button
+            type="button"
+            variant="link"
+            onClick={handleChangeEmail}
+            className="w-full"
+            size="lg"
+          >
+            Change Email
           </Button>
         </div>
       </Card>

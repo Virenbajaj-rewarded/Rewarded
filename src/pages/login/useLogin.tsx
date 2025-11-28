@@ -17,16 +17,12 @@ export const useLogin = () => {
   } = useAuth();
 
   const onLogin = async (values: LoginForm) => {
-    try {
-      const success = await login(values);
-      if (success) {
-        toast.success('Welcome back!');
-        navigate(ROUTES.ROOT);
-      } else {
-        toast.error('Invalid email or password');
-      }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.');
+    const success = await login(values);
+    if (success) {
+      toast.success('Welcome back!');
+      navigate(ROUTES.ROOT);
+    } else {
+      toast.error('Invalid email or password');
     }
   };
 

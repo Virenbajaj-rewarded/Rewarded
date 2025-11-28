@@ -10,7 +10,7 @@ const Root = () => {
   const { data: user, isLoading } = useFetchProfileQuery();
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.LOGIN} replace />;
+    return <Navigate to={ROUTES.CHOOSE_ROLE} replace />;
   }
 
   if (isLoading || !user) {

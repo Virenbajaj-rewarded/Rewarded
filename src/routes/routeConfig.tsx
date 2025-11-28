@@ -9,12 +9,14 @@ import Login from '../pages/login/Login';
 import SignupUser from '../pages/signup/user/SignupUser';
 import NotFound from '../pages/NotFound';
 import SignupMerchant from '../pages/signup/merchant/SignupMerchant';
-import SignupChooseRole from '../pages/signup/choose-role/SignupChooseRole';
+import ChooseRole from '../pages/choose-role/ChooseRole';
 import ConfirmEmail from '../pages/confirm-email/ConfirmEmail';
 import SetPassword from '../pages/set-password/SetPassword';
 import { ROUTES } from './routeNames';
 import ChangePassword from '../pages/change-password/ChangePassword';
-import ForgotPassword from '../pages/forgot-password/ForgotPassword';
+import ForgotPassword from '../pages/forgot-password/request-forgot-password/ForgotPassword';
+import ConfirmForgotPassword from '../pages/forgot-password/confirm-forgot-password/ConfirmForgotPassword';
+import SetNewPassword from '../pages/forgot-password/set-new-password/SetNewPassword';
 import SignupMerchantSuccess from '../pages/signup/signup-merchant-success/SignupMerchantSuccess';
 import ActivePrograms from '../pages/programs/pages/active-programs/ActivePrograms';
 import DraftPrograms from '../pages/programs/pages/draft-programs/DraftPrograms';
@@ -39,8 +41,8 @@ export const publicRoutes: RouteObject[] = [
     element: <Login />,
   },
   {
-    path: ROUTES.SIGNUP_CHOOSE_ROLE,
-    element: <SignupChooseRole />,
+    path: ROUTES.CHOOSE_ROLE,
+    element: <ChooseRole />,
   },
   {
     path: ROUTES.SIGNUP_MERCHANT,
@@ -61,6 +63,14 @@ export const publicRoutes: RouteObject[] = [
   {
     path: ROUTES.FORGOT_PASSWORD,
     element: <ForgotPassword />,
+  },
+  {
+    path: ROUTES.CONFIRM_FORGOT_PASSWORD,
+    element: <ConfirmForgotPassword />,
+  },
+  {
+    path: ROUTES.SET_NEW_PASSWORD,
+    element: <SetNewPassword />,
   },
   {
     path: ROUTES.SIGNUP_MERCHANT_SUCCESS,

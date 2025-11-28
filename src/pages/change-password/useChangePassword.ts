@@ -20,7 +20,7 @@ export const useChangePassword = () => {
     const { oldPassword, newPassword } = values;
     await changePassword({ oldPassword, newPassword });
     await logout();
-    navigate(ROUTES.LOGIN);
+    navigate(ROUTES.CHOOSE_ROLE);
   };
 
   const formik = useFormik<ChangePasswordFormValues>({

@@ -4,12 +4,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import WarningIcon from '@/assets/warning.svg?react';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/routes';
 
 const SignupMerchantSuccess = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
+
+  const handleNavigateToLogin = () => {
+    navigate(ROUTES.LOGIN);
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md p-[40px]">
@@ -25,6 +33,14 @@ const SignupMerchantSuccess = () => {
             business setup. If verification fails, you’ll receive an email with
             instructions to try again.
           </CardDescription>
+          <Button
+            type="button"
+            variant="default"
+            className="w-full"
+            onClick={handleNavigateToLogin}
+          >
+            Back to Log in
+          </Button>
         </CardHeader>
       </Card>
     </div>

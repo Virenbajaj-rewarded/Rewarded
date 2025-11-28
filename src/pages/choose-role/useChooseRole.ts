@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ERole } from '@/enums';
 import { ROUTES } from '@/routes';
 
-export const useSignupChooseRole = () => {
+export const useChooseRole = () => {
   const [role, setRole] = useState<ERole>(ERole.USER);
   const navigate = useNavigate();
 
@@ -12,11 +12,7 @@ export const useSignupChooseRole = () => {
   };
 
   const handleNextClick = () => {
-    if (role === ERole.USER) {
-      navigate(ROUTES.SIGNUP_USER);
-    } else {
-      navigate(ROUTES.SIGNUP_MERCHANT);
-    }
+    navigate(`${ROUTES.LOGIN}?role=${role}`);
   };
 
   return { role, handleRoleChange, handleNextClick };

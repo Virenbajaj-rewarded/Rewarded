@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/routes';
+import { ERole } from '@/enums';
 
 export const useConfirmEmail = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const useConfirmEmail = () => {
   const handleConfirmEmail = async values => {
     try {
       await confirmEmail(values.code);
-      navigate(ROUTES.LOGIN);
+      navigate(ROUTES.DISCOVER);
     } catch (error) {
       toast.error('Failed to confirm email:', error);
     }
@@ -60,6 +61,10 @@ export const useConfirmEmail = () => {
     enableReinitialize: true,
   });
 
+  const handleChangeEmail = () => {
+    navigate(-1);
+  };
+
   return {
     handleConfirmEmail,
     formik,
@@ -67,5 +72,6 @@ export const useConfirmEmail = () => {
     canResend,
     handleResendCode,
     sendEmailVerificationCodeLoading,
+    handleChangeEmail,
   };
 };

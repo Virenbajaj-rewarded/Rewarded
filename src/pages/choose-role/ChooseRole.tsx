@@ -1,23 +1,17 @@
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
-import { ROUTES } from '@/routes';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useSignupChooseRole } from './useSignupChooseRole';
+import { useChooseRole } from './useChooseRole';
 import { Button } from '@/components/ui/button';
-import ArrowLeftIcon from '@/assets/arrow-left.svg?react';
 import UserIcon from '@/assets/user.svg?react';
 import MerchantIcon from '@/assets/merchant.svg?react';
 
-const SignupChooseRole = () => {
-  const { role, handleRoleChange, handleNextClick } = useSignupChooseRole();
+const ChooseRole = () => {
+  const { role, handleRoleChange, handleNextClick } = useChooseRole();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#141414] p-4">
       <Card className="w-full max-w-md p-[40px]">
         <div className="flex items-center mb-4">
-          <Link to={ROUTES.LOGIN}>
-            <ArrowLeftIcon width={24} height={24} className="mr-4" />
-          </Link>
           <CardTitle className="text-[30px] text-white">
             Choose Your Role
           </CardTitle>
@@ -69,4 +63,4 @@ const SignupChooseRole = () => {
   );
 };
 
-export default SignupChooseRole;
+export default ChooseRole;

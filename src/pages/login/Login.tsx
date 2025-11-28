@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,8 +8,11 @@ import { useLogin } from './useLogin';
 import { ROUTES } from '@/routes';
 import StarIcon from '@/assets/star.svg?react';
 import GoogleButton from '@/components/auth/GoogleButton';
+import { ERole } from '@/enums';
 
 const Login = () => {
+  const [searchParams] = useSearchParams();
+  const role = searchParams.get('role') as ERole | null;
   const { formik, loading, handleSignInWithGoogle, isSignInWithGoogleLoading } =
     useLogin();
 
@@ -69,19 +72,25 @@ const Login = () => {
                 {loading ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
-            <GoogleButton
-              disabled={isSignInWithGoogleLoading || loading}
-              onPress={handleSignInWithGoogle}
-              loading={isSignInWithGoogleLoading}
-              className="mt-4"
-            />
+            {role === ERole.USER && (
+              <GoogleButton
+                disabled={isSignInWithGoogleLoading || loading}
+                onPress={handleSignInWithGoogle}
+                loading={isSignInWithGoogleLoading}
+                className="mt-4"
+              />
+            )}
 
             <div className="mt-6  text-sm">
               <span className="text-muted-foreground">
                 Don't have an account?{' '}
               </span>
               <Link
-                to={ROUTES.SIGNUP_CHOOSE_ROLE}
+                to={
+                  role === ERole.USER
+                    ? ROUTES.SIGNUP_USER
+                    : ROUTES.SIGNUP_MERCHANT
+                }
                 className="text-primary hover:text-primary/80"
               >
                 Sign Up

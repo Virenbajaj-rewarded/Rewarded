@@ -9,4 +9,5 @@ export interface IMerchantSignupFormValues {
   phoneNumber: string;
   location: ILocation;
   industry: EIndustry | null;
+  agreedToTerms: boolean;
 }

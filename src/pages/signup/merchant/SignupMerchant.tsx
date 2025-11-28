@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AddressAutocomplete } from '@/components/ui/address-autocomplete';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { EIndustry, EIndustryDisplayNames } from '@/enums';
 import {
   Card,
@@ -17,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
+import { ERole } from '@/enums';
 import { useSignupMerchant } from './useSignupMerchant';
 import { FormikProvider } from 'formik';
 import { ROUTES } from '@/routes';
@@ -30,18 +32,24 @@ const steps = [
 ];
 
 const SignupMerchant = () => {
-  const { formik, isLoading, currentStep, handleNext, handleStepClick } =
-    useSignupMerchant();
+  const {
+    formik,
+    isLoading,
+    currentStep,
+    handleNext,
+    handleStepClick,
+    isStep1Valid,
+  } = useSignupMerchant();
   return (
     <FormikProvider value={formik}>
       <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md p-[40px]">
+        <Card className="w-full max-w-md p-7">
           <CardHeader className="text-center p-0 mb-7">
             <div className="flex items-center gap-2 mb-4">
-              <Link to={ROUTES.SIGNUP_CHOOSE_ROLE}>
+              <Link to={`${ROUTES.CHOOSE_ROLE}?role=${ERole.MERCHANT}`}>
                 <ArrowLeftIcon width={24} height={24} />
               </Link>
-              <CardTitle className="text-[30px] font-bold">
+              <CardTitle className="text-3xl font-bold">
                 Create Your Account
               </CardTitle>
             </div>
@@ -57,6 +65,7 @@ const SignupMerchant = () => {
               currentStep={currentStep}
               className="mb-8"
               onStepClick={handleStepClick}
+              disabledSteps={currentStep === 1 && !isStep1Valid ? [2] : []}
             />
 
             <form onSubmit={formik.handleSubmit} className="space-y-4">
@@ -107,7 +116,12 @@ const SignupMerchant = () => {
                     />
                   </div>
 
-                  <Button type="button" onClick={handleNext} className="w-full">
+                  <Button
+                    type="button"
+                    onClick={handleNext}
+                    className="w-full"
+                    disabled={!isStep1Valid}
+                  >
                     Next
                   </Button>
                 </>
@@ -181,14 +195,48 @@ const SignupMerchant = () => {
                     />
                   </div>
 
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="agreedToTerms"
+                        checked={formik.values.agreedToTerms}
+                        onCheckedChange={checked => {
+                          formik.setFieldValue('agreedToTerms', checked);
+                          formik.setFieldTouched('agreedToTerms', true, false);
+                        }}
+                        className="mt-1"
+                      />
+                      <Label
+                        htmlFor="agreedToTerms"
+                        className="text-sm font-normal leading-relaxed cursor-pointer"
+                      >
+                        By signing up, you agree to our{' '}
+                        <Link
+                          to="/terms-and-conditions"
+                          className="text-primary hover:text-primary/80 underline"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Terms and Conditions
+                        </Link>
+                        . Please read the full Terms and Conditions before
+                        completing registration.
+                      </Label>
+                    </div>
+                    {formik.touched.agreedToTerms &&
+                      formik.errors.agreedToTerms && (
+                        <p className="text-sm text-[#F5222D]">
+                          {formik.errors.agreedToTerms}
+                        </p>
+                      )}
+                  </div>
+
                   <Button
                     type="submit"
                     className="w-full"
                     disabled={!formik.isValid || !formik.dirty}
                   >
-                    {isLoading
-                      ? 'Creating business account...'
-                      : 'Create Business Account'}
+                    {isLoading ? 'Loading...' : 'Next'}
                   </Button>
                 </>
               )}
