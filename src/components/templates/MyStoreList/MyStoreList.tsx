@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 
 import { styles } from './MyStoreList.styles';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
-import Store from '@/components/molecules/Store';
+import { StoreListItem } from '@/components/molecules/Store';
 import { IStoreListItem } from '@/services/stores/stores.types';
 import { MyStoreListProps } from './types';
 import { Typography } from '@/components';
@@ -18,10 +18,14 @@ const MyStoreList = ({
   isFetchingNextPage,
   refetch,
   isRefetching,
+  handleUnlikeStore,
 }: MyStoreListProps) => {
-  const renderItem = useCallback(({ item }: ListRenderItemInfo<IStoreListItem>) => {
-    return <Store {...item} />;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<IStoreListItem>) => {
+      return <StoreListItem store={item} handleUnlikeStore={handleUnlikeStore} />;
+    },
+    [handleUnlikeStore]
+  );
 
   if (isLoading) {
     return (

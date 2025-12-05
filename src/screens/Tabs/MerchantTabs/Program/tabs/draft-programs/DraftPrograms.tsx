@@ -16,6 +16,7 @@ export default function DraftPrograms() {
     isRefetching,
     handleActivateProgram,
     activateProgramLoading,
+    handleTopUpProgram,
   } = useDraftPrograms();
 
   if (isFetchProgramsLoading) {
@@ -55,6 +56,7 @@ export default function DraftPrograms() {
   return (
     <ProgramList
       programs={draftPrograms}
+      handleTopUpProgram={handleTopUpProgram}
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}

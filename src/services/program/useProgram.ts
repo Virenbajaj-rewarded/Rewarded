@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { showToast } from '@/utils';
 import { EProgramStatus } from '@/enums';
+import { IProgram } from '@/interfaces';
 import { UserQueryKey } from '@/services/user/useUser';
 import { ProgramServices } from './programService';
 import { ICreateProgramPayload, IEditProgramPayload } from './program.types';
@@ -79,9 +80,12 @@ export const useProgram = () => {
 
   const activateProgramMutation = useMutation({
     mutationFn: (id: string) => ProgramServices.activateProgram(id),
-    onSuccess: () => {
+    onSuccess: (program: IProgram) => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchProgram, program.id],
       });
       client.invalidateQueries({
         queryKey: [UserQueryKey.fetchBalance],
@@ -98,9 +102,12 @@ export const useProgram = () => {
 
   const stopProgramMutation = useMutation({
     mutationFn: (id: string) => ProgramServices.stopProgram(id),
-    onSuccess: () => {
+    onSuccess: (program: IProgram) => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchProgram, program.id],
       });
       client.invalidateQueries({
         queryKey: [UserQueryKey.fetchBalance],
@@ -117,9 +124,12 @@ export const useProgram = () => {
 
   const renewProgramMutation = useMutation({
     mutationFn: (id: string) => ProgramServices.renewProgram(id),
-    onSuccess: () => {
+    onSuccess: (program: IProgram) => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchProgram, program.id],
       });
       client.invalidateQueries({
         queryKey: [UserQueryKey.fetchBalance],
@@ -136,9 +146,12 @@ export const useProgram = () => {
 
   const withdrawProgramMutation = useMutation({
     mutationFn: (id: string) => ProgramServices.withdrawProgram(id),
-    onSuccess: () => {
+    onSuccess: (program: IProgram) => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchProgram, program.id],
       });
       client.invalidateQueries({
         queryKey: [UserQueryKey.fetchBalance],
@@ -153,11 +166,37 @@ export const useProgram = () => {
     },
   });
 
-  const topUpProgramMutation = useMutation({
-    mutationFn: (id: string) => ProgramServices.topUpProgram(id),
-    onSuccess: () => {
+  const fundProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.fundProgram(id),
+    onSuccess: (program: IProgram) => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchProgram, program.id],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Program funded successfully',
+      });
+    },
+    onError: error => {
+      console.error('Failed to top up program:', error);
+    },
+  });
+
+  const topUpProgramMutation = useMutation({
+    mutationFn: ({ id, amount }: { id: string; amount: number }) =>
+      ProgramServices.topUpProgram(id, amount),
+    onSuccess: (program: IProgram) => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchProgram, program.id],
       });
       client.invalidateQueries({
         queryKey: [UserQueryKey.fetchBalance],
@@ -205,8 +244,11 @@ export const useProgram = () => {
     renewProgramLoading: renewProgramMutation.isPending,
     withdrawProgram: withdrawProgramMutation.mutateAsync,
     withdrawProgramLoading: withdrawProgramMutation.isPending,
+    fundProgram: fundProgramMutation.mutateAsync,
+    fundProgramLoading: fundProgramMutation.isPending,
     topUpProgram: topUpProgramMutation.mutateAsync,
     topUpProgramLoading: topUpProgramMutation.isPending,
+    topUpProgramSuccess: topUpProgramMutation.isSuccess,
     requestProgramActivation: requestProgramActivationMutation.mutateAsync,
     requestProgramActivationLoading: requestProgramActivationMutation.isPending,
     invalidateQuery,

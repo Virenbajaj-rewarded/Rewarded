@@ -18,6 +18,7 @@ export default function StoppedPrograms() {
     isFetchingNextPage,
     refetch,
     isRefetching,
+    handleTopUpProgram,
   } = useStoppedPrograms();
 
   if (isFetchProgramsLoading) {
@@ -58,6 +59,7 @@ export default function StoppedPrograms() {
   return (
     <ProgramList
       programs={stoppedPrograms}
+      handleTopUpProgram={handleTopUpProgram}
       handleRenewProgram={handleRenewProgram}
       renewProgramLoading={renewProgramLoading}
       handleWithdrawProgram={handleWithdrawProgram}

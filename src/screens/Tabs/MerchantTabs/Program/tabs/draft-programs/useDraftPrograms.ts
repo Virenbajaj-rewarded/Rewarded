@@ -1,8 +1,12 @@
 import { useProgram } from '@/services/program/useProgram';
 import { useMemo } from 'react';
 import { EProgramStatus } from '@/enums';
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths';
+import { IProgram } from '@/interfaces';
 
 export const useDraftPrograms = () => {
+  const navigation = useNavigation();
   const { useFetchProgramsQuery, activateProgram, activateProgramLoading } = useProgram();
   const {
     data,
@@ -21,6 +25,10 @@ export const useDraftPrograms = () => {
     await activateProgram(id);
   };
 
+  const handleTopUpProgram = (program: IProgram) => {
+    navigation.navigate(Paths.TOP_UP_PROGRAM, { program });
+  };
+
   return {
     draftPrograms,
     isFetchProgramsLoading,
@@ -32,5 +40,6 @@ export const useDraftPrograms = () => {
     isRefetching,
     handleActivateProgram,
     activateProgramLoading,
+    handleTopUpProgram,
   };
 };

@@ -24,6 +24,7 @@ type ProgramItemProps = {
   renewProgramLoading?: boolean;
   handleWithdrawProgram?: (id: string) => void;
   withdrawProgramLoading?: boolean;
+  handleTopUpProgram: (program: IProgram) => void;
 };
 
 export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
@@ -38,7 +39,7 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
             <>
               <PrimaryButton
                 label="Top Up"
-                onPress={() => {}}
+                onPress={() => props.handleTopUpProgram(program)}
                 style={styles.topUpButtonStyle}
                 textStyle={styles.topUpButtonTextStyle}
               />
@@ -65,7 +66,7 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
               )}
               <PrimaryButton
                 label="Top Up"
-                onPress={() => {}}
+                onPress={() => props.handleTopUpProgram(program)}
                 style={styles.topUpButtonStyle}
                 textStyle={styles.topUpButtonTextStyle}
               />
@@ -99,7 +100,7 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
               )}
               <PrimaryButton
                 label="Top Up"
-                onPress={() => {}}
+                onPress={() => props.handleTopUpProgram(program)}
                 style={styles.transparentButtonStyle}
                 textStyle={styles.editButtonTextStyle}
               />
@@ -141,7 +142,6 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
             backgroundColor={getProgramStrategyBackground(program.strategy)}
           >
             {EProgramStrategyDisplayNames[program.strategy]}{' '}
-            {program.percentBack ? `${program.percentBack}%` : ''}
           </Tag>
         </View>
       </TouchableOpacity>

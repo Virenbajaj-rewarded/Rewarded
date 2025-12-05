@@ -24,6 +24,7 @@ interface ProgramListProps {
   isFetchingNextPage?: boolean;
   refetch?: () => void;
   isRefetching?: boolean;
+  handleTopUpProgram: (program: IProgram) => void;
 }
 
 export default function ProgramList({
@@ -41,6 +42,7 @@ export default function ProgramList({
   isFetchingNextPage,
   refetch,
   isRefetching,
+  handleTopUpProgram,
 }: ProgramListProps) {
   const navigation = useNavigation();
 
@@ -62,6 +64,7 @@ export default function ProgramList({
         renderItem={({ item }) => (
           <ProgramItem
             program={item}
+            handleTopUpProgram={handleTopUpProgram}
             handleActivateProgram={handleActivateProgram}
             activateProgramLoading={activateProgramLoading}
             handleStopProgram={handleStopProgram}

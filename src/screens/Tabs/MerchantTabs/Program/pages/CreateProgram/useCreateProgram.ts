@@ -12,7 +12,7 @@ import { showToast } from '@/utils';
 export const useCreateProgram = ({
   navigation,
 }: Pick<RootScreenProps<Paths.CREATE_PROGRAM>, 'navigation'>) => {
-  const { createProgram, createProgramLoading, topUpProgram, activateProgram } = useProgram();
+  const { createProgram, createProgramLoading, fundProgram, activateProgram } = useProgram();
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -73,7 +73,7 @@ export const useCreateProgram = ({
     try {
       const program = await handleCreateProgram(formik.values);
       if (program && program.id) {
-        await topUpProgram(program.id);
+        await fundProgram(program.id);
         return program;
       }
     } catch (error) {

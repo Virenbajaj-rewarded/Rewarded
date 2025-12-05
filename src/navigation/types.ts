@@ -28,6 +28,10 @@ export type RootStackParamList = {
   [Paths.STORE]: {
     businessCode: string;
   };
+  [Paths.TOP_UP_STORE]: {
+    userId: string;
+    storeName: string;
+  };
   [Paths.SCAN_STORE]: {
     businessCode: string;
   };
@@ -35,8 +39,14 @@ export type RootStackParamList = {
   [Paths.QR_CODE]: {
     id: string;
   };
-  [Paths.MERCHANT_QR_PAYMENT]: {
-    consumerId: string;
+  [Paths.CREDIT_POINTS]: {
+    userId: string;
+  };
+  [Paths.SCAN_USER]: {
+    userId: string;
+  };
+  [Paths.REQUEST_POINTS]: {
+    userId: string;
   };
   [Paths.LOGIN]: {
     role: ERole;
@@ -69,6 +79,9 @@ export type RootStackParamList = {
   };
   [Paths.PROGRAM_DETAILS]: {
     programId: string;
+  };
+  [Paths.TOP_UP_PROGRAM]: {
+    program: IProgram;
   };
   [Paths.EDIT_BUSINESS]: undefined;
 };

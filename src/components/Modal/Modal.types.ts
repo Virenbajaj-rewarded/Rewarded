@@ -1,4 +1,5 @@
-import { StyleProp, ViewStyle, ReactNode } from 'react-native';
+import { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { ReactNode } from 'react';
 
 export interface IModal {
   visible: boolean;
@@ -11,8 +12,8 @@ export interface IModal {
   onCancel: () => void;
   onClose: () => void;
   submitButtonStyle?: StyleProp<ViewStyle>;
-  submitButtonTextStyle?: StyleProp<ViewStyle>;
+  submitButtonTextStyle?: StyleProp<TextStyle>;
   cancelButtonStyle?: StyleProp<ViewStyle>;
-  cancelButtonTextStyle?: StyleProp<ViewStyle>;
+  cancelButtonTextStyle?: StyleProp<TextStyle>;
   children?: ReactNode;
 }

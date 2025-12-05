@@ -1,8 +1,12 @@
 import { useProgram } from '@/services/program/useProgram';
 import { useMemo } from 'react';
 import { EProgramStatus } from '@/enums';
+import { IProgram } from '@/interfaces';
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths';
 
 export const useActivePrograms = () => {
+  const navigation = useNavigation();
   const { stopProgram, stopProgramLoading, useFetchProgramsQuery } = useProgram();
   const {
     data,
@@ -19,6 +23,9 @@ export const useActivePrograms = () => {
   const handleStopProgram = async (id: string) => {
     await stopProgram(id);
   };
+  const handleTopUpProgram = (program: IProgram) => {
+    navigation.navigate(Paths.TOP_UP_PROGRAM, { program });
+  };
   return {
     activePrograms,
     handleStopProgram,
@@ -30,5 +37,6 @@ export const useActivePrograms = () => {
     isFetchingNextPage,
     refetch,
     isRefetching,
+    handleTopUpProgram,
   };
 };

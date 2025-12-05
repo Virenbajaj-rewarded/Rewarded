@@ -16,6 +16,7 @@ export default function ActivePrograms() {
     isFetchingNextPage,
     refetch,
     isRefetching,
+    handleTopUpProgram,
   } = useActivePrograms();
 
   if (isFetchProgramsLoading) {
@@ -56,6 +57,7 @@ export default function ActivePrograms() {
   return (
     <ProgramList
       programs={activePrograms}
+      handleTopUpProgram={handleTopUpProgram}
       handleStopProgram={handleStopProgram}
       stopProgramLoading={stopProgramLoading}
       fetchNextPage={fetchNextPage}

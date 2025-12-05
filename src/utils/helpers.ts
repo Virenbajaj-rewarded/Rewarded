@@ -12,5 +12,5 @@ export function capitalize(str: string) {
 }
 
 export function formatCurrency(value: number) {
-  return value ? `CAD ${value.toFixed(2)}` : 'N/A';
+  return value != null ? `CAD ${value.toFixed(2)}` : 'N/A';
 }

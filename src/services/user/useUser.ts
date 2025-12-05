@@ -6,7 +6,7 @@ import { getAuthState } from '@/services/auth/authStorage';
 export const enum UserQueryKey {
   fetchUserProfile = 'fetchUserProfile',
   fetchBalance = 'fetchBalance',
-  fetchCustomerById = 'fetchCustomerById',
+  fetchUserById = 'fetchUserById',
   updateUser = 'patchUserProfile',
 }
 
@@ -30,10 +30,10 @@ export const useFetchBalanceQuery = () =>
     placeholderData: 0,
   });
 
-export const useFetchCustomerById = (id?: string) =>
+export const useFetchUserById = (id?: string) =>
   useQuery({
     queryFn: () => UserServices.fetchUserById(id!),
-    queryKey: [UserQueryKey.fetchCustomerById, id],
+    queryKey: [UserQueryKey.fetchUserById, id],
     staleTime: 60 * 1000,
     enabled: !!id,
   });

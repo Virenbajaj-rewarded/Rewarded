@@ -1,4 +1,5 @@
 import { EIndustry } from '@/enums';
+import { IActiveRewardProgram } from '@/interfaces/IStore';
 
 export interface IStoreListItem {
   id: string;
@@ -8,6 +9,7 @@ export interface IStoreListItem {
   businessCode: string;
   distance: number;
   storeType: EIndustry;
+  activeRewardProgram: IActiveRewardProgram | null;
 }
 
 export interface IGetStoresResponse {

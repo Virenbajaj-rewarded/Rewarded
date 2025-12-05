@@ -7,10 +7,17 @@ import { useNavigation } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths.ts';
 import { Typography } from '@/components';
 import { EIndustryDisplayNames } from '@/enums';
+import { formatStrategyLabel } from '@/screens/Tabs/MerchantTabs/Program/utils';
 
-const StoreListItem = (store: IStoreListItem) => {
+const StoreListItem = ({
+  store,
+  handleUnlikeStore,
+}: {
+  store: IStoreListItem;
+  handleUnlikeStore: (id: string) => void;
+}) => {
   const navigation = useNavigation();
-  const { logoUrl, name, rewardPoints, distance, businessCode, storeType } = store || {};
+  const { logoUrl, name, rewardPoints, distance, businessCode, storeType, id } = store || {};
 
   const handleStorePress = () => {
     navigation.navigate(Paths.STORE, {
@@ -20,40 +27,49 @@ const StoreListItem = (store: IStoreListItem) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleStorePress}>
-      <Image source={{ uri: logoUrl }} style={styles.logoImage} width={60} height={60} />
+      {logoUrl ? (
+        <Image source={{ uri: logoUrl }} style={styles.photoImage} />
+      ) : (
+        <View style={styles.photoPlaceholder}>
+          <Typography fontVariant="bold" fontSize={24} color="#FFFFFF">
+            Logo
+          </Typography>
+        </View>
+      )}
 
       <View style={styles.infoList}>
-        <View style={styles.infoItem}>
+        <View style={styles.header}>
           <Typography fontVariant="bold" fontSize={20} color="#FFFFFF">
             {name}
           </Typography>
           <TouchableOpacity
             hitSlop={{ right: 10, left: 10, top: 10, bottom: 10 }}
-            onPress={() => {
-              console.warn('remove from favorites');
-              //TODO: add action to show modal to remove from favorites
-            }}
+            onPress={() => handleUnlikeStore(id)}
           >
-            <IconByVariant path="heart-filled" width={24} height={24} color="#fff" />
+            <IconByVariant path="heart-filled" width={24} height={24} color="#3C83F6" />
           </TouchableOpacity>
         </View>
-        <View style={styles.infoItem}>
-          <View style={styles.storeTypeContainer}>
-            {/* TODO: add icon for store type */}
-            <IconByVariant path="bookstore" width={20} height={20} color="#8C8C8C" />
-            <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
-              {EIndustryDisplayNames[storeType]}
-            </Typography>
-          </View>
-        </View>
         <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
-          {distance ? `${distance} miles from you` : 'Address not available'}
+          {EIndustryDisplayNames[storeType]}
         </Typography>
-        <View style={styles.infoItem}>
-          <Typography fontVariant="medium" fontSize={14} color="#3C83F6">
-            {rewardPoints ? `${rewardPoints} rewards points` : 'No rewards points'}
+        {distance && (
+          <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
+            {distance ? `${distance} miles from you` : 'Address not available'}
           </Typography>
-        </View>
+        )}
+        {store?.activeRewardProgram && (
+          <Typography fontVariant="regular" fontSize={14} color="#3C83F6">
+            {formatStrategyLabel(store?.activeRewardProgram)}
+          </Typography>
+        )}
+
+        <Typography
+          fontVariant={rewardPoints ? 'bold' : 'regular'}
+          fontSize={rewardPoints ? 16 : 14}
+          color={rewardPoints ? '#fff' : '#8C8C8C'}
+        >
+          {rewardPoints ? `${rewardPoints} rewards points` : 'Rewards currently inactive'}
+        </Typography>
       </View>
     </TouchableOpacity>
   );

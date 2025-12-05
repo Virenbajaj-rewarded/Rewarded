@@ -9,6 +9,7 @@ import { useStore } from './useStore';
 import { styles } from './Store.styles';
 import SafeScreen from '@/components/templates/SafeScreen';
 import { useShortAddress } from '@/hooks';
+import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
 import { EIndustryDisplayNames, EProgramStrategy, ERole } from '@/enums';
 
 export default function Store({ route }: RootScreenProps<Paths.STORE>) {
@@ -24,6 +25,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
     handleOpenEmail,
     handleOpenPhone,
     handleOpenMaps,
+    handlePay,
   } = useStore({ businessCode });
 
   const {
@@ -109,6 +111,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
               style={styles.qrCode}
             />
           )}
+          <PrimaryButton label="Pay" onPress={handlePay} />
           {isQRCodeVisible ? (
             <TouchableOpacity
               onPress={hideQRCode}
@@ -122,10 +125,10 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
           ) : (
             <TouchableOpacity
               onPress={showQRCode}
-              style={[styles.showQRCodeButton, styles.qrCodeButtonContainer]}
+              style={[styles.qrCodeButtonContainer, styles.showQRCodeButton]}
             >
-              <IconByVariant path="qr" width={16} height={16} color={'#ffffff'} />
-              <Typography fontVariant="regular" fontSize={16} color={'#ffffff'}>
+              <IconByVariant path="qr-blue" width={16} height={16} color="#3c83f6" />
+              <Typography fontVariant="regular" fontSize={16} color="#3c83f6">
                 Show QR
               </Typography>
             </TouchableOpacity>

@@ -10,6 +10,7 @@ import { styles } from './ScanStore.styles';
 import SafeScreen from '@/components/templates/SafeScreen';
 import { useShortAddress } from '@/hooks';
 import { EIndustryDisplayNames, EProgramStrategy, ERole } from '@/enums';
+import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
 
 export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) {
   const { businessCode } = route.params;
@@ -24,6 +25,7 @@ export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) 
     handleOpenEmail,
     handleOpenPhone,
     handleOpenMaps,
+    handlePay,
   } = useScanStore({ businessCode });
 
   const {
@@ -43,6 +45,7 @@ export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) 
       </View>
     );
   }
+
   if (isFetchStoreError || !store) {
     return (
       <View style={styles.loaderContainer}>
@@ -86,6 +89,7 @@ export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) 
           <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
             {distance ? `${distance} miles from you` : 'Address not available'}
           </Typography>
+          <PrimaryButton label="Pay" onPress={handlePay} />
           {isQRCodeVisible && (
             <QrCodeSvg
               value={JSON.stringify({
@@ -112,10 +116,10 @@ export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) 
           ) : (
             <TouchableOpacity
               onPress={showQRCode}
-              style={[styles.showQRCodeButton, styles.qrCodeButtonContainer]}
+              style={[styles.qrCodeButtonContainer, styles.showQRCodeButton]}
             >
-              <IconByVariant path="qr" width={16} height={16} color={'#ffffff'} />
-              <Typography fontVariant="regular" fontSize={16} color={'#ffffff'}>
+              <IconByVariant path="qr-blue" width={16} height={16} color="#3c83f6" />
+              <Typography fontVariant="regular" fontSize={16} color="#3c83f6">
                 Show QR
               </Typography>
             </TouchableOpacity>

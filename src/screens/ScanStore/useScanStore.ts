@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Linking } from 'react-native';
 import { useFetchMerchantByBusinessCodeQuery } from '@/services/merchant/useMerchant';
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths';
 
 export const useScanStore = ({ businessCode }: { businessCode: string }) => {
+  const navigation = useNavigation();
   const [isQRCodeVisible, setIsQRCodeVisible] = useState(false);
 
   const showQRCode = () => {
@@ -12,6 +15,7 @@ export const useScanStore = ({ businessCode }: { businessCode: string }) => {
   const hideQRCode = () => {
     setIsQRCodeVisible(false);
   };
+
   const {
     data: store,
     isLoading: isFetchStoreLoading,
@@ -40,6 +44,13 @@ export const useScanStore = ({ businessCode }: { businessCode: string }) => {
     await Linking.openURL(mapsUrl);
   };
 
+  const handlePay = () => {
+    navigation.navigate(Paths.TOP_UP_STORE, {
+      userId: store?.userId || '',
+      storeName: store?.businessName || '',
+    });
+  };
+
   return {
     store,
     isFetchStoreLoading,
@@ -50,5 +61,6 @@ export const useScanStore = ({ businessCode }: { businessCode: string }) => {
     handleOpenEmail,
     handleOpenPhone,
     handleOpenMaps,
+    handlePay,
   };
 };

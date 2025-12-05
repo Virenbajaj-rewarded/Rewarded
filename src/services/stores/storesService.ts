@@ -2,14 +2,22 @@ import { instance } from '@/services/instance';
 
 import { IGetStoresResponse, ISavingsResponse } from './stores.types';
 import { IStore } from '@/interfaces';
+import { EIndustry } from '@/enums';
 
 export const StoreServices = {
-  fetchMyStores: async ({ pageParam = 1 }: { pageParam?: number }) => {
+  fetchMyStores: async ({
+    pageParam = 1,
+    storeType,
+  }: {
+    pageParam?: number;
+    storeType?: EIndustry | null;
+  }) => {
     const response = await instance
       .get(`users/me/stores`, {
         searchParams: {
           page: pageParam,
           limit: 12,
+          ...(storeType && { storeType }),
         },
       })
       .json<IGetStoresResponse>();
@@ -36,12 +44,14 @@ export const StoreServices = {
     const response = await instance.get(`users/me/savings`).json<ISavingsResponse>();
     return response;
   },
-  deleteStore: async (id: string) => {
-    await instance.delete<void>(`users/me/stores/${id}`);
-    return id;
+  likeStore: async (id: string) => {
+    const response = await instance.post<{ success: boolean }>(`users/me/stores/${id}/like`).json();
+    return response.success;
   },
-  restoreStore: async (id: string) => {
-    await instance.post<void>(`users/me/stores/${id}/restore`);
-    return id;
+  unlikeStore: async (id: string) => {
+    const response = await instance
+      .delete(`users/me/stores/${id}/like`)
+      .json<{ success: boolean }>();
+    return response.success;
   },
 };

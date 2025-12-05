@@ -7,6 +7,7 @@ export interface Location {
 
 export interface IStore {
   id: string;
+  userId: string;
   businessName: string;
   businessEmail: string;
   businessPhone: string;

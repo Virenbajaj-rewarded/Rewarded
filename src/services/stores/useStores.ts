@@ -5,8 +5,9 @@ import {
   InvalidateOptions,
   useMutation,
 } from '@tanstack/react-query';
-import { IGetStoresResponse } from './stores.types';
 import { StoreServices } from '@/services/stores/storesService';
+import { EIndustry } from '@/enums';
+import { showToast } from '@/utils';
 
 export const enum StoreQueryKey {
   fetchMyStores = 'fetchMyStores',
@@ -15,10 +16,14 @@ export const enum StoreQueryKey {
   fetchSavings = 'fetchSavings',
 }
 
-const useFetchStoresQuery = () =>
+const useFetchStoresQuery = (storeType?: EIndustry | null) =>
   useInfiniteQuery({
-    queryKey: [StoreQueryKey.fetchMyStores],
-    queryFn: ({ pageParam = 1 }) => StoreServices.fetchMyStores({ pageParam }),
+    queryKey: [StoreQueryKey.fetchMyStores, storeType],
+    queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
+      StoreServices.fetchMyStores({
+        pageParam,
+        storeType: storeType,
+      }),
     getNextPageParam: lastPage => {
       const { page, limit, total } = lastPage;
       const hasMore = page < Math.ceil(total / limit);
@@ -58,6 +63,38 @@ const useFetchSavingsQuery = () =>
 export const useMyStores = () => {
   const client = useQueryClient();
 
+  const likeStoreMutation = useMutation({
+    mutationFn: (id: string) => StoreServices.likeStore(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [StoreQueryKey.fetchMyStores],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Added to my stores',
+      });
+    },
+    onError: error => {
+      console.error('Failed to like store:', error);
+    },
+  });
+
+  const unlikeStoreMutation = useMutation({
+    mutationFn: (id: string) => StoreServices.unlikeStore(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [StoreQueryKey.fetchMyStores],
+      });
+      showToast({
+        type: 'success',
+        text1: 'Removed from my stores',
+      });
+    },
+    onError: error => {
+      console.error('Failed to like store:', error);
+    },
+  });
+
   const invalidateQuery = (queryKeys: StoreQueryKey[], options?: InvalidateOptions) =>
     client.invalidateQueries(
       {
@@ -72,65 +109,9 @@ export const useMyStores = () => {
     useFetchRemovedStoresQuery,
     useFetchStoreQuery,
     useFetchSavingsQuery,
+    unlikeStore: unlikeStoreMutation.mutateAsync,
+    unlikeStoreLoading: unlikeStoreMutation.isPending,
+    likeStore: likeStoreMutation.mutateAsync,
+    likeStoreLoading: likeStoreMutation.isPending,
   };
-};
-
-export const useDeleteStore = () => {
-  const client = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) => StoreServices.deleteStore(id),
-    onSuccess: id => {
-      client.setQueryData<{ pages: IGetStoresResponse[]; pageParams: unknown[] } | undefined>(
-        [StoreQueryKey.fetchMyStores],
-        oldData => {
-          if (!oldData) {
-            return oldData;
-          }
-
-          return {
-            ...oldData,
-            pages: oldData.pages.map(page => ({
-              ...page,
-              items: page.items.filter(store => store.id !== id),
-            })),
-          };
-        }
-      );
-
-      client.invalidateQueries({
-        queryKey: [StoreQueryKey.fetchDeletedStores],
-      });
-    },
-  });
-};
-
-export const useRestoreStore = () => {
-  const client = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) => StoreServices.restoreStore(id),
-    onSuccess: id => {
-      client.setQueryData<{ pages: IGetStoresResponse[]; pageParams: unknown[] } | undefined>(
-        [StoreQueryKey.fetchDeletedStores],
-        oldData => {
-          if (!oldData) {
-            return oldData;
-          }
-
-          return {
-            ...oldData,
-            pages: oldData.pages.map(page => ({
-              ...page,
-              items: page.items.filter(store => store.id !== id),
-            })),
-          };
-        }
-      );
-
-      client.invalidateQueries({
-        queryKey: [StoreQueryKey.fetchMyStores],
-      });
-    },
-  });
 };

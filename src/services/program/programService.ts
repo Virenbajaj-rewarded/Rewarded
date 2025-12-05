@@ -52,8 +52,14 @@ export const ProgramServices = {
     const response = await instance.post<IProgram>(`reward-programs/${id}/withdraw`);
     return response.json();
   },
-  topUpProgram: async (id: string) => {
+  fundProgram: async (id: string) => {
     const response = await instance.post<IProgram>(`reward-programs/${id}/fund`);
+    return response.json();
+  },
+  topUpProgram: async (id: string, amount: number) => {
+    const response = await instance.post<IProgram>(`reward-programs/${id}/top-up`, {
+      json: { amount },
+    });
     return response.json();
   },
   requestProgramActivation: async (id: string) => {

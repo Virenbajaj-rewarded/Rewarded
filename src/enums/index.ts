@@ -4,6 +4,7 @@ import { EProgramStrategy, EProgramStrategyDisplayNames } from './EProgramStrate
 import { EOfferType, EOfferTypeDisplayNames } from './EOfferType';
 import { EProgramStatus } from './EProgramStatus';
 import { EPaymentMethod, EPaymentMethodDisplayNames } from './EPaymentMethod';
+import { ELedger, ELedgerStatus } from './ELedger';
 
 export {
   ERole,
@@ -16,4 +17,6 @@ export {
   EProgramStatus,
   EPaymentMethod,
   EPaymentMethodDisplayNames,
+  ELedger,
+  ELedgerStatus,
 };

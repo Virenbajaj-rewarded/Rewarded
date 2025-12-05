@@ -5,7 +5,6 @@ import { Paths } from '@/navigation/paths';
 import { EProgramStatus, EProgramStrategyDisplayNames } from '@/enums';
 import { PrimaryButton, Tag, Typography } from '@/components';
 import { capitalize } from '@/utils/helpers';
-import { useProgram } from '@/services/program/useProgram';
 import SafeScreen from '@/components/templates/SafeScreen';
 import { getProgramStatusTextColor, getProgramStatusBackgroundColor } from '../../utils';
 import { styles } from './ProgramDetails.styles';
@@ -30,6 +29,7 @@ export default function ProgramDetails({
     withdrawProgramLoading,
     handleEditProgram,
     program,
+    handleTopUpProgram,
     isLoadingProgram,
   } = useProgramDetails(programId);
 
@@ -60,7 +60,7 @@ export default function ProgramDetails({
           <>
             <PrimaryButton
               label="Top Up"
-              onPress={() => {}}
+              onPress={() => handleTopUpProgram(program)}
               style={styles.topUpButtonStyle}
               textStyle={styles.topUpButtonTextStyle}
             />
@@ -84,7 +84,7 @@ export default function ProgramDetails({
             />
             <PrimaryButton
               label="Top Up"
-              onPress={() => {}}
+              onPress={() => handleTopUpProgram(program)}
               style={styles.topUpButtonStyle}
               textStyle={styles.topUpButtonTextStyle}
             />
@@ -116,7 +116,7 @@ export default function ProgramDetails({
             />
             <PrimaryButton
               label="Top Up"
-              onPress={() => {}}
+              onPress={() => handleTopUpProgram(program)}
               style={styles.transparentButtonStyle}
               textStyle={styles.editButtonTextStyle}
             />
@@ -135,6 +135,7 @@ export default function ProgramDetails({
     handleRenewProgram,
     handleWithdrawProgram,
     handleEditProgram,
+    handleTopUpProgram,
   ]);
 
   if (isLoadingProgram || !program) {

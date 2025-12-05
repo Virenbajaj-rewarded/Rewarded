@@ -56,7 +56,8 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   showQRCodeButton: {
-    backgroundColor: '#3c83f6',
+    backgroundColor: 'transparent',
+    borderWidth: 0,
   },
   hideQRCodeButton: {
     backgroundColor: '#000000',

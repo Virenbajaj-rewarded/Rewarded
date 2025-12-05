@@ -90,8 +90,8 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
 
       switch (qrCode.type) {
         case 'customer_profile':
-          navigation.replace(Paths.MERCHANT_QR_PAYMENT, {
-            consumerId: qrCode.value,
+          navigation.replace(Paths.SCAN_USER, {
+            userId: qrCode.value,
           });
           break;
         case 'store_profile':

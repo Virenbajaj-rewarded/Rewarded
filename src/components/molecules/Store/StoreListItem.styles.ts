@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 24,
     padding: 16,
-    gap: 4,
+    gap: 16,
   },
   logoImage: {
     width: 80,
@@ -19,8 +19,7 @@ export const styles = StyleSheet.create({
   infoList: {
     flex: 1,
   },
-  infoItem: {
-    flex: 1,
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -29,5 +28,20 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  photoPlaceholder: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    backgroundColor: '#3C83F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  photoImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    marginBottom: 12,
   },
 });

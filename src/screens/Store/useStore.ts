@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Linking } from 'react-native';
 import { useMyStores } from '@/services/stores/useStores';
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths';
 
 export const useStore = ({ businessCode }: { businessCode: string }) => {
+  const navigation = useNavigation();
   const [isQRCodeVisible, setIsQRCodeVisible] = useState(false);
   const { useFetchStoreQuery } = useMyStores();
 
@@ -41,6 +44,13 @@ export const useStore = ({ businessCode }: { businessCode: string }) => {
     await Linking.openURL(mapsUrl);
   };
 
+  const handlePay = () => {
+    navigation.navigate(Paths.TOP_UP_STORE, {
+      userId: store?.userId || '',
+      storeName: store?.businessName || '',
+    });
+  };
+
   return {
     store,
     isFetchStoreLoading,
@@ -51,5 +61,6 @@ export const useStore = ({ businessCode }: { businessCode: string }) => {
     handleOpenEmail,
     handleOpenPhone,
     handleOpenMaps,
+    handlePay,
   };
 };

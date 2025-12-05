@@ -1,8 +1,12 @@
 import { useProgram } from '@/services/program/useProgram';
 import { useMemo } from 'react';
 import { EProgramStatus } from '@/enums';
+import { useNavigation } from '@react-navigation/native';
+import { Paths } from '@/navigation/paths';
+import { IProgram } from '@/interfaces';
 
 export const useStoppedPrograms = () => {
+  const navigation = useNavigation();
   const {
     renewProgram,
     renewProgramLoading,
@@ -29,6 +33,10 @@ export const useStoppedPrograms = () => {
   const handleWithdrawProgram = async (id: string) => {
     await withdrawProgram(id);
   };
+  const handleTopUpProgram = (program: IProgram) => {
+    navigation.navigate(Paths.TOP_UP_PROGRAM, { program });
+  };
+
   return {
     stoppedPrograms,
     handleRenewProgram,
@@ -42,5 +50,6 @@ export const useStoppedPrograms = () => {
     isFetchingNextPage,
     refetch,
     isRefetching,
+    handleTopUpProgram,
   };
 };

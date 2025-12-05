@@ -1,6 +1,7 @@
 import { useProgram } from '@/services/program/useProgram';
 import { useNavigation } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths';
+import { IProgram } from '@/interfaces';
 
 export const useProgramDetails = (programId: string) => {
   const navigation = useNavigation();
@@ -44,6 +45,10 @@ export const useProgramDetails = (programId: string) => {
     }
   };
 
+  const handleTopUpProgram = (program: IProgram) => {
+    navigation.navigate(Paths.TOP_UP_PROGRAM, { program });
+  };
+
   return {
     handleActivateProgram,
     activateProgramLoading,
@@ -54,6 +59,7 @@ export const useProgramDetails = (programId: string) => {
     handleWithdrawProgram,
     withdrawProgramLoading,
     handleEditProgram,
+    handleTopUpProgram,
     program,
     isLoadingProgram,
   };

@@ -9,7 +9,7 @@ import { showToast } from '@/utils';
 import { IProgram } from '@/interfaces';
 
 export const useEditProgram = ({ navigation, route }: RootScreenProps<Paths.EDIT_PROGRAM>) => {
-  const { editProgram, editProgramLoading, topUpProgram, activateProgram } = useProgram();
+  const { editProgram, editProgramLoading, fundProgram, activateProgram } = useProgram();
   const program = route.params.program;
 
   const {
@@ -90,7 +90,7 @@ export const useEditProgram = ({ navigation, route }: RootScreenProps<Paths.EDIT
     try {
       const updatedProgram = await handleEditProgram(formik.values);
       if (updatedProgram && updatedProgram.id) {
-        await topUpProgram(updatedProgram.id);
+        await fundProgram(updatedProgram.id);
         return updatedProgram;
       }
     } catch (error) {

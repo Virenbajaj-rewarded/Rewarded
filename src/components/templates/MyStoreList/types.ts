@@ -9,4 +9,5 @@ export type MyStoreListProps = {
   isFetchingNextPage: boolean;
   refetch: () => void;
   isRefetching: boolean;
+  handleUnlikeStore: (id: string) => void;
 };

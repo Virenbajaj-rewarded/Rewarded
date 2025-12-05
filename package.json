@@ -18,6 +18,7 @@
     "ios": "cp -f .env.development .env 2>/dev/null || true && ENVFILE=.env.development react-native run-ios --scheme RewardedDevelopment --simulator=\"iPhone 16 Pro\"",
     "ios:stage": "cp -f .env.staging .env 2>/dev/null || true && ENVFILE=.env.staging react-native run-ios --scheme RewardedStaging --simulator=\"iPhone 16 Pro\"",
     "ios:prod": "cp -f .env.production .env 2>/dev/null || true && ENVFILE=.env.production react-native run-ios --simulator=\"iPhone 16 Pro\"",
+    "ios:local": "cp -f .env.local .env 2>/dev/null || true && ENVFILE=.env.local react-native run-ios --device=\"iPhone (3)\"",
     "start": "react-native start --client-logs",
     "lint:rules": "eslint . --cache",
     "lint:code-format": "prettier --check \"src/**/*.{js,json,md,ts,tsx,yml,yaml}\"",
