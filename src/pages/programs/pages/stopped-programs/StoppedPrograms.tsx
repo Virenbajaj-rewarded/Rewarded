@@ -1,6 +1,7 @@
 import { ProgramsStatistic } from '../../components/ProgramsStatistic';
 import { ProgramItem } from '../../components/ProgramItem';
 import { CreateProgramButton } from '../../components/CreateProgramButton';
+import { TopUpModal } from '../../components/TopUpModal';
 import { useStoppedPrograms } from './useStoppedPrograms';
 import { Button } from '@/components/ui/button';
 import { EProgramStatus } from '@/enums';
@@ -18,6 +19,12 @@ const StoppedPrograms = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    handleTopUpProgram,
+    isTopUpModalOpen,
+    setIsTopUpModalOpen,
+    selectedProgram,
+    handleTopUp,
+    topUpProgramLoading,
   } = useStoppedPrograms();
 
   if (isFetchProgramsLoading) {
@@ -48,6 +55,7 @@ const StoppedPrograms = () => {
                 renewProgramLoading={renewProgramLoading}
                 handleWithdrawProgram={handleWithdrawProgram}
                 withdrawProgramLoading={withdrawProgramLoading}
+                handleTopUpProgram={handleTopUpProgram}
               />
             ))}
           </div>
@@ -66,6 +74,13 @@ const StoppedPrograms = () => {
       ) : (
         <div className="text-center text-gray-500">No stopped programs</div>
       )}
+      <TopUpModal
+        open={isTopUpModalOpen}
+        onOpenChange={setIsTopUpModalOpen}
+        program={selectedProgram}
+        onTopUp={handleTopUp}
+        isLoading={topUpProgramLoading}
+      />
     </div>
   );
 };

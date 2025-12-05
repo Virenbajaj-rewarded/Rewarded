@@ -34,6 +34,7 @@ export const ROUTES = {
   REQUEST: '/request',
   DISCOVER: '/discover',
   EXPENSES: '/expenses',
-  FAVOURITES: '/favourites',
+  MY_STORES: '/my-stores',
+  STORE_PROFILE: '/my-stores/:businessCode',
   WALLET: '/wallet',
 };

@@ -22,12 +22,14 @@ type ActiveProgramItemProps = {
   program: IProgram & { status: EProgramStatus.ACTIVE };
   handleStopProgram: (id: string) => void;
   stopProgramLoading: boolean;
+  handleTopUpProgram: (program: IProgram) => void;
 };
 
 type DraftProgramItemProps = {
   program: IProgram & { status: EProgramStatus.DRAFT };
   activateProgram: (id: string) => void;
   activateProgramLoading: boolean;
+  handleTopUpProgram: (program: IProgram) => void;
 };
 
 type StoppedProgramItemProps = {
@@ -36,6 +38,7 @@ type StoppedProgramItemProps = {
   renewProgramLoading: boolean;
   handleWithdrawProgram: (id: string) => void;
   withdrawProgramLoading: boolean;
+  handleTopUpProgram: (program: IProgram) => void;
 };
 
 type ProgramItemProps =
@@ -112,13 +115,13 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
   const renderButtons = useCallback(() => {
     switch (status) {
       case EProgramStatus.ACTIVE: {
-        const { handleStopProgram, stopProgramLoading } =
+        const { handleStopProgram, stopProgramLoading, handleTopUpProgram } =
           props as ActiveProgramItemProps;
         return (
           <>
             <Button
               variant="default"
-              onClick={() => {}}
+              onClick={() => handleTopUpProgram(program)}
               className="w-full md:w-1/2 bg-[#0C1A31] text-[#639CF8] hover:bg-[#0C1A31]/80"
             >
               Top Up
@@ -136,13 +139,13 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
         );
       }
       case EProgramStatus.DRAFT: {
-        const { activateProgram, activateProgramLoading } =
+        const { activateProgram, activateProgramLoading, handleTopUpProgram } =
           props as DraftProgramItemProps;
         return (
           <>
             <Button
               variant="default"
-              onClick={() => {}}
+              onClick={() => handleTopUpProgram(program)}
               className="w-full md:w-1/2 bg-[#0C1A31] text-[#639CF8] hover:bg-[#0C1A31]/80"
             >
               Top Up
@@ -164,32 +167,42 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
           renewProgramLoading,
           handleWithdrawProgram,
           withdrawProgramLoading,
+          handleTopUpProgram,
         } = props as StoppedProgramItemProps;
         return (
-          <>
+          <div className="flex flex-col flex-1 gap-2">
+            <div className="flex gap-2">
+              <Button
+                variant="default"
+                onClick={() => handleWithdrawProgram(id)}
+                disabled={withdrawProgramLoading}
+                className="w-full md:w-1/2 bg-[#0C1A31] text-[#639CF8] hover:bg-[#0C1A31]/80"
+              >
+                <RenewIcon className="h-4 w-4" color="#639CF8" />
+                {withdrawProgramLoading ? 'Withdrawing...' : 'Withdraw'}
+              </Button>
+              <Button
+                variant="default"
+                onClick={() => handleRenewProgram(id)}
+                disabled={renewProgramLoading}
+                className="w-full md:w-1/2 text-white bg-[#3C83F6]"
+              >
+                <USDIcon className="h-4 w-4" />
+                {renewProgramLoading ? 'Renewing...' : 'Renew'}
+              </Button>
+            </div>
             <Button
-              variant="default"
-              onClick={() => handleWithdrawProgram(id)}
-              disabled={withdrawProgramLoading}
-              className="w-full md:w-1/2 bg-[#0C1A31] text-[#639CF8] hover:bg-[#0C1A31]/80"
+              variant="link"
+              onClick={() => handleTopUpProgram(program)}
+              className="w-full"
             >
-              <RenewIcon className="h-4 w-4" color="#639CF8" />
-              {withdrawProgramLoading ? 'Withdrawing...' : 'Withdraw'}
+              Top Up
             </Button>
-            <Button
-              variant="default"
-              onClick={() => handleRenewProgram(id)}
-              disabled={renewProgramLoading}
-              className="w-full md:w-1/2 text-white bg-[#3C83F6]"
-            >
-              <USDIcon className="h-4 w-4" />
-              {renewProgramLoading ? 'Renewing...' : 'Renew'}
-            </Button>
-          </>
+          </div>
         );
       }
     }
-  }, [status, props, id]);
+  }, [status, props, id, program]);
 
   return (
     <Card className="bg-[#141414] border-border flex flex-col h-full">
@@ -214,7 +227,6 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
                 backgroundColor={getProgramStrategyBackground()}
               >
                 {EProgramStrategyDisplayNames[strategy]}
-                {percentBack ? ` ${percentBack}%` : ''}
               </Tag>
             </div>
             {status === EProgramStatus.DRAFT && (
@@ -238,7 +250,7 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
                 {EProgramStrategyDisplayNames[strategy]}
               </span>{' '}
               <span className="font-medium text-white ">
-                {percentBack ? `${percentBack}%` : 'N/A'}
+                {percentBack ? `${percentBack}` : 'N/A'}
               </span>
             </div>
             {maxDailyBudget && (

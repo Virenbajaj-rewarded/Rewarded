@@ -3,6 +3,7 @@ import { ILocation } from './ILocation';
 
 export interface IStore {
   id: string;
+  userId: string;
   businessName: string;
   businessEmail: string;
   businessPhoneNumber: string;

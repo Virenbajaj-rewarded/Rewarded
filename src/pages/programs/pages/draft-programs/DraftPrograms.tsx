@@ -1,6 +1,7 @@
 import { ProgramsStatistic } from '../../components/ProgramsStatistic';
 import { ProgramItem } from '../../components/ProgramItem';
 import { CreateProgramButton } from '../../components/CreateProgramButton';
+import { TopUpModal } from '../../components/TopUpModal';
 import { useDraftPrograms } from './useDraftPrograms';
 import { Button } from '@/components/ui/button';
 import { EProgramStatus } from '@/enums';
@@ -16,6 +17,12 @@ const DraftPrograms = () => {
     isFetchingNextPage,
     activateProgram,
     activateProgramLoading,
+    handleTopUpProgram,
+    isTopUpModalOpen,
+    setIsTopUpModalOpen,
+    selectedProgram,
+    handleTopUp,
+    topUpProgramLoading,
   } = useDraftPrograms();
 
   if (isFetchProgramsLoading) {
@@ -42,6 +49,7 @@ const DraftPrograms = () => {
                 program={program as IProgram & { status: EProgramStatus.DRAFT }}
                 activateProgram={activateProgram}
                 activateProgramLoading={activateProgramLoading}
+                handleTopUpProgram={handleTopUpProgram}
               />
             ))}
           </div>
@@ -60,6 +68,13 @@ const DraftPrograms = () => {
       ) : (
         <div className="text-center text-gray-500">No draft programs</div>
       )}
+      <TopUpModal
+        open={isTopUpModalOpen}
+        onOpenChange={setIsTopUpModalOpen}
+        program={selectedProgram}
+        onTopUp={handleTopUp}
+        isLoading={topUpProgramLoading}
+      />
     </div>
   );
 };

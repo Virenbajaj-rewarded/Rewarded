@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 export const useEditProgram = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { editProgram, editProgramLoading, topUpProgram, activateProgram } =
+  const { editProgram, editProgramLoading, fundProgram, activateProgram } =
     useProgram();
 
   const program = (location.state as { program?: IProgram })?.program;
@@ -93,7 +93,7 @@ export const useEditProgram = () => {
     try {
       const updatedProgram = await handleEditProgram(formik.values);
       if (updatedProgram && updatedProgram.id) {
-        await topUpProgram(updatedProgram.id);
+        await fundProgram(updatedProgram.id);
         return updatedProgram;
       }
     } catch (error) {

@@ -54,8 +54,14 @@ export const ProgramServices = {
     );
     return response.data;
   },
-  topUpProgram: async (id: string) => {
+  fundProgram: async (id: string) => {
     const response = await api.post<IProgram>(`/reward-programs/${id}/fund`);
+    return response.data;
+  },
+  topUpProgram: async (id: string, amount: number) => {
+    const response = await api.post<IProgram>(`/reward-programs/${id}/top-up`, {
+      amount,
+    });
     return response.data;
   },
   requestProgramActivation: async (id: string) => {

@@ -129,8 +129,26 @@ export const useProgram = () => {
     },
   });
 
+  const fundProgramMutation = useMutation({
+    mutationFn: (id: string) => ProgramServices.fundProgram(id),
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: [ProgramQueryKey.fetchPrograms],
+      });
+      client.invalidateQueries({
+        queryKey: [UserQueryKey.fetchBalance],
+      });
+      toast.success(`Program funded successfully`);
+    },
+    onError: error => {
+      console.error('Failed to fund program:', error);
+      toast.error('Failed to fund program');
+    },
+  });
+
   const topUpProgramMutation = useMutation({
-    mutationFn: (id: string) => ProgramServices.topUpProgram(id),
+    mutationFn: ({ id, amount }: { id: string; amount: number }) =>
+      ProgramServices.topUpProgram(id, amount),
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: [ProgramQueryKey.fetchPrograms],
@@ -142,6 +160,7 @@ export const useProgram = () => {
     },
     onError: error => {
       console.error('Failed to top up program:', error);
+      toast.error('Failed to top up program');
     },
   });
 
@@ -185,6 +204,8 @@ export const useProgram = () => {
     topUpProgramLoading: topUpProgramMutation.isPending,
     requestProgramActivation: requestProgramActivationMutation.mutateAsync,
     requestProgramActivationLoading: requestProgramActivationMutation.isPending,
+    fundProgram: fundProgramMutation.mutateAsync,
+    fundProgramLoading: fundProgramMutation.isPending,
     invalidateQuery,
     useFetchProgramsQuery,
   };

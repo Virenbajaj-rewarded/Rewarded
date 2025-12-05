@@ -8,7 +8,7 @@ import BalanceIcon from '@/assets/balance.svg?react';
 import RequestIcon from '@/assets/request.svg?react';
 import DiscoverIcon from '@/assets/search.svg?react';
 import WalletIcon from '@/assets/wallet.svg?react';
-import FavouritesIcon from '@/assets/heart.svg?react';
+import MyStoresIcon from '@/assets/heart.svg?react';
 import { ROUTES } from '@/routes/routeNames';
 
 export type SidebarRoute = {
@@ -80,9 +80,9 @@ export const sidebarRoutes: SidebarRoute[] = [
     role: ERole.USER,
   },
   {
-    name: 'Favourites',
-    href: ROUTES.FAVOURITES,
-    icon: FavouritesIcon,
+    name: 'My Stores',
+    href: ROUTES.MY_STORES,
+    icon: MyStoresIcon,
     role: ERole.USER,
   },
   { name: 'Wallet', href: ROUTES.WALLET, icon: WalletIcon, role: ERole.USER },

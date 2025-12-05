@@ -29,8 +29,9 @@ import Balance from '../pages/balance/Balance';
 import Request from '../pages/request/Request';
 import Discover from '../pages/discover/Discover';
 import Expenses from '../pages/expenses/Expenses';
-import Favourites from '../pages/favourites/Favourites';
+import MyStores from '../pages/my-stores/MyStores';
 import Wallet from '../pages/wallet/Wallet';
+import { StoreProfile } from '../pages/store-profile/StoreProfile';
 import { ERole } from '../enums';
 
 export type ProtectedRouteConfig = RouteObject & { allowedRoles?: ERole[] };
@@ -136,8 +137,12 @@ export const protectedRoutes: ProtectedRouteConfig[] = [
     element: <Expenses />,
   },
   {
-    path: ROUTES.FAVOURITES,
-    element: <Favourites />,
+    path: ROUTES.MY_STORES,
+    element: <MyStores />,
+  },
+  {
+    path: ROUTES.STORE_PROFILE,
+    element: <StoreProfile />,
   },
   {
     path: ROUTES.WALLET,
