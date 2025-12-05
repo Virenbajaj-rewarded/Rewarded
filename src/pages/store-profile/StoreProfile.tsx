@@ -49,9 +49,10 @@ export const StoreProfile = () => {
         <CardHeader>
           <CardTitle>Store Profile</CardTitle>
         </CardHeader>
-        <div className="p-6">
+        {/* TODO: Uncomment this when the payment feature is implemented */}
+        {/* <div className="p-6">
           <Button onClick={openPayModal}>Pay</Button>
-        </div>
+        </div> */}
       </Card>
 
       <PaymentModal
