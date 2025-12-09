@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   programItem: {
     padding: 24,
+    marginHorizontal: 16,
     gap: 12,
     backgroundColor: '#141414',
     borderRadius: 16,

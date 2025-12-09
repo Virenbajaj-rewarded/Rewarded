@@ -1,6 +1,6 @@
 import { instance } from '@/services/instance';
 
-import { IGetUserResponse } from './user.types';
+import { IGetUserResponse, IGetTransactionHistoryResponse } from './user.types';
 
 export const UserServices = {
   fetchProfile: async () => {
@@ -23,6 +23,17 @@ export const UserServices = {
   updateUser: async (data: Partial<IGetUserResponse>) => {
     const response = await instance
       .patch<Partial<IGetUserResponse>>(`users/me/profile`, { json: data })
+      .json();
+    return response;
+  },
+  fetchTransactionHistory: async ({ pageParam = 1 }: { pageParam?: number }) => {
+    const response = await instance
+      .get<IGetTransactionHistoryResponse>(`users/me/transactions`, {
+        searchParams: {
+          page: pageParam,
+          limit: 12,
+        },
+      })
       .json();
     return response;
   },

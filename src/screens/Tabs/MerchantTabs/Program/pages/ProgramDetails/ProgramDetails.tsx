@@ -1,8 +1,8 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, ActivityIndicator } from 'react-native';
 import { RootScreenProps } from '@/navigation/types';
 import { Paths } from '@/navigation/paths';
-import { EProgramStatus, EProgramStrategyDisplayNames } from '@/enums';
+import { EProgramStatus, EProgramStrategy, EProgramStrategyDisplayNames } from '@/enums';
 import { PrimaryButton, Tag, Typography } from '@/components';
 import { capitalize } from '@/utils/helpers';
 import SafeScreen from '@/components/templates/SafeScreen';
@@ -11,12 +11,17 @@ import { styles } from './ProgramDetails.styles';
 import { IProgram } from '@/interfaces';
 import { formatCurrency } from '@/utils/helpers';
 import { useProgramDetails } from './useProgramDetails';
+import { StopProgramModal } from '../../components/StopProgramModal/StopProgramModal';
 
 export default function ProgramDetails({
   navigation,
   route,
 }: RootScreenProps<Paths.PROGRAM_DETAILS>) {
   const { programId } = route.params;
+  const [isStopModalVisible, setIsStopModalVisible] = useState(false);
+
+  const openStopModal = useCallback(() => setIsStopModalVisible(true), []);
+  const closeStopModal = useCallback(() => setIsStopModalVisible(false), []);
 
   const {
     handleActivateProgram,
@@ -65,9 +70,8 @@ export default function ProgramDetails({
               textStyle={styles.topUpButtonTextStyle}
             />
             <PrimaryButton
-              label={stopProgramLoading ? 'Stopping...' : 'Stop'}
-              onPress={() => handleStopProgram(program.id)}
-              disabled={stopProgramLoading}
+              label="Stop"
+              onPress={openStopModal}
               style={styles.stopButtonStyle}
               textStyle={styles.stopButtonTextStyle}
               icon={{ name: 'stop', color: '#FF4D4F', width: 16, height: 16 }}
@@ -126,12 +130,11 @@ export default function ProgramDetails({
   }, [
     status,
     activateProgramLoading,
-    stopProgramLoading,
     renewProgramLoading,
     withdrawProgramLoading,
     program,
     handleActivateProgram,
-    handleStopProgram,
+    openStopModal,
     handleRenewProgram,
     handleWithdrawProgram,
     handleEditProgram,
@@ -221,6 +224,22 @@ export default function ProgramDetails({
 
         <View style={styles.buttonsContainer}>{renderButtons()}</View>
       </ScrollView>
+      {program && (
+        <StopProgramModal
+          visible={isStopModalVisible}
+          onClose={closeStopModal}
+          description={
+            program.strategy === EProgramStrategy.PERCENT_BACK
+              ? 'Are you sure you want to stop rewarding points? The program will move to Draft. Any remaining budget remains available until you click Withdraw.'
+              : 'Are you sure you want to stop? Partial rewards will be distributed to participants based on their spend progress.'
+          }
+          onConfirm={() => {
+            handleStopProgram(program.id);
+            closeStopModal();
+          }}
+          isLoading={stopProgramLoading}
+        />
+      )}
     </SafeScreen>
   );
 }

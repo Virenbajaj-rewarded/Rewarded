@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { EProgramStatus, EProgramStrategyDisplayNames } from '@/enums';
+import { EProgramStatus, EProgramStrategy, EProgramStrategyDisplayNames } from '@/enums';
 import { IProgram } from '@/interfaces';
 import { PrimaryButton, Tag, Typography } from '@/components';
 import { styles } from './ProgramItem.styles';
@@ -13,6 +13,7 @@ import {
   getProgramStrategyBackground,
 } from '../../utils';
 import { capitalize } from '@/utils/helpers';
+import { StopProgramModal } from '../StopProgramModal/StopProgramModal';
 
 type ProgramItemProps = {
   program: IProgram;
@@ -30,6 +31,10 @@ type ProgramItemProps = {
 export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
   const navigation = useNavigation();
   const { status } = program;
+  const [isStopModalVisible, setIsStopModalVisible] = useState(false);
+
+  const openStopModal = () => setIsStopModalVisible(true);
+  const closeStopModal = () => setIsStopModalVisible(false);
 
   const renderButtons = useCallback(
     (program: IProgram) => {
@@ -45,8 +50,8 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
               />
               {props.handleStopProgram && (
                 <PrimaryButton
-                  label={props.stopProgramLoading ? 'Stopping...' : 'Stop'}
-                  onPress={() => props.handleStopProgram!(program.id)}
+                  label="Stop"
+                  onPress={openStopModal}
                   style={styles.stopButtonStyle}
                   textStyle={styles.stopButtonTextStyle}
                   icon={{ name: 'stop', color: '#FF4D4F', width: 16, height: 16 }}
@@ -146,6 +151,22 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
         </View>
       </TouchableOpacity>
       <View style={styles.programItemButtons}>{renderButtons(program)}</View>
+      {props.handleStopProgram && (
+        <StopProgramModal
+          visible={isStopModalVisible}
+          onClose={closeStopModal}
+          description={
+            program.strategy === EProgramStrategy.PERCENT_BACK
+              ? 'Are you sure you want to stop rewarding points? The program will move to Draft. Any remaining budget remains available until you click Withdraw.'
+              : 'Are you sure you want to stop? Partial rewards will be distributed to participants based on their spend progress.'
+          }
+          onConfirm={() => {
+            props.handleStopProgram!(program.id);
+            closeStopModal();
+          }}
+          isLoading={props.stopProgramLoading}
+        />
+      )}
     </View>
   );
 };

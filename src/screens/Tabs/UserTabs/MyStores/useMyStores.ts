@@ -1,7 +1,8 @@
 import { useMyStores as useMyStoresService } from '@/services/stores/useStores';
 import { EIndustry, EIndustryDisplayNames } from '@/enums';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { IStoreListItem } from '@/services/stores/stores.types';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const useMyStores = () => {
   const [selectedStoreType, setSelectedStoreType] = useState<EIndustry | null>(null);
@@ -33,6 +34,12 @@ export const useMyStores = () => {
   };
 
   const stores = useMemo(() => data?.pages.flatMap(page => page.items) ?? [], [data]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const industryOptions = useMemo(
     () => [

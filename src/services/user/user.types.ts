@@ -1,4 +1,5 @@
 import { ERole } from '@/enums';
+import { ITransaction } from '@/interfaces';
 
 export interface IGetUserResponse {
   id: string;
@@ -11,8 +12,9 @@ export interface IGetUserResponse {
   updatedAt: string;
 }
 
-export interface IGetMerchantBalanceResponse {
-  points: number;
-  usd: number;
-  usdc: number;
+export interface IGetTransactionHistoryResponse {
+  items: ITransaction[];
+  page: number;
+  limit: number;
+  total: number;
 }

@@ -20,6 +20,7 @@ export const useLedger = () => {
     mutationFn: (payload: ICreditPointRequest) => creditPoint(payload),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [UserQueryKey.fetchBalance] });
+      client.invalidateQueries({ queryKey: [UserQueryKey.fetchTransactionHistory] });
     },
     onError: error => {
       console.error('Failed to credit point:', error);
@@ -65,6 +66,7 @@ export const useLedger = () => {
         text1: 'Request approved successfully',
       });
       client.invalidateQueries({ queryKey: [UserQueryKey.fetchBalance] });
+      client.invalidateQueries({ queryKey: [UserQueryKey.fetchTransactionHistory] });
     },
     onError: error => {
       console.error('Failed to approve request:', error);

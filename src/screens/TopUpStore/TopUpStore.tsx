@@ -1,4 +1,5 @@
 import { View, Keyboard, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { FormikProvider } from 'formik';
 import { Typography, TextField, PrimaryButton } from '@/components';
 import IconByVariant from '@/components/atoms/IconByVariant';
 import SafeScreen from '@/components/templates/SafeScreen';
@@ -7,7 +8,6 @@ import { styles } from './TopUpStore.styles';
 import { RootScreenProps } from '@/navigation/types';
 import { Paths } from '@/navigation/paths';
 import { useTopUpStore } from './useTopUpStore';
-import { FormikProvider } from 'formik';
 
 export default function TopUpStore({ route, navigation }: RootScreenProps<Paths.TOP_UP_STORE>) {
   const storeName = route.params.storeName;
@@ -82,7 +82,7 @@ export default function TopUpStore({ route, navigation }: RootScreenProps<Paths.
             </View>
             <View style={styles.buttonContainer}>
               <PrimaryButton
-                label={creditPointLoading ? 'Topping up...' : 'Top Up'}
+                label={creditPointLoading ? 'Loading...' : 'Pay'}
                 onPress={() => formik.handleSubmit()}
                 disabled={!formik.isValid || !formik.dirty || creditPointLoading}
               />

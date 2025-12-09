@@ -1,5 +1,13 @@
-import { useState, useCallback } from 'react';
-import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+  Pressable,
+  LayoutRectangle,
+  findNodeHandle,
+} from 'react-native';
 import { Typography } from '@/components';
 import styles from './Selector.styles';
 
@@ -30,6 +38,8 @@ export default function Selector<T = string>({
   required,
 }: SelectorProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
+  const [anchorLayout, setAnchorLayout] = useState<LayoutRectangle | null>(null);
+  const anchorRef = useRef<View>(null);
 
   const selectedOption = options.find(option => option.value === value);
 
@@ -43,6 +53,17 @@ export default function Selector<T = string>({
 
   const toggleDropdown = useCallback(() => {
     setIsOpen(!isOpen);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && anchorRef.current) {
+      const handle = findNodeHandle(anchorRef.current);
+      if (handle) {
+        anchorRef.current.measureInWindow((x, y, width, height) => {
+          setAnchorLayout({ x, y, width, height });
+        });
+      }
+    }
   }, [isOpen]);
 
   return (
@@ -60,7 +81,7 @@ export default function Selector<T = string>({
         </View>
       )}
 
-      <View style={styles.inputContainer}>
+      <View style={styles.inputContainer} ref={anchorRef}>
         <TouchableOpacity
           style={[styles.input, error && styles.inputError, isOpen && styles.inputFocused]}
           onPress={toggleDropdown}
@@ -81,31 +102,45 @@ export default function Selector<T = string>({
         </TouchableOpacity>
       </View>
 
-      {isOpen && (
-        <View style={styles.dropdown}>
-          <ScrollView
-            style={styles.scrollView}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
+      {isOpen && anchorLayout && (
+        <Modal transparent visible onRequestClose={toggleDropdown}>
+          <Pressable style={styles.backdrop} onPress={toggleDropdown} />
+          <View
+            style={[
+              styles.dropdownModal,
+              {
+                top: anchorLayout.y + anchorLayout.height,
+                left: anchorLayout.x,
+                width: anchorLayout.width,
+              },
+            ]}
           >
-            {options.map(option => (
-              <TouchableOpacity
-                key={String(option.value)}
-                style={[styles.option, value === option.value && styles.selectedOption]}
-                onPress={() => handleSelect(option)}
-                activeOpacity={0.7}
-              >
-                <Typography
-                  fontVariant="regular"
-                  fontSize={16}
-                  color={value === option.value ? '#007AFF' : '#FFFFFF'}
+            <FlatList
+              data={options}
+              keyExtractor={item => String(item.value)}
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              nestedScrollEnabled
+              scrollEnabled
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.option, value === item.value && styles.selectedOption]}
+                  onPress={() => handleSelect(item)}
+                  activeOpacity={0.7}
                 >
-                  {option.label}
-                </Typography>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+                  <Typography
+                    fontVariant="regular"
+                    fontSize={16}
+                    color={value === item.value ? '#007AFF' : '#FFFFFF'}
+                  >
+                    {item.label}
+                  </Typography>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </Modal>
       )}
 
       {error && (

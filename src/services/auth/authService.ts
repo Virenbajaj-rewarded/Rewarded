@@ -28,8 +28,26 @@ export const AuthServices = {
     if (firebaseError.code === 'auth/network-request-failed') {
       return 'Network error. Please check your connection and try again.';
     }
+    if (
+      firebaseError.code === 'auth/wrong-password' ||
+      firebaseError.code === 'auth/invalid-credential'
+    ) {
+      return 'Incorrect email or password. Please try again.';
+    }
+    if (firebaseError.code === 'auth/user-not-found') {
+      return 'No account found with this email. Please sign up first.';
+    }
+    if (firebaseError.code === 'auth/too-many-requests') {
+      return 'Too many attempts. Please wait a moment and try again.';
+    }
+    if (firebaseError.code === 'auth/user-disabled') {
+      return 'This account has been disabled. Please contact support.';
+    }
+    if (firebaseError.code === 'auth/popup-closed-by-user') {
+      return 'Sign-in was cancelled. Please try again to continue.';
+    }
 
-    return firebaseError.message || 'An error occurred during signup. Please try again.';
+    return firebaseError.message || 'Something went wrong. Please try again later.';
   },
   healthCheck: async () => {
     const response = await instance.get<IHealthCheckResponse>('health');
@@ -40,10 +58,10 @@ export const AuthServices = {
       const response = await auth().signInWithEmailAndPassword(email.trim(), password);
       return response.user;
     } catch (error) {
+      const errorMessage = AuthServices.getFirebaseErrorMessage(error);
       showToast({
         type: 'error',
-        text1: 'Failed to login',
-        text2: error instanceof Error ? error.message : 'Unknown error',
+        text1: errorMessage,
       });
       throw error;
     }
@@ -53,10 +71,10 @@ export const AuthServices = {
       await auth().signOut();
       await GoogleSignin.signOut();
     } catch (error) {
+      const errorMessage = AuthServices.getFirebaseErrorMessage(error);
       showToast({
         type: 'error',
-        text1: 'Failed to sign out',
-        text2: error instanceof Error ? error.message : 'Unknown error',
+        text1: errorMessage,
       });
       throw error;
     }
@@ -74,10 +92,10 @@ export const AuthServices = {
       });
       return signupUserResponse.json();
     } catch (error) {
+      const errorMessage = AuthServices.getFirebaseErrorMessage(error);
       showToast({
         type: 'error',
-        text1: 'Failed to sign up',
-        text2: error instanceof Error ? error.message : 'Unknown error',
+        text1: errorMessage,
       });
       throw error;
     }
@@ -115,10 +133,10 @@ export const AuthServices = {
         const signupUserResponse = await instance.post<ISignupUserResponse>('auth/register');
         return signupUserResponse.json();
       } catch (registerError: any) {
+        const errorMessage = AuthServices.getFirebaseErrorMessage(registerError);
         showToast({
           type: 'error',
-          text1: 'Failed to sign in with Google',
-          text2: registerError instanceof Error ? registerError.message : 'Unknown error',
+          text1: errorMessage,
         });
         if (registerError?.status === 409 || registerError?.status === 400) {
           throw registerError;
@@ -126,10 +144,10 @@ export const AuthServices = {
         throw registerError;
       }
     } catch (error) {
+      const errorMessage = AuthServices.getFirebaseErrorMessage(error);
       showToast({
         type: 'error',
-        text1: 'Failed to sign in with Google',
-        text2: error instanceof Error ? error.message : 'Unknown error',
+        text1: errorMessage,
       });
       throw error;
     }

@@ -10,4 +10,5 @@ export interface ITypography {
   color: string;
   textAlign?: 'left' | 'center' | 'right';
   numberOfLines?: number;
+  ellipsizeMode?: 'head' | 'middle' | 'tail';
 }

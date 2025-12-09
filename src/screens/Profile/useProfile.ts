@@ -45,7 +45,11 @@ export const useProfile = () => {
 
   const handleLogout = async () => {
     hideLogoutModal();
-    signOut();
+    try {
+      await signOut();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return {

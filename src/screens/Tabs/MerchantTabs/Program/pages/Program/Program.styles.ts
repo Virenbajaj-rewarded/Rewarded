@@ -7,8 +7,6 @@ export const styles = StyleSheet.create({
   },
   tabsContainer: {
     flex: 1,
-    padding: 16,
-    gap: 24,
   },
   header: {
     padding: 16,

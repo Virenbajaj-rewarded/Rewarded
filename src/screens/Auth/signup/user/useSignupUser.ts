@@ -6,7 +6,6 @@ import { useFormik } from 'formik';
 import { userValidationSchema } from './SignupUser.validation';
 import { showToast } from '@/utils';
 import { ERole } from '@/enums';
-import { AuthServices } from '@/services/auth/authService';
 
 const initialValues = {
   fullName: '',
@@ -23,19 +22,11 @@ export const useSignupUser = () => {
   const handleSubmit = async (values: IUserSignupFormValues) => {
     await healthCheck()
       .then(async () => {
-        try {
-          const response = await signupUser(values);
-          if (!response.isEmailConfirmed) {
-            navigation.navigate(Paths.CONFIRM_EMAIL, { email: values.email });
-          } else {
-            navigation.navigate(Paths.LOGIN, { role: ERole.USER });
-          }
-        } catch (error) {
-          const errorMessage = AuthServices.getFirebaseErrorMessage(error);
-          showToast({
-            type: 'error',
-            text1: errorMessage,
-          });
+        const response = await signupUser(values);
+        if (!response.isEmailConfirmed) {
+          navigation.navigate(Paths.CONFIRM_EMAIL, { email: values.email });
+        } else {
+          navigation.navigate(Paths.LOGIN, { role: ERole.USER });
         }
       })
       .catch(error => {

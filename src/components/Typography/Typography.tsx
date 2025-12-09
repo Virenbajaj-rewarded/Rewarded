@@ -25,6 +25,7 @@ const Typography = ({
   color = '#FFFFFF',
   textAlign = 'left',
   numberOfLines,
+  ellipsizeMode,
 }: ITypography) => {
   const dynamicStyle = useMemo(
     () =>
@@ -41,7 +42,11 @@ const Typography = ({
   );
 
   return (
-    <Text style={[dynamicStyle.text, style]} numberOfLines={numberOfLines}>
+    <Text
+      style={[dynamicStyle.text, style]}
+      numberOfLines={numberOfLines}
+      ellipsizeMode={ellipsizeMode}
+    >
       {children}
     </Text>
   );

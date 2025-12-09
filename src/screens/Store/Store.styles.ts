@@ -5,10 +5,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     paddingTop: 45,
-    marginBottom: 24,
   },
   contentContainer: {
     gap: 16,
+    paddingBottom: 50,
   },
   loaderContainer: {
     flex: 1,

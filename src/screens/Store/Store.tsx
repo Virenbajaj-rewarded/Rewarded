@@ -111,8 +111,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
               style={styles.qrCode}
             />
           )}
-          {/* FIXME: Uncomment pay button */}
-          {/* <PrimaryButton label="Pay11" onPress={handlePay} /> */}
+          <PrimaryButton label="Pay" onPress={handlePay} />
           {isQRCodeVisible ? (
             <TouchableOpacity
               onPress={hideQRCode}

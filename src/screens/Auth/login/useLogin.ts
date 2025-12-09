@@ -4,7 +4,6 @@ import { Paths } from '@/navigation/paths';
 import { useNavigation } from '@react-navigation/native';
 import { loginValidationSchema } from './Login.validation';
 import { useFormik } from 'formik';
-import { Alert } from 'react-native';
 import { ERole } from '@/enums';
 
 export const useLogin = (chosenRole: ERole) => {
@@ -38,22 +37,12 @@ export const useLogin = (chosenRole: ERole) => {
   };
 
   const handleSignInWithGoogle = async () => {
-    await healthCheck()
-      .then(async () => {
-        try {
-          await signInWithGoogle();
-        } catch (e) {
-          const error = e as Error;
-          Alert.alert(error?.message || 'Error', 'Please try again later', [{ text: 'OK' }], {
-            cancelable: true,
-          });
-        }
-      })
-      .catch(error => {
-        Alert.alert(error?.message || 'Error', 'Please try again later', [{ text: 'OK' }], {
-          cancelable: true,
-        });
-      });
+    try {
+      await healthCheck();
+      await signInWithGoogle();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return {

@@ -143,6 +143,16 @@ export default function EditBusiness({}: RootScreenProps<Paths.EDIT_BUSINESS>) {
             }
           />
 
+          <AddressAutocomplete
+            required
+            label="Address"
+            placeholder="Enter your address"
+            value={formik.values.location?.address || ''}
+            onAddressSelect={handleAddressSelect}
+            onClear={handleClearLocation}
+            error={getLocationError()}
+          />
+
           <TextField
             required
             label="Phone Number"
@@ -156,16 +166,6 @@ export default function EditBusiness({}: RootScreenProps<Paths.EDIT_BUSINESS>) {
                 ? formik.errors.businessPhoneNumber
                 : undefined
             }
-          />
-
-          <AddressAutocomplete
-            required
-            label="Address"
-            placeholder="Enter your address"
-            value={formik.values.location?.address || ''}
-            onAddressSelect={handleAddressSelect}
-            onClear={handleClearLocation}
-            error={getLocationError()}
           />
 
           <TextField

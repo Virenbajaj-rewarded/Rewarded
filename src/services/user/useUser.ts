@@ -1,4 +1,4 @@
-import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { InvalidateOptions, useQuery, useQueryClient, useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import { UserServices } from './userService';
 import { IGetUserResponse } from '@/services/user/user.types';
 import { getAuthState } from '@/services/auth/authStorage';
@@ -8,6 +8,7 @@ export const enum UserQueryKey {
   fetchBalance = 'fetchBalance',
   fetchUserById = 'fetchUserById',
   updateUser = 'patchUserProfile',
+  fetchTransactionHistory = 'fetchTransactionHistory',
 }
 
 const useFetchProfileQuery = () => {
@@ -36,6 +37,19 @@ export const useFetchUserById = (id?: string) =>
     queryKey: [UserQueryKey.fetchUserById, id],
     staleTime: 60 * 1000,
     enabled: !!id,
+  });
+
+export const useFetchTransactionHistoryQuery = () =>
+  useInfiniteQuery({
+    queryKey: [UserQueryKey.fetchTransactionHistory],
+    queryFn: ({ pageParam = 1 }) => UserServices.fetchTransactionHistory({ pageParam }),
+    getNextPageParam: lastPage => {
+      const { page, limit, total } = lastPage;
+      const hasMore = page < Math.ceil(total / limit);
+      return hasMore ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+    staleTime: 180000,
   });
 
 export const useUpdateUserMutation = () => {
@@ -79,5 +93,6 @@ export const useUser = () => {
     useFetchProfileQuery,
     setQueryData,
     useUpdateUserMutation,
+    useFetchTransactionHistoryQuery,
   };
 };

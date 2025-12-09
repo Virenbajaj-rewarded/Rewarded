@@ -33,11 +33,8 @@ export default StyleSheet.create({
   inputText: {
     flex: 1,
   },
-  dropdown: {
+  dropdownModal: {
     position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
     backgroundColor: '#1f1f1f',
     borderWidth: 1,
     borderColor: '#404040',
@@ -52,11 +49,11 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 10,
-    zIndex: 1021,
-    maxHeight: 200,
+    maxHeight: 220,
+    zIndex: 2000,
   },
   scrollView: {
-    maxHeight: 150,
+    maxHeight: 200,
   },
   option: {
     paddingHorizontal: 16,
@@ -74,5 +71,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'transparent',
   },
 });

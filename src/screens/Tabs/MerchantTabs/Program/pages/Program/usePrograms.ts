@@ -1,19 +1,24 @@
 import { useProgram } from '@/services/program/useProgram';
 import { useMemo } from 'react';
-import { EProgramStatus } from '@/enums';
+import { EProgramStatus, EProgramStatusDisplayNames } from '@/enums';
+import { IProgram } from '@/interfaces';
 import { useNavigation } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths';
-import { IProgram } from '@/interfaces';
 
-export const useStoppedPrograms = () => {
+export const usePrograms = (activeTabName: EProgramStatusDisplayNames) => {
   const navigation = useNavigation();
   const {
+    stopProgram,
+    stopProgramLoading,
+    useFetchProgramsQuery,
+    activateProgram,
+    activateProgramLoading,
     renewProgram,
     renewProgramLoading,
     withdrawProgram,
     withdrawProgramLoading,
-    useFetchProgramsQuery,
   } = useProgram();
+
   const {
     data,
     isLoading: isFetchProgramsLoading,
@@ -23,22 +28,38 @@ export const useStoppedPrograms = () => {
     isFetchingNextPage,
     refetch,
     isRefetching,
-  } = useFetchProgramsQuery(EProgramStatus.STOPPED);
+  } = useFetchProgramsQuery(
+    EProgramStatus[activeTabName.toUpperCase() as keyof typeof EProgramStatus]
+  );
 
-  const stoppedPrograms = useMemo(() => data?.pages.flatMap(page => page.items) ?? [], [data]);
+  const programs = useMemo(() => data?.pages.flatMap(page => page.items) ?? [], [data]);
 
-  const handleRenewProgram = async (id: string) => {
-    await renewProgram(id);
+  const handleStopProgram = async (id: string) => {
+    await stopProgram(id);
   };
-  const handleWithdrawProgram = async (id: string) => {
-    await withdrawProgram(id);
+
+  const handleActivateProgram = async (id: string) => {
+    await activateProgram(id);
   };
+
   const handleTopUpProgram = (program: IProgram) => {
     navigation.navigate(Paths.TOP_UP_PROGRAM, { program });
   };
 
+  const handleRenewProgram = async (id: string) => {
+    await renewProgram(id);
+  };
+
+  const handleWithdrawProgram = async (id: string) => {
+    await withdrawProgram(id);
+  };
+
   return {
-    stoppedPrograms,
+    programs,
+    handleStopProgram,
+    stopProgramLoading,
+    handleActivateProgram,
+    activateProgramLoading,
     handleRenewProgram,
     renewProgramLoading,
     handleWithdrawProgram,

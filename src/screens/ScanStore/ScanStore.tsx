@@ -89,8 +89,7 @@ export default function ScanStore({ route }: RootScreenProps<Paths.SCAN_STORE>) 
           <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
             {distance ? `${distance} miles from you` : 'Address not available'}
           </Typography>
-          {/* FIXME: Uncomment pay button */}
-          {/* <PrimaryButton label="Pay" onPress={handlePay} /> */}
+          <PrimaryButton label="Pay" onPress={handlePay} />
           {isQRCodeVisible && (
             <QrCodeSvg
               value={JSON.stringify({

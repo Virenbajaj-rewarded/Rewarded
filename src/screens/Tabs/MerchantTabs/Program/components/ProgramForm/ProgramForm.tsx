@@ -145,6 +145,7 @@ export default function ProgramForm({
     ) {
       return (
         <TextField
+          required
           keyboardType="numeric"
           label="Amount of CAD Points"
           value={percentBack?.toString() || ''}
@@ -160,6 +161,7 @@ export default function ProgramForm({
       return (
         <>
           <TextField
+            required
             keyboardType="numeric"
             label="Amount to Spend"
             value={spendThreshold?.toString() || ''}
@@ -172,6 +174,7 @@ export default function ProgramForm({
             }
           />
           <TextField
+            required
             keyboardType="numeric"
             label="% of Cashback"
             value={rewardPercent?.toString() || ''}
@@ -191,6 +194,7 @@ export default function ProgramForm({
       return (
         <>
           <TextField
+            required
             keyboardType="numeric"
             label="Amount to Spend"
             value={spendThreshold?.toString() || ''}
@@ -203,6 +207,7 @@ export default function ProgramForm({
             }
           />
           <TextField
+            required
             keyboardType="numeric"
             label="Amount of CAD Points"
             value={rewardPercent?.toString() || ''}
@@ -227,6 +232,7 @@ export default function ProgramForm({
               General
             </Typography>
             <TextField
+              required
               label="Offer Name"
               value={name}
               onChangeText={handleChange('name')}
@@ -253,6 +259,7 @@ export default function ProgramForm({
             />
             <View style={styles.budgetContainer}>
               <TextField
+                required
                 keyboardType="numeric"
                 label="Budget"
                 value={budget?.toString()}
@@ -267,6 +274,7 @@ export default function ProgramForm({
               </Typography>
             </View>
             <TextField
+              required
               keyboardType="numeric"
               label="Max Daily Budget"
               value={maxDailyBudget?.toString()}

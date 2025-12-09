@@ -156,7 +156,11 @@ function ApplicationNavigator() {
                 component={ChooseRole}
                 name={Paths.CHOOSE_ROLE}
               />
-              <Stack.Screen options={{ headerShown: false }} component={Login} name={Paths.LOGIN} />
+              <Stack.Screen
+                options={{ headerShown: true, headerTitle: '' }}
+                component={Login}
+                name={Paths.LOGIN}
+              />
               <Stack.Screen
                 options={{
                   headerShown: true,
