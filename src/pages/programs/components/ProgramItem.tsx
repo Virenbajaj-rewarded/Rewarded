@@ -20,7 +20,7 @@ const capitalize = (str: string): string => {
 
 type ActiveProgramItemProps = {
   program: IProgram & { status: EProgramStatus.ACTIVE };
-  handleStopProgram: (id: string) => void;
+  handleStopProgram: (id: string, strategy: EProgramStrategy) => void;
   stopProgramLoading: boolean;
   handleTopUpProgram: (program: IProgram) => void;
 };
@@ -128,12 +128,12 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
             </Button>
             <Button
               variant="outline"
-              onClick={() => handleStopProgram(id)}
+              onClick={() => handleStopProgram(id, strategy)}
               disabled={stopProgramLoading}
               className="border-[#FF4D4F] text-[#FF4D4F] hover:bg-[#FF4D4F]/10 w-full md:w-1/2"
             >
               <StopIcon className="h-4 w-4" />
-              {stopProgramLoading ? 'Stopping...' : 'Stop'}
+              Stop
             </Button>
           </>
         );
@@ -202,7 +202,7 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
         );
       }
     }
-  }, [status, props, id, program]);
+  }, [status, props, id, program, strategy]);
 
   return (
     <Card className="bg-[#141414] border-border flex flex-col h-full">

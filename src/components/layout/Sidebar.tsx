@@ -28,6 +28,13 @@ export const Sidebar = () => {
 
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
+  const isPathActive = (href?: string) => {
+    if (!href) return false;
+    return (
+      location.pathname === href || location.pathname.startsWith(`${href}/`)
+    );
+  };
+
   const toggleMenu = (menu: SidebarRoute) => {
     setOpenMenus(prev => {
       const current = prev[menu.name];
@@ -97,11 +104,11 @@ export const Sidebar = () => {
                 <ul role="list" className="-mx-2 space-y-1">
                   {sidebarRoutesBasedOnRole.map(item => {
                     const hasChildren = (item.children?.length ?? 0) > 0;
-                    const parentHasActiveChild = item.children?.some(
-                      child => location.pathname === child.href
+                    const parentHasActiveChild = item.children?.some(child =>
+                      isPathActive(child.href)
                     );
                     const isActive =
-                      location.pathname === item.href || parentHasActiveChild;
+                      isPathActive(item.href) || parentHasActiveChild;
                     const storedState = openMenus[item.name];
                     const isMenuOpen = hasChildren
                       ? storedState !== undefined
@@ -212,8 +219,7 @@ export const Sidebar = () => {
                         {hasChildren && isMenuOpen && (
                           <ul role="list" className="mt-1 space-y-1">
                             {item.children?.map(child => {
-                              const childIsActive =
-                                location.pathname === child.href;
+                              const childIsActive = isPathActive(child.href);
                               return (
                                 <li key={child.name}>
                                   <Link

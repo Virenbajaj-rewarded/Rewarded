@@ -2,6 +2,7 @@ import { ProgramsStatistic } from '../../components/ProgramsStatistic';
 import { ProgramItem } from '../../components/ProgramItem';
 import { CreateProgramButton } from '../../components/CreateProgramButton';
 import { TopUpModal } from '../../components/TopUpModal';
+import { StopProgramModal } from '../../components/StopProgramModal';
 import { useActivePrograms } from './useActivePrograms';
 import { Button } from '@/components/ui/button';
 import { EProgramStatus } from '@/enums';
@@ -23,6 +24,11 @@ const ActivePrograms = () => {
     selectedProgram,
     handleTopUp,
     topUpProgramLoading,
+    isStopModalOpen,
+    setIsStopModalOpen,
+    selectedStopProgramId,
+    selectedStopProgramStrategy,
+    handleStop,
   } = useActivePrograms();
 
   if (isFetchProgramsLoading) {
@@ -76,6 +82,14 @@ const ActivePrograms = () => {
         program={selectedProgram}
         onTopUp={handleTopUp}
         isLoading={topUpProgramLoading}
+      />
+      <StopProgramModal
+        open={isStopModalOpen}
+        onOpenChange={setIsStopModalOpen}
+        programId={selectedStopProgramId}
+        programStrategy={selectedStopProgramStrategy}
+        onStop={handleStop}
+        isLoading={stopProgramLoading}
       />
     </div>
   );

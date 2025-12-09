@@ -37,7 +37,8 @@ export const loginUser = async (
     localStorage.setItem('isAuthenticated', 'true');
     return true;
   } catch (e) {
-    console.error('Login error:', e);
+    const errorMessage = getFirebaseErrorMessage(e);
+    toast.error(errorMessage);
     return false;
   }
 };
@@ -57,10 +58,27 @@ export const getFirebaseErrorMessage = (error: unknown): string => {
   if (firebaseError.code === 'auth/network-request-failed') {
     return 'Network error. Please check your connection and try again.';
   }
+  if (
+    firebaseError.code === 'auth/wrong-password' ||
+    firebaseError.code === 'auth/invalid-credential'
+  ) {
+    return 'Incorrect email or password. Please try again.';
+  }
+  if (firebaseError.code === 'auth/user-not-found') {
+    return 'No account found with this email. Please sign up first.';
+  }
+  if (firebaseError.code === 'auth/too-many-requests') {
+    return 'Too many attempts. Please wait a moment and try again.';
+  }
+  if (firebaseError.code === 'auth/user-disabled') {
+    return 'This account has been disabled. Please contact support.';
+  }
+  if (firebaseError.code === 'auth/popup-closed-by-user') {
+    return 'Sign-in was cancelled. Please try again to continue.';
+  }
 
   return (
-    firebaseError.message ||
-    'An error occurred during signup. Please try again.'
+    firebaseError.message || 'Something went wrong. Please try again later.'
   );
 };
 
@@ -80,6 +98,8 @@ export const signupUser = async (
     );
     return signupUserResponse.data;
   } catch (e) {
+    const errorMessage = getFirebaseErrorMessage(e);
+    toast.error(errorMessage);
     console.error('Signup error:', e);
     throw e;
   }
@@ -129,14 +149,21 @@ export const setMerchantPassword = async (
     );
     return signupUserResponse.data.success;
   } catch (e) {
+    const errorMessage = getFirebaseErrorMessage(e);
+    toast.error(errorMessage);
     console.error('Signup error:', e);
   }
 };
 
 export const logoutUser = async (): Promise<void> => {
-  await signOut(auth);
-  localStorage.setItem('isAuthenticated', 'false');
-  localStorage.removeItem('userRole');
+  try {
+    await signOut(auth);
+    localStorage.setItem('isAuthenticated', 'false');
+    localStorage.removeItem('userRole');
+  } catch (e) {
+    const errorMessage = getFirebaseErrorMessage(e);
+    toast.error(errorMessage);
+  }
 };
 
 export const changePassword = async (
@@ -146,6 +173,7 @@ export const changePassword = async (
     '/auth/change-password',
     data
   );
+
   return response.data.success;
 };
 
@@ -169,15 +197,12 @@ export const signInWithGoogle = async (): Promise<ISignupUserResponse> => {
 
       return signupUserResponse.data;
     } catch (registerError: unknown) {
-      toast.error('Failed to sign up');
+      toast.error(registerError as string);
       throw registerError;
     }
   } catch (error: unknown) {
-    const firebaseError = error as { code?: string };
-    if (firebaseError.code === 'auth/popup-closed-by-user') {
-      throw new Error('Sign up cancelled');
-    }
-    toast.error('Failed to sign up with Google');
+    const errorMessage = getFirebaseErrorMessage(error);
+    toast.error(errorMessage);
     throw error;
   }
 };

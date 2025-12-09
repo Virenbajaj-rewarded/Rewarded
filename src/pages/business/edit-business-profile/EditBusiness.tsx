@@ -165,24 +165,6 @@ const EditBusiness = () => {
               }
             />
 
-            <Input
-              label="Phone Number"
-              id="businessPhoneNumber"
-              name="businessPhoneNumber"
-              type="tel"
-              placeholder="Enter your phone number"
-              value={formik.values.businessPhoneNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-              error={
-                formik.touched.businessPhoneNumber &&
-                formik.errors.businessPhoneNumber
-                  ? formik.errors.businessPhoneNumber
-                  : undefined
-              }
-            />
-
             <div className="space-y-2">
               <AddressAutocomplete
                 label="Address"
@@ -204,6 +186,24 @@ const EditBusiness = () => {
                 }
               />
             </div>
+
+            <Input
+              label="Phone Number"
+              id="businessPhoneNumber"
+              name="businessPhoneNumber"
+              type="tel"
+              placeholder="Enter your phone number"
+              value={formik.values.businessPhoneNumber}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              required
+              error={
+                formik.touched.businessPhoneNumber &&
+                formik.errors.businessPhoneNumber
+                  ? formik.errors.businessPhoneNumber
+                  : undefined
+              }
+            />
 
             <Input
               label="Telegram"

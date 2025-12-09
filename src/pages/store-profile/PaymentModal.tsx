@@ -28,8 +28,8 @@ export const PaymentModal = ({
   isLoading,
   balance,
 }: PaymentModalProps) => {
-  const handleClose = () => {
-    formik.resetForm();
+  const handleClose = async () => {
+    await formik.resetForm();
     onOpenChange(false);
   };
 
@@ -38,7 +38,7 @@ export const PaymentModal = ({
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Enter payment amount</DialogTitle>
+            <DialogTitle>Enter top up amount</DialogTitle>
           </DialogHeader>
 
           <div className="flex flex-col items-center gap-6 py-4">
@@ -51,7 +51,7 @@ export const PaymentModal = ({
               <Input
                 value={formik.values.points}
                 onChange={formik.handleChange('points')}
-                onBlur={formik.handleBlur('points')}
+                onBlur={() => formik.handleBlur('points')}
                 error={
                   formik.touched.points && formik.errors.points
                     ? formik.errors.points
@@ -65,6 +65,13 @@ export const PaymentModal = ({
           </div>
 
           <DialogFooter>
+            <Button
+              variant="ghost"
+              onClick={handleClose}
+              className="w-full text-[#3C83F6]"
+            >
+              Cancel
+            </Button>
             <Button
               type="submit"
               onClick={() => formik.handleSubmit()}

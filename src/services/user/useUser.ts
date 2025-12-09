@@ -3,9 +3,12 @@ import {
   useQuery,
   useQueryClient,
   useMutation,
+  useInfiniteQuery,
 } from '@tanstack/react-query';
 
-import { UserServices, User } from './userService';
+import { UserServices } from './userService';
+import { IGetUserResponse } from './user.types';
+
 import { getIsAuthenticated } from '../auth';
 import { toast } from 'sonner';
 
@@ -14,6 +17,7 @@ export const enum UserQueryKey {
   fetchBalance = 'fetchBalance',
   fetchCustomerById = 'fetchCustomerById',
   updateUser = 'patchUserProfile',
+  fetchTransactionHistory = 'fetchTransactionHistory',
 }
 
 const useFetchProfileQuery = () =>
@@ -42,11 +46,26 @@ export const useFetchBalanceQuery = () =>
     placeholderData: 0,
   });
 
+export const useFetchTransactionHistoryQuery = () =>
+  useInfiniteQuery({
+    queryKey: [UserQueryKey.fetchTransactionHistory],
+    queryFn: ({ pageParam = 1 }) =>
+      UserServices.fetchTransactionHistory({ pageParam }),
+    getNextPageParam: lastPage => {
+      const { page, limit, total } = lastPage;
+      const hasMore = page < Math.ceil(total / limit);
+      return hasMore ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+    staleTime: 180000,
+  });
+
 export const useUpdateUserMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Partial<User>) => UserServices.updateUser(data),
+    mutationFn: (data: Partial<IGetUserResponse>) =>
+      UserServices.updateUser(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [UserQueryKey.fetchUserProfile],
@@ -73,7 +92,7 @@ export const useUser = () => {
       options
     );
 
-  const setQueryData = (profile: User | null) => {
+  const setQueryData = (profile: IGetUserResponse | null) => {
     client.setQueryData([UserQueryKey.fetchUserProfile], profile);
   };
 

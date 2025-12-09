@@ -228,6 +228,7 @@ export const ProgramForm = ({
     ) {
       return (
         <Input
+          required
           label="Amount of CAD Points"
           value={percentBack?.toString() || ''}
           onChange={handleChange('percentBack')}
@@ -249,6 +250,7 @@ export const ProgramForm = ({
       return (
         <div className="space-y-6">
           <Input
+            required
             leftMask="CAD"
             label="Amount to Spend"
             value={spendThreshold?.toString() || ''}
@@ -263,6 +265,7 @@ export const ProgramForm = ({
           />
 
           <Input
+            required
             label="% of Cashback"
             value={rewardPercent?.toString() || ''}
             onChange={handleChange('rewardPercent')}
@@ -285,6 +288,7 @@ export const ProgramForm = ({
       return (
         <div className="space-y-6">
           <Input
+            required
             leftMask="CAD"
             label="Amount to Spend"
             value={spendThreshold?.toString() || ''}
@@ -299,6 +303,7 @@ export const ProgramForm = ({
           />
 
           <Input
+            required
             label="Amount of CAD Points"
             value={rewardPercent?.toString() || ''}
             onChange={handleChange('rewardPercent')}
@@ -332,12 +337,13 @@ export const ProgramForm = ({
           <h1 className="text-3xl font-medium text-foreground">{title}</h1>
         </div>
 
-        <Card className="p-4 md:p-10">
+        <Card className="p-4 md:p-8">
           <CardHeader className="flex flex-row items-center justify-between p-0 mb-5">
             <CardTitle className="text-2xl text-white">General</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6 p-0">
             <Input
+              required
               label="Offer Name"
               value={name}
               onChange={handleChange('name')}
@@ -347,7 +353,6 @@ export const ProgramForm = ({
             />
 
             <div className="space-y-2">
-              <Label>Strategy</Label>
               <RadioGroup
                 value={strategy}
                 onValueChange={handleStrategyChange}
@@ -383,6 +388,7 @@ export const ProgramForm = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="relative">
                 <Input
+                  required
                   leftMask="CAD"
                   label="Budget"
                   value={budget?.toString()}
@@ -399,6 +405,7 @@ export const ProgramForm = ({
               </div>
               <div className="relative">
                 <Input
+                  required
                   leftMask="CAD"
                   label="Max Daily Budget"
                   value={maxDailyBudget?.toString()}
@@ -416,7 +423,7 @@ export const ProgramForm = ({
           </CardContent>
         </Card>
 
-        <Card className="p-4 md:p-10">
+        <Card className="p-4 md:p-8">
           <CardHeader className="p-0 mb-5">
             <CardTitle className="text-2xl text-white">Offer Type</CardTitle>
           </CardHeader>

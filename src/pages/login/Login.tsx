@@ -7,6 +7,7 @@ import { FormikProvider } from 'formik';
 import { useLogin } from './useLogin';
 import { ROUTES } from '@/routes';
 import StarIcon from '@/assets/star.svg?react';
+import ArrowLeftIcon from '@/assets/arrow-left.svg?react';
 import GoogleButton from '@/components/auth/GoogleButton';
 import { ERole } from '@/enums';
 
@@ -24,9 +25,15 @@ const Login = () => {
             <div className="flex items-center justify-center mb-2">
               <StarIcon width={48} height={48} />
             </div>
-            <CardTitle className="text-[38px] text-white">
-              Welcome back
-            </CardTitle>
+            <div className="grid grid-cols-[auto_1fr_auto] items-center">
+              <Link to={ROUTES.CHOOSE_ROLE} className="flex justify-start">
+                <ArrowLeftIcon width={24} height={24} />
+              </Link>
+              <CardTitle className="text-[38px] text-white text-center whitespace-nowrap">
+                Welcome back
+              </CardTitle>
+              <div className="w-[24px]"></div>
+            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={formik.handleSubmit} className="space-y-4">

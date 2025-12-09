@@ -1,6 +1,6 @@
 import { useProgram } from '@/services/program/useProgram';
 import { useMemo, useState } from 'react';
-import { EProgramStatus } from '@/enums';
+import { EProgramStatus, EProgramStrategy } from '@/enums';
 import { IProgram } from '@/interfaces';
 
 export const useActivePrograms = () => {
@@ -22,14 +22,26 @@ export const useActivePrograms = () => {
 
   const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<IProgram | null>(null);
+  const [isStopModalOpen, setIsStopModalOpen] = useState(false);
+  const [selectedStopProgramId, setSelectedStopProgramId] = useState<
+    string | null
+  >(null);
+  const [selectedStopProgramStrategy, setSelectedStopProgramStrategy] =
+    useState<EProgramStrategy | null>(null);
 
   const activePrograms = useMemo(
     () => data?.pages.flatMap(page => page.items) || [],
     [data]
   );
 
-  const handleStopProgram = async (id: string) => {
-    await stopProgram(id);
+  const handleStopProgram = (id: string, strategy: EProgramStrategy) => {
+    setSelectedStopProgramId(id);
+    setSelectedStopProgramStrategy(strategy);
+    setIsStopModalOpen(true);
+  };
+
+  const handleStop = async (programId: string) => {
+    await stopProgram(programId);
   };
 
   const handleTopUpProgram = (program: IProgram) => {
@@ -56,5 +68,10 @@ export const useActivePrograms = () => {
     selectedProgram,
     handleTopUp,
     topUpProgramLoading,
+    isStopModalOpen,
+    setIsStopModalOpen,
+    selectedStopProgramId,
+    selectedStopProgramStrategy,
+    handleStop,
   };
 };

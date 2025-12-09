@@ -3,6 +3,9 @@ import { Button } from '../../components/ui/button';
 import { useStoreProfile } from './useStoreProfile';
 import { PaymentModal } from './PaymentModal';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/routes';
+import ArrowLeftIcon from '@/assets/arrow-left.svg?react';
 
 export const StoreProfile = () => {
   const {
@@ -46,13 +49,15 @@ export const StoreProfile = () => {
   return (
     <>
       <Card className="space-y-6">
-        <CardHeader>
-          <CardTitle>Store Profile</CardTitle>
+        <CardHeader className="flex flex-row items-center gap-10">
+          <Link replace to={ROUTES.MY_STORES}>
+            <ArrowLeftIcon width={24} height={24} />
+          </Link>
+          <CardTitle className="text-2xl font-bold">Store Profile</CardTitle>
         </CardHeader>
-        {/* TODO: Uncomment this when the payment feature is implemented */}
-        {/* <div className="p-6">
+        <div className="p-6">
           <Button onClick={openPayModal}>Pay</Button>
-        </div> */}
+        </div>
       </Card>
 
       <PaymentModal

@@ -34,8 +34,7 @@ export const useSignupUser = () => {
             navigate(ROUTES.ROOT);
           }
         } catch (error) {
-          const errorMessage = getFirebaseErrorMessage(error);
-          toast.error(errorMessage);
+          toast.error(error as string);
         }
       })
       .catch(error => {
