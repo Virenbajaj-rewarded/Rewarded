@@ -30,22 +30,14 @@ export const useSignupMerchant = () => {
   }, []);
 
   const handleSubmit = async (values: IMerchantSignupFormValues) => {
-    await healthCheck()
-      .then(async () => {
-        try {
-          await signupMerchant(values);
-          navigation.navigate(Paths.SIGNUP_MERCHANT_SUCCESS, { email: values.email });
-        } catch (error) {
-          console.error(error);
-        }
-      })
-      .catch(error => {
-        showToast({
-          type: 'error',
-          text1: 'Please try again later',
-        });
-        throw error;
-      });
+    await healthCheck().then(async () => {
+      try {
+        await signupMerchant(values);
+        navigation.navigate(Paths.SIGNUP_MERCHANT_SUCCESS, { email: values.email });
+      } catch (error) {
+        console.error(error);
+      }
+    });
   };
 
   const formik = useFormik<IMerchantSignupFormValues>({

@@ -20,22 +20,14 @@ export const useSignupUser = () => {
   const navigation = useNavigation();
   const { signupUser, signupUserLoading, healthCheck } = useAuth();
   const handleSubmit = async (values: IUserSignupFormValues) => {
-    await healthCheck()
-      .then(async () => {
-        const response = await signupUser(values);
-        if (!response.isEmailConfirmed) {
-          navigation.navigate(Paths.CONFIRM_EMAIL, { email: values.email });
-        } else {
-          navigation.navigate(Paths.LOGIN, { role: ERole.USER });
-        }
-      })
-      .catch(error => {
-        showToast({
-          type: 'error',
-          text1: 'Please try again later',
-        });
-        throw error;
-      });
+    await healthCheck().then(async () => {
+      const response = await signupUser(values);
+      if (!response.isEmailConfirmed) {
+        navigation.navigate(Paths.CONFIRM_EMAIL, { email: values.email });
+      } else {
+        navigation.navigate(Paths.LOGIN, { role: ERole.USER });
+      }
+    });
   };
 
   const formik = useFormik<IUserSignupFormValues>({

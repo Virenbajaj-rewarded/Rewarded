@@ -164,8 +164,7 @@ export const AuthServices = {
     } catch (error) {
       showToast({
         type: 'error',
-        text1: 'Failed to change password',
-        text2: error instanceof Error ? error.message : 'Unknown error',
+        text1: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }
