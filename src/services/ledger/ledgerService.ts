@@ -1,5 +1,11 @@
 import { instance } from '@/services/instance';
-import { ICreditPointRequest, IRequestPointsRequest, ICheckRequestsResponse } from './types';
+import {
+  ICreditPointRequest,
+  IRequestPointsRequest,
+  ICheckRequestsResponse,
+  IGetPointsByAmountResponse,
+  ICreditUserRequest,
+} from './types';
 
 export const creditPoint = async (payload: ICreditPointRequest) => {
   const response = await instance
@@ -53,5 +59,23 @@ export const approveRequest = async (requestId: string) => {
 
 export const declineRequest = async (requestId: string) => {
   const response = await instance.post(`points/decline/${requestId}`).json();
+  return response;
+};
+
+export const getPointsByAmount = async (amount: number, customerId: string) => {
+  const response = await instance
+    .post('reward-programs/credit-user/preview', {
+      json: { amount, customerId },
+    })
+    .json<IGetPointsByAmountResponse>();
+  return response;
+};
+
+export const creditUser = async (payload: ICreditUserRequest) => {
+  const response = await instance
+    .post('reward-programs/credit-user', {
+      json: payload,
+    })
+    .json<{ programId: string }>();
   return response;
 };

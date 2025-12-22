@@ -4,6 +4,7 @@ import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/n
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { IProgram } from '@/interfaces';
 import { ERole } from '@/enums';
+import { QR_CODE } from '@/types';
 
 export type RootScreenProps<S extends keyof RootStackParamList = keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, S>;
@@ -27,17 +28,16 @@ export type RootStackParamList = {
   [Paths.MERCHANT_TABS]: NavigatorScreenParams<MerchantTabStackParamList>;
   [Paths.STORE]: {
     businessCode: string;
+    isFromQrScanner?: boolean;
   };
   [Paths.TOP_UP_STORE]: {
     userId: string;
     storeName: string;
   };
-  [Paths.SCAN_STORE]: {
-    businessCode: string;
-  };
   [Paths.QR_SCANNER]: undefined;
   [Paths.QR_CODE]: {
-    id: string;
+    value: QR_CODE;
+    showText?: boolean;
   };
   [Paths.CREDIT_POINTS]: {
     userId: string;

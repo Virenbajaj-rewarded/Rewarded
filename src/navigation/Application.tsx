@@ -14,7 +14,6 @@ import {
   Login,
   ForgotPassword,
   Store,
-  ScanStore,
   ConfirmEmail,
   QRScanner,
   CreditPoints,
@@ -228,13 +227,7 @@ function ApplicationNavigator() {
                       headerTitle: '',
                     }}
                   />
-                  <Stack.Screen
-                    component={ScanStore}
-                    name={Paths.SCAN_STORE}
-                    options={{
-                      headerTitle: 'Store',
-                    }}
-                  />
+
                   <Stack.Screen
                     component={Profile}
                     name={Paths.PROFILE}
@@ -326,8 +319,8 @@ function ApplicationNavigator() {
         title="Withdrawal Request"
         description={
           requestPointsModalData
-            ? `${requestPointsModalData.merchant?.businessName} requested to withdraw ${requestPointsModalData.amount} CAD points. Approve withdrawal? 
-            ${requestPointsModalData.comment && `Comment: ${requestPointsModalData.comment}`}`
+            ? `${requestPointsModalData.merchant?.businessName} requested to withdraw ${requestPointsModalData.amount} CAD points. Approve withdrawal?
+              ${requestPointsModalData.comment ? `\nComment: ${requestPointsModalData.comment}` : ''}`
             : ''
         }
         submitButtonLabel={

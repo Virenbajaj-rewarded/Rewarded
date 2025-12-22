@@ -1,6 +1,8 @@
+import { ReactElement } from 'react';
+import { ListRenderItemInfo } from '@shopify/flash-list';
 import { IStoreListItem } from '@/services/stores/stores.types';
 
-export type MyStoreListProps = {
+export type StoreListProps = {
   stores: IStoreListItem[];
   isLoading: boolean;
   isError: boolean;
@@ -9,5 +11,6 @@ export type MyStoreListProps = {
   isFetchingNextPage: boolean;
   refetch: () => void;
   isRefetching: boolean;
-  handleUnlikeStore: (id: string) => void;
+  renderItem: (info: ListRenderItemInfo<IStoreListItem>) => ReactElement;
+  listHeaderComponent?: ReactElement;
 };

@@ -1,5 +1,5 @@
 export type ICreditPointsFormValues = {
   points: string;
-  amountCents: string;
+  amount: string;
   comment: string;
 };

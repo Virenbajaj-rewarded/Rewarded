@@ -72,12 +72,12 @@ export default function TopUpStore({ route, navigation }: RootScreenProps<Paths.
               </View>
 
               <TextField
+                variant="points"
                 value={values.points}
                 onChangeText={handleChange('points')}
                 onBlur={handleBlur('points')}
                 keyboardType="number-pad"
                 error={touched.points && errors.points ? errors.points : undefined}
-                style={styles.pointsInput}
               />
             </View>
             <View style={styles.buttonContainer}>

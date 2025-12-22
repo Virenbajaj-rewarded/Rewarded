@@ -7,6 +7,7 @@ export interface IProgram {
   percentBack: number;
   spendThreshold: number;
   rewardPercent: number;
+  stopDistributionPoints: number;
   maxDailyBudget: number;
   budget: number;
   fundedAmount: number;

@@ -1,11 +1,16 @@
 import { View } from 'react-native';
+import { useCallback } from 'react';
 import { UserTabCombinedScreenProps } from '@/navigation/types.ts';
 import { UserTabPaths } from '@/navigation/paths.ts';
-import MyStoreList from '@/components/templates/MyStoreList';
+import StoreList from '@/components/templates/StoreList/StoreList';
+import { StoreListItem } from '@/components/molecules/Store';
 import { useMyStores } from './useMyStores';
 import { styles } from './MyStores.styles';
 import { Modal, Selector } from '@/components';
-import { formatStrategyLabel } from '../../MerchantTabs/Program/utils';
+import { formatStrategyLabel } from '@/utils';
+import { ListRenderItemInfo } from '@shopify/flash-list';
+import { IStoreListItem } from '@/services/stores/stores.types';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function MyStores({}: UserTabCombinedScreenProps<UserTabPaths.MY_STORES>) {
   const {
@@ -27,17 +32,25 @@ export default function MyStores({}: UserTabCombinedScreenProps<UserTabPaths.MY_
     leaveProgram,
   } = useMyStores();
 
-  return (
-    <View style={styles.container}>
-      <Selector
-        label="Industry"
-        value={selectedStoreType}
-        onValueChange={handleStoreTypeChange}
-        options={industryOptions}
-        placeholder="Select Industry"
-      />
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<IStoreListItem>) => {
+      return <StoreListItem store={item} handleUnlikeStore={handleUnlikeStore} />;
+    },
+    [handleUnlikeStore]
+  );
 
-      <MyStoreList
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <View style={styles.headerContainer}>
+        <Selector
+          label="Industry"
+          value={selectedStoreType}
+          onValueChange={handleStoreTypeChange}
+          options={industryOptions}
+          placeholder="Select Industry"
+        />
+      </View>
+      <StoreList
         stores={stores}
         isLoading={isFetchStoresLoading}
         isError={isFetchStoresError}
@@ -46,7 +59,7 @@ export default function MyStores({}: UserTabCombinedScreenProps<UserTabPaths.MY_
         isFetchingNextPage={isFetchingNextPage}
         refetch={refetch}
         isRefetching={isFetchStoresRefetching}
-        handleUnlikeStore={handleUnlikeStore}
+        renderItem={renderItem}
       />
       <Modal
         visible={isLeaveProgramModalOpen}
@@ -59,6 +72,6 @@ export default function MyStores({}: UserTabCombinedScreenProps<UserTabPaths.MY_
         cancelButtonLabel="Cancel"
         onSubmit={() => leaveProgram(selectedStore?.id ?? '')}
       />
-    </View>
+    </ScrollView>
   );
 }

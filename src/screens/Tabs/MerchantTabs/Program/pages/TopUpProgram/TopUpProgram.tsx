@@ -63,12 +63,12 @@ export default function TopUpProgram({ route, navigation }: RootScreenProps<Path
               </View>
 
               <TextField
+                variant="points"
                 value={values.amount}
                 onChangeText={handleChange('amount')}
                 onBlur={handleBlur('amount')}
                 keyboardType="number-pad"
                 error={touched.amount && errors.amount ? errors.amount : undefined}
-                style={styles.pointsInput}
               />
             </View>
             <View style={styles.buttonContainer}>

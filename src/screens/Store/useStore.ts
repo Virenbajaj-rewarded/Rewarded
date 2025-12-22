@@ -7,15 +7,18 @@ import { Paths } from '@/navigation/paths';
 export const useStore = ({ businessCode }: { businessCode: string }) => {
   const navigation = useNavigation();
   const [isQRCodeVisible, setIsQRCodeVisible] = useState(false);
-  const { useFetchStoreQuery } = useMyStores();
+  const [isLeaveProgramModalOpen, setIsLeaveProgramModalOpen] = useState(false);
 
-  const showQRCode = () => {
-    setIsQRCodeVisible(true);
-  };
+  const { useFetchStoreQuery, unlikeStore, likeStore } = useMyStores();
 
-  const hideQRCode = () => {
-    setIsQRCodeVisible(false);
-  };
+  const handleGoBack = () => navigation.goBack();
+
+  const showQRCode = () => setIsQRCodeVisible(true);
+  const hideQRCode = () => setIsQRCodeVisible(false);
+
+  const openLeaveProgramModal = () => setIsLeaveProgramModalOpen(true);
+  const closeLeaveProgramModal = () => setIsLeaveProgramModalOpen(false);
+
   const {
     data: store,
     isLoading: isFetchStoreLoading,
@@ -28,14 +31,14 @@ export const useStore = ({ businessCode }: { businessCode: string }) => {
   };
 
   const handleOpenPhone = async () => {
-    if (!store?.businessPhone) return;
-    const cleanPhone = store.businessPhone.replace(/[\s\-()]/g, '');
+    if (!store?.businessPhoneNumber) return;
+    const cleanPhone = store.businessPhoneNumber.replace(/[\s\-()]/g, '');
     const phoneUrl = `tel:${cleanPhone}`;
     await Linking.openURL(phoneUrl);
   };
 
   const handleOpenMaps = async () => {
-    if (!store?.location.latitude || !store?.location.longitude) return;
+    if (!store?.location?.latitude || !store?.location?.longitude) return;
 
     const latitude = store.location.latitude;
     const longitude = store.location.longitude;
@@ -44,11 +47,48 @@ export const useStore = ({ businessCode }: { businessCode: string }) => {
     await Linking.openURL(mapsUrl);
   };
 
+  const handleOpenTelegram = async () => {
+    if (!store?.tgUsername) return;
+    const username = store.tgUsername.replace('@', '');
+    const telegramUrl = `https://t.me/${username}`;
+    await Linking.openURL(telegramUrl);
+  };
+
+  const handleOpenWhatsApp = async () => {
+    if (!store?.whatsppUsername) return;
+    const phoneNumber = store.whatsppUsername.replace(/[\s\-()@]/g, '');
+    const whatsappUrl = `https://wa.me/${phoneNumber}`;
+    await Linking.openURL(whatsappUrl);
+  };
+
   const handlePay = () => {
     navigation.navigate(Paths.TOP_UP_STORE, {
       userId: store?.userId || '',
       storeName: store?.businessName || '',
     });
+  };
+
+  const handleUnlikeStore = async () => {
+    if (!store?.id) return;
+
+    if (store?.activeRewardProgram) {
+      openLeaveProgramModal();
+    } else {
+      await unlikeStore(store.id);
+      handleGoBack();
+    }
+  };
+
+  const handleLikeStore = async () => {
+    if (!store?.id) return;
+    await likeStore(store.id);
+    handleGoBack();
+  };
+
+  const handleLeaveProgram = async (storeId: string) => {
+    await unlikeStore(storeId);
+    closeLeaveProgramModal();
+    handleGoBack();
   };
 
   return {
@@ -61,6 +101,14 @@ export const useStore = ({ businessCode }: { businessCode: string }) => {
     handleOpenEmail,
     handleOpenPhone,
     handleOpenMaps,
+    handleOpenTelegram,
+    handleOpenWhatsApp,
     handlePay,
+    handleUnlikeStore,
+    handleLikeStore,
+    openLeaveProgramModal,
+    handleLeaveProgram,
+    isLeaveProgramModalOpen,
+    closeLeaveProgramModal,
   };
 };

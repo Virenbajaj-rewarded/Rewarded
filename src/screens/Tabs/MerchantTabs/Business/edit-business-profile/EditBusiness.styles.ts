@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     paddingBottom: 32,
     gap: 16,
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   center: {
     flex: 1,
     justifyContent: 'center',

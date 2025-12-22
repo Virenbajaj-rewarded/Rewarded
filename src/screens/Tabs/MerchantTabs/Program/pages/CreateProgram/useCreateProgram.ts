@@ -7,7 +7,6 @@ import { RootScreenProps } from '@/navigation/types';
 import { Paths } from '@/navigation/paths';
 import { IProgram } from '@/interfaces';
 import { EPaymentMethod } from '@/enums';
-import { showToast } from '@/utils';
 
 export const useCreateProgram = ({
   navigation,
@@ -77,10 +76,6 @@ export const useCreateProgram = ({
         return program;
       }
     } catch (error) {
-      showToast({
-        type: 'error',
-        text1: 'Failed to create program',
-      });
       console.error(error);
     }
   };

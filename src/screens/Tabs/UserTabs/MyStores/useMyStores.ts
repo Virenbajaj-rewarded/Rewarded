@@ -8,7 +8,7 @@ export const useMyStores = () => {
   const [selectedStoreType, setSelectedStoreType] = useState<EIndustry | null>(null);
   const [isLeaveProgramModalOpen, setIsLeaveProgramModalOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState<IStoreListItem | null>(null);
-  const { useFetchStoresQuery } = useMyStoresService();
+  const { useFetchMyStoresQuery } = useMyStoresService();
 
   const { unlikeStore, unlikeStoreLoading } = useMyStoresService();
   const {
@@ -20,7 +20,7 @@ export const useMyStores = () => {
     isFetchingNextPage,
     refetch,
     isRefetching: isFetchStoresRefetching,
-  } = useFetchStoresQuery(selectedStoreType);
+  } = useFetchMyStoresQuery(selectedStoreType);
 
   const openLeaveProgramModal = () => {
     setIsLeaveProgramModalOpen(true);
@@ -61,7 +61,7 @@ export const useMyStores = () => {
     const store = stores.find(store => store.id === storeId);
     setSelectedStore(store ?? null);
 
-    if (store?.rewardPoints && store.rewardPoints > 0) {
+    if (store?.activeRewardProgram) {
       openLeaveProgramModal();
     } else {
       await unlikeStore(storeId);

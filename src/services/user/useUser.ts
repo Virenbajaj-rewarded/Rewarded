@@ -1,4 +1,10 @@
-import { InvalidateOptions, useQuery, useQueryClient, useMutation, useInfiniteQuery } from '@tanstack/react-query';
+import {
+  InvalidateOptions,
+  useQuery,
+  useQueryClient,
+  useMutation,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 import { UserServices } from './userService';
 import { IGetUserResponse } from '@/services/user/user.types';
 import { getAuthState } from '@/services/auth/authStorage';
@@ -28,6 +34,8 @@ export const useFetchBalanceQuery = () =>
     staleTime: 300000,
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: 'always',
+    //TODO: Remove this after push notifications are implemented
+    refetchInterval: 5000,
     placeholderData: 0,
   });
 
@@ -49,6 +57,8 @@ export const useFetchTransactionHistoryQuery = () =>
       return hasMore ? page + 1 : undefined;
     },
     initialPageParam: 1,
+    // TODO: Remove this after push notifications are implemented
+    refetchInterval: 5000,
     staleTime: 180000,
   });
 

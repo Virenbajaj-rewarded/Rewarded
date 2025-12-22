@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import {
   creditPoint,
   requestPoints,
@@ -8,10 +8,14 @@ import {
   seenByUser,
   approveRequest,
   declineRequest,
+  getPointsByAmount,
+  creditUser,
 } from '@/services/ledger/ledgerService';
 import { UserQueryKey } from '@/services/user/useUser';
-import { ICreditPointRequest, IRequestPointsRequest } from './types';
+import { ProgramQueryKey } from '@/services/program/useProgram';
+import { ICreditPointRequest, IRequestPointsRequest, ICreditUserRequest } from './types';
 import { showToast } from '@/utils';
+import { MerchantQueryKey } from '@/services/merchant/useMerchant';
 
 export const useLedger = () => {
   const client = useQueryClient();
@@ -80,6 +84,30 @@ export const useLedger = () => {
     },
   });
 
+  const creditUserMutation = useMutation({
+    mutationFn: async (payload: ICreditUserRequest) => {
+      const response = await creditUser(payload);
+      return response.programId;
+    },
+    onSuccess: (programId: string) => {
+      client.invalidateQueries({ queryKey: [UserQueryKey.fetchBalance] });
+      client.invalidateQueries({ queryKey: [ProgramQueryKey.fetchPrograms] });
+      client.invalidateQueries({ queryKey: [ProgramQueryKey.fetchProgram, programId] });
+      client.invalidateQueries({ queryKey: [MerchantQueryKey.fetchCustomers] });
+      client.invalidateQueries({ queryKey: [MerchantQueryKey.fetchCustomerStats] });
+    },
+    onError: error => {
+      console.error('Failed to credit user:', error);
+    },
+  });
+
+  const useGetPointsByAmountQuery = (amount: number, userId: string) =>
+    useQuery({
+      queryKey: ['getPointsByAmount', amount, userId],
+      queryFn: () => (amount > 0 ? getPointsByAmount(amount, userId) : null),
+      staleTime: 30000,
+    });
+
   return {
     creditPoint: creditPointMutation.mutateAsync,
     creditPointLoading: creditPointMutation.isPending,
@@ -107,5 +135,10 @@ export const useLedger = () => {
     declineRequestLoading: declineRequestMutation.isPending,
     declineRequestError: declineRequestMutation.error,
     declineRequestSuccess: declineRequestMutation.isSuccess,
+    creditUser: creditUserMutation.mutateAsync,
+    creditUserLoading: creditUserMutation.isPending,
+    creditUserError: creditUserMutation.error,
+    creditUserSuccess: creditUserMutation.isSuccess,
+    useGetPointsByAmountQuery,
   };
 };

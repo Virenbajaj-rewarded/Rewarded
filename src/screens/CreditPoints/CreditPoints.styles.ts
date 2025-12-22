@@ -22,6 +22,11 @@ export const styles = StyleSheet.create({
   commentInput: {
     minHeight: 100,
     textAlignVertical: 'top',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  programLabel: {
+    marginTop: -16,
   },
   buttonContainer: {
     paddingHorizontal: 20,

@@ -69,7 +69,9 @@ export const instance = ky.extend({
             text2: message,
           });
 
-          throw new Error(message);
+          const error = new Error(message) as Error & { status?: number };
+          error.status = response.status;
+          throw error;
         }
 
         return response;

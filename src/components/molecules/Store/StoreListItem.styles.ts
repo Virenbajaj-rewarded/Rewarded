@@ -21,8 +21,15 @@ export const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
+  },
+  titleContainer: {
+    flex: 1,
+    flexShrink: 1,
+  },
+  heartButton: {
+    flexShrink: 0,
   },
   storeTypeContainer: {
     flexDirection: 'row',

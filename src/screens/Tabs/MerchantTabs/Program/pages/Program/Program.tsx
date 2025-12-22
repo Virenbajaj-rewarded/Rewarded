@@ -8,7 +8,7 @@ import IconByVariant from '@/components/atoms/IconByVariant';
 import PrimaryButton from '@/components/PrimaryButton/PrimaryButton';
 import { useMerchant } from '@/services/merchant/useMerchant';
 import { useCallback, useMemo, useState } from 'react';
-import { EProgramStatusDisplayNames } from '@/enums';
+import { EProgramStatusDisplayNames, ERole } from '@/enums';
 import ProgramList from '@/screens/Tabs/MerchantTabs/Program/components/ProgramList/ProgramList';
 
 export default function Program({
@@ -25,7 +25,12 @@ export default function Program({
   const handleNavigateToQR = useCallback(() => {
     if (!profile?.businessCode) return;
     navigation.navigate(Paths.QR_CODE, {
-      id: profile.businessCode,
+      value: {
+        value: profile.businessCode || '',
+        type: 'store_profile',
+        role: ERole.USER,
+      },
+      showText: true,
     });
   }, [profile?.businessCode, navigation]);
 

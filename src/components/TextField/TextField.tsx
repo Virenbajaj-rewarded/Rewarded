@@ -1,7 +1,8 @@
 import { TextInput, TextInputProps, View, TouchableOpacity } from 'react-native';
+
 import { Typography } from '@/components';
 import { styles } from './TextField.styles';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, memo } from 'react';
 import IconByVariant from '@/components/atoms/IconByVariant';
 
 type Props = TextInputProps & {
@@ -11,9 +12,10 @@ type Props = TextInputProps & {
   rightAction?: ReactNode;
   mask?: string;
   required?: boolean;
+  variant?: 'default' | 'points';
 };
 
-export default function TextField({
+const TextField = ({
   style,
   label,
   error,
@@ -23,8 +25,9 @@ export default function TextField({
   value,
   secureTextEntry,
   required,
+  variant = 'default',
   ...rest
-}: Props) {
+}: Props) => {
   const [isSecureTextEntry, setIsSecureTextEntry] = useState(!!secureTextEntry);
 
   const toggleSecureTextEntry = () => {
@@ -74,6 +77,7 @@ export default function TextField({
           placeholderTextColor={'#4D4D4D'}
           style={[
             styles.input,
+            variant === 'points' ? styles.pointsInput : undefined,
             mask && value ? styles.inputWithMask : undefined,
             secureTextEntry || rightAction ? styles.inputWithButton : undefined,
             style,
@@ -89,6 +93,11 @@ export default function TextField({
           <View style={styles.rightAction}>{resolvedRightAction}</View>
         )}
       </View>
+      {variant === 'points' && (
+        <Typography fontVariant="regular" fontSize={16} color="#8C8C8C" textAlign="center">
+          Tap and edit
+        </Typography>
+      )}
       {error && (
         <Typography fontVariant="regular" fontSize={12} color="#FF6B6B">
           {error}
@@ -96,4 +105,5 @@ export default function TextField({
       )}
     </View>
   );
-}
+};
+export default memo(TextField);

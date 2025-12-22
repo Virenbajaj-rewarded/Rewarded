@@ -12,6 +12,7 @@ import { styles } from './CreditPoints.styles';
 import { useCreditPoints } from './useCreditPoints';
 import IconByVariant from '@/components/atoms/IconByVariant';
 
+import { formatStrategyLabel, formatCurrency } from '@/utils';
 export default function CreditPoints({ navigation, route }: RootScreenProps<Paths.CREDIT_POINTS>) {
   const userId = route.params.userId;
 
@@ -22,11 +23,12 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
     showConfirmModal,
     closeConfirmModal,
     handleConfirmCredit,
-    creditPointLoading,
-    creditPointSuccess,
-    creditPointError,
+    creditUserLoading,
+    creditUserSuccess,
+    creditUserError,
     handleGoToPrograms,
     handleTryAgain,
+    activeProgram,
   } = useCreditPoints(userId, navigation);
 
   const { values, errors, touched, handleChange, handleBlur } = formik;
@@ -43,7 +45,7 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
     );
   }
 
-  if (creditPointSuccess) {
+  if (creditUserSuccess) {
     return (
       <SafeScreen>
         <View style={styles.stateContainer}>
@@ -70,7 +72,7 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
     );
   }
 
-  if (creditPointError) {
+  if (creditUserError) {
     return (
       <SafeScreen>
         <View style={styles.stateContainer}>
@@ -112,6 +114,7 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <ScrollView
+            keyboardDismissMode="on-drag"
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
             keyboardShouldPersistTaps="handled"
@@ -120,13 +123,13 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
             <View style={styles.formContainer}>
               <TextField
                 label="Sum Paid by User"
-                value={values.amountCents}
-                onChangeText={handleChange('amountCents')}
-                onBlur={handleBlur('amountCents')}
+                value={values.amount}
+                onChangeText={handleChange('amount')}
+                onBlur={handleBlur('amount')}
                 placeholder="Enter amount"
                 keyboardType="number-pad"
                 mask="CAD"
-                error={touched.amountCents && errors.amountCents ? errors.amountCents : undefined}
+                error={touched.amount && errors.amount ? errors.amount : undefined}
               />
 
               <TextField
@@ -136,8 +139,19 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
                 onBlur={handleBlur('points')}
                 placeholder="Enter points"
                 keyboardType="number-pad"
+                editable={false}
                 error={touched.points && errors.points ? errors.points : undefined}
+                style={{ paddingBottom: 0 }}
               />
+              <Typography
+                fontVariant="regular"
+                fontSize={12}
+                color="#FFFFFF"
+                style={styles.programLabel}
+              >
+                {formatStrategyLabel(activeProgram ?? null)}; Max Daily Points{' - '}
+                {formatCurrency(activeProgram?.maxDailyBudget ?? 0)}
+              </Typography>
 
               <TextField
                 label="Comment (optional)"
@@ -157,7 +171,7 @@ export default function CreditPoints({ navigation, route }: RootScreenProps<Path
             <PrimaryButton
               label="Credit"
               onPress={() => formik.handleSubmit()}
-              disabled={!formik.isValid || !formik.dirty || creditPointLoading}
+              disabled={!formik.isValid || !formik.dirty || creditUserLoading}
               style={styles.creditButton}
             />
           </View>

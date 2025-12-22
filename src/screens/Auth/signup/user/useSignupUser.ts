@@ -4,7 +4,6 @@ import { Paths } from '@/navigation/paths';
 import { IUserSignupFormValues } from './SignupUser.types';
 import { useFormik } from 'formik';
 import { userValidationSchema } from './SignupUser.validation';
-import { showToast } from '@/utils';
 import { ERole } from '@/enums';
 
 const initialValues = {

@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     marginTop: 16,
   },
   transactionHistoryContainer: {
-    marginVertical: 24,
+    marginTop: 24,
   },
 
   dateHeader: {

@@ -31,6 +31,7 @@
 		13B07F961A680F5B00A75B9A /* Rewarded.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rewarded.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Rewarded/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Rewarded/Info.plist; sourceTree = "<group>"; };
+		3E364AFB2EEC32230012BDE3 /* Rewarded.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Rewarded.entitlements; path = Rewarded/Rewarded.entitlements; sourceTree = "<group>"; };
 		5EE13257EEDAFA94F43FED9A /* Pods-Rewarded.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rewarded.debug.xcconfig"; path = "Target Support Files/Pods-Rewarded/Pods-Rewarded.debug.xcconfig"; sourceTree = "<group>"; };
 		670C55CB8D6548949201A23B /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = Rewarded/Colors.xcassets; sourceTree = "<group>"; };
 		788108616A4FF568FB65769B /* Pods-Rewarded.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rewarded.staging.xcconfig"; path = "Target Support Files/Pods-Rewarded/Pods-Rewarded.staging.xcconfig"; sourceTree = "<group>"; };
@@ -67,6 +68,7 @@
 		13B07FAE1A68108700A75B9A /* Rewarded */ = {
 			isa = PBXGroup;
 			children = (
+				3E364AFB2EEC32230012BDE3 /* Rewarded.entitlements */,
 				E334D6462E7FEF2500BC1A6A /* GoogleService-Info.plist */,
 				F5DC7AB02D9D8A92004DB744 /* AppDelegade.swift */,
 				F571B3872BD7A3F80014213C /* PrivacyInfo.xcprivacy */,
@@ -455,7 +457,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 53;
+				CODE_SIGN_ENTITLEMENTS = Rewarded/Rewarded.entitlements;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Rewarded/Info.plist;
@@ -492,7 +495,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 53;
+				CODE_SIGN_ENTITLEMENTS = Rewarded/Rewarded.entitlements;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				INFOPLIST_FILE = Rewarded/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;
@@ -814,7 +818,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 53;
+				CODE_SIGN_ENTITLEMENTS = Rewarded/Rewarded.entitlements;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				INFOPLIST_FILE = Rewarded/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;
@@ -966,7 +971,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 53;
+				CODE_SIGN_ENTITLEMENTS = Rewarded/Rewarded.entitlements;
+				CURRENT_PROJECT_VERSION = 63;
 				DEVELOPMENT_TEAM = CD3CH9CG6Y;
 				INFOPLIST_FILE = Rewarded/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rewarded;

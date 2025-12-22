@@ -5,7 +5,6 @@ import { Paths } from '@/navigation/paths';
 import { IMerchantSignupFormValues } from './SignupMerchant.types';
 import { useFormik } from 'formik';
 import { merchantSignupSchema } from './SignupMerchant.validation';
-import { showToast } from '@/utils';
 
 export const useSignupMerchant = () => {
   const navigation = useNavigation();

@@ -40,16 +40,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 4,
     marginBottom: 16,
   },
-  pointsInput: {
-    borderWidth: 0,
-    backgroundColor: 'transparent',
-    width: '100%',
-    fontSize: 38,
-    lineHeight: 46,
-    height: 200,
-    textAlign: 'center',
-    color: '#FFFFFF',
-  },
   buttonContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20,

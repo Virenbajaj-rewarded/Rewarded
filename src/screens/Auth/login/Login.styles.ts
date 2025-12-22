@@ -46,4 +46,7 @@ export const styles = StyleSheet.create({
   versionText: {
     textAlign: 'center',
   },
+  forgotPasswordButton: {
+    alignSelf: 'flex-start',
+  },
 });

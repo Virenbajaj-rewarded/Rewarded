@@ -14,7 +14,11 @@ const SetNewPassword = ({ route }: RootScreenProps<Paths.SET_NEW_PASSWORD>) => {
   return (
     <FormikProvider value={formik}>
       <SafeScreen style={styles.container}>
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+          keyboardDismissMode="on-drag"
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+        >
           <TextField
             secureTextEntry
             label="New Password"

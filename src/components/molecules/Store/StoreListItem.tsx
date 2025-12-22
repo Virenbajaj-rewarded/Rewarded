@@ -7,23 +7,35 @@ import { useNavigation } from '@react-navigation/native';
 import { Paths } from '@/navigation/paths.ts';
 import { Typography } from '@/components';
 import { EIndustryDisplayNames } from '@/enums';
-import { formatStrategyLabel } from '@/screens/Tabs/MerchantTabs/Program/utils';
+import { formatStrategyLabel } from '@/utils';
 
-const StoreListItem = ({
-  store,
-  handleUnlikeStore,
-}: {
+type StoreListItemProps = {
   store: IStoreListItem;
   handleUnlikeStore: (id: string) => void;
-}) => {
+  handleLikeStore?: (id: string) => void;
+};
+
+const StoreListItem = ({ store, handleUnlikeStore, handleLikeStore }: StoreListItemProps) => {
   const navigation = useNavigation();
-  const { logoUrl, name, rewardPoints, distance, businessCode, storeType, id } = store || {};
+  const { logoUrl, name, distance, businessCode, storeType, id, isLiked, activeRewardProgram } =
+    store || {};
 
   const handleStorePress = () => {
     navigation.navigate(Paths.STORE, {
       businessCode,
     });
   };
+
+  const handleHeartPress = () => {
+    if (isLiked) {
+      handleUnlikeStore(id);
+    } else if (handleLikeStore) {
+      handleLikeStore(id);
+    }
+  };
+
+  const heartIcon = isLiked ? 'heart-filled' : 'heart';
+  const heartColor = isLiked ? '#3C83F6' : '#FFFFFF';
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleStorePress}>
@@ -39,36 +51,32 @@ const StoreListItem = ({
 
       <View style={styles.infoList}>
         <View style={styles.header}>
-          <Typography fontVariant="bold" fontSize={20} color="#FFFFFF">
-            {name}
-          </Typography>
+          <View style={styles.titleContainer}>
+            <Typography fontVariant="bold" fontSize={20} color="#FFFFFF">
+              {name}
+            </Typography>
+          </View>
           <TouchableOpacity
             hitSlop={{ right: 10, left: 10, top: 10, bottom: 10 }}
-            onPress={() => handleUnlikeStore(id)}
+            onPress={handleHeartPress}
+            style={styles.heartButton}
           >
-            <IconByVariant path="heart-filled" width={24} height={24} color="#3C83F6" />
+            <IconByVariant path={heartIcon} width={24} height={24} color={heartColor} />
           </TouchableOpacity>
         </View>
         <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
           {EIndustryDisplayNames[storeType]}
         </Typography>
-        {distance && (
-          <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
-            {distance ? `${distance} miles from you` : 'Address not available'}
-          </Typography>
-        )}
-        {store?.activeRewardProgram && (
-          <Typography fontVariant="regular" fontSize={14} color="#3C83F6">
-            {formatStrategyLabel(store?.activeRewardProgram)}
-          </Typography>
-        )}
+        <Typography fontVariant="regular" fontSize={14} color="#8C8C8C">
+          {distance ? `${distance} miles from you` : 'Address not available'}
+        </Typography>
 
         <Typography
-          fontVariant={rewardPoints ? 'bold' : 'regular'}
-          fontSize={rewardPoints ? 16 : 14}
-          color={rewardPoints ? '#fff' : '#8C8C8C'}
+          fontVariant="regular"
+          fontSize={14}
+          color={activeRewardProgram ? '#3C83F6' : '#C13333'}
         >
-          {rewardPoints ? `${rewardPoints} rewards points` : 'Rewards currently inactive'}
+          {formatStrategyLabel(activeRewardProgram)}
         </Typography>
       </View>
     </TouchableOpacity>

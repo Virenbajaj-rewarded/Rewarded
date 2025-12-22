@@ -4,7 +4,6 @@ export * from './QRScanner';
 export * from './CreditPoints';
 export * from './Profile';
 export * from './QRCode';
-export * from './ScanStore';
 export * from './CreditPoints';
 export * from './RequestPoints';
 export * from './ScanUser';

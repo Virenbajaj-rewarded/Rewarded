@@ -60,7 +60,10 @@ function Login({ route }: RootScreenProps<Paths.LOGIN>) {
               }
             />
 
-            <TouchableOpacity onPress={navigateToForgotPassword}>
+            <TouchableOpacity
+              onPress={navigateToForgotPassword}
+              style={styles.forgotPasswordButton}
+            >
               <Typography fontVariant="regular" fontSize={14} color="#3c83f6">
                 Forgot password?
               </Typography>

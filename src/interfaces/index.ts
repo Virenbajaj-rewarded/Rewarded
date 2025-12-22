@@ -2,7 +2,17 @@ import { ILocation } from './ILocation';
 import { IUser } from './IUser';
 import { IMerchant } from './IMerchant';
 import { IProgram } from './IProgram';
-import { IStore } from './IStore';
+import { IStore, IActiveRewardProgram } from './IStore';
 import { ITransaction } from './ITransaction';
+import { ICustomer } from './ICustomer';
 
-export type { ILocation, IUser, IMerchant, IProgram, IStore, ITransaction };
+export type {
+  ILocation,
+  IUser,
+  IMerchant,
+  IProgram,
+  IStore,
+  ITransaction,
+  IActiveRewardProgram,
+  ICustomer,
+};

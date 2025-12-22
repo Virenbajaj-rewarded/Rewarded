@@ -1,6 +1,6 @@
 import type { RootScreenProps } from '@/navigation/types';
 
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { ScrollView, View, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { Paths } from '@/navigation/paths';
 
@@ -147,56 +147,63 @@ const SignupMerchant = ({}: RootScreenProps<Paths.SIGNUP_MERCHANT>) => {
   return (
     <FormikProvider value={formik}>
       <SafeScreen style={styles.container}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.contentContainer}
-          nestedScrollEnabled={true}
-          keyboardShouldPersistTaps="handled"
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingView}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
-          <Typography fontVariant="medium" fontSize={14} color="#BFBFBF">
-            Enter your details to start. We&apos;ll verify your information, then you can complete
-            your business setup.
-          </Typography>
+          <ScrollView
+            keyboardDismissMode="on-drag"
+            style={styles.scrollView}
+            contentContainerStyle={styles.contentContainer}
+            nestedScrollEnabled={true}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Typography fontVariant="medium" fontSize={14} color="#BFBFBF">
+              Enter your details to start. We&apos;ll verify your information, then you can complete
+              your business setup.
+            </Typography>
 
-          <Stepper
-            style={styles.stepperContainer}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            stepTitles={stepTitles}
-            onStepPress={stepNumber => {
-              // Disable stepper clicks if on step 1 and form is not valid
-              if (currentStep === 1 && !isStep1Valid()) {
-                return;
-              }
-              if (stepNumber === 1) {
-                handlePreviousStep();
-              } else if (stepNumber === 2) {
-                handleNextStep();
-              }
-            }}
-          />
-
-          {currentStep === 1 && renderStep1()}
-          {currentStep === 2 && renderStep2()}
-        </ScrollView>
-
-        <View style={styles.buttonContainer}>
-          {currentStep < totalSteps ? (
-            <PrimaryButton
-              label="Next"
-              onPress={handleNextStep}
-              disabled={currentStep === 1 && !isStep1Valid()}
-              style={styles.button}
+            <Stepper
+              style={styles.stepperContainer}
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+              stepTitles={stepTitles}
+              onStepPress={stepNumber => {
+                // Disable stepper clicks if on step 1 and form is not valid
+                if (currentStep === 1 && !isStep1Valid()) {
+                  return;
+                }
+                if (stepNumber === 1) {
+                  handlePreviousStep();
+                } else if (stepNumber === 2) {
+                  handleNextStep();
+                }
+              }}
             />
-          ) : (
-            <PrimaryButton
-              label={signupMerchantLoading ? 'Loading...' : 'Send Request'}
-              disabled={!formik.isValid || !formik.dirty}
-              onPress={formik.handleSubmit}
-              style={styles.button}
-            />
-          )}
-        </View>
+
+            {currentStep === 1 && renderStep1()}
+            {currentStep === 2 && renderStep2()}
+          </ScrollView>
+
+          <View style={styles.buttonContainer}>
+            {currentStep < totalSteps ? (
+              <PrimaryButton
+                label="Next"
+                onPress={handleNextStep}
+                disabled={currentStep === 1 && !isStep1Valid()}
+                style={styles.button}
+              />
+            ) : (
+              <PrimaryButton
+                label={signupMerchantLoading ? 'Loading...' : 'Send Request'}
+                disabled={!formik.isValid || !formik.dirty}
+                onPress={formik.handleSubmit}
+                style={styles.button}
+              />
+            )}
+          </View>
+        </KeyboardAvoidingView>
       </SafeScreen>
     </FormikProvider>
   );

@@ -1,7 +1,7 @@
 export interface ICreditPointRequest {
   points: number;
   toUserId: string;
-  amountCents?: number;
+  amount?: number;
   comment?: string;
 }
 
@@ -28,4 +28,14 @@ export interface ICheckRequestsResponse {
     fullName: string;
   };
   updatedAt: Date;
+}
+
+export interface IGetPointsByAmountResponse {
+  points: number;
+}
+
+export interface ICreditUserRequest {
+  amount: number;
+  customerId: string;
+  comment?: string;
 }

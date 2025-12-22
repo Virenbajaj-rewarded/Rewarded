@@ -3,8 +3,16 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#000000',
+    padding: 16,
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: '#000000',
+    paddingBottom: 16,
+  },
+  headerContainer: {
+    paddingBottom: 0,
   },
   widgetsContainer: {
     flexDirection: 'row',

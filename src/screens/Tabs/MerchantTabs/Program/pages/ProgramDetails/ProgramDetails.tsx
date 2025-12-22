@@ -12,6 +12,7 @@ import { IProgram } from '@/interfaces';
 import { formatCurrency } from '@/utils/helpers';
 import { useProgramDetails } from './useProgramDetails';
 import { StopProgramModal } from '../../components/StopProgramModal/StopProgramModal';
+import { formatStrategyLabel, getRemainingBudget } from '@/utils/helpers';
 
 export default function ProgramDetails({
   navigation,
@@ -38,16 +39,8 @@ export default function ProgramDetails({
     isLoadingProgram,
   } = useProgramDetails(programId);
 
-  const {
-    name,
-    status,
-    strategy,
-    percentBack,
-    maxDailyBudget,
-    budget,
-    rewardPercent,
-    spentAmount,
-  } = (program as IProgram) || {};
+  const { name, status, strategy, stopDistributionPoints, maxDailyBudget, budget, spentAmount } =
+    (program as IProgram) || {};
 
   useEffect(() => {
     if (name) {
@@ -162,17 +155,17 @@ export default function ProgramDetails({
             {capitalize(status)}
           </Tag>
           <Typography fontVariant="semibold" fontSize={20} color="#FFFFFF">
-            {formatCurrency(budget)}
+            {formatCurrency(getRemainingBudget(program))}
           </Typography>
         </View>
         <View style={styles.detailsContainer}>
-          {strategy && percentBack && (
+          {strategy && (
             <View style={styles.detailRow}>
-              <Typography fontVariant="regular" fontSize={16} color="#FFFFFF">
+              <Typography fontVariant="regular" fontSize={16} color="#BFBFBF">
                 {EProgramStrategyDisplayNames[strategy]}
               </Typography>
-              <Typography fontVariant="regular" fontSize={16} color="#FFFFFF">
-                {percentBack}%
+              <Typography fontVariant="regular" fontSize={14} color="#FFFFFF">
+                {formatStrategyLabel(program)}
               </Typography>
             </View>
           )}
@@ -188,7 +181,7 @@ export default function ProgramDetails({
             </View>
           )}
 
-          {budget && status !== EProgramStatus.ACTIVE && (
+          {budget && (
             <View style={styles.detailRow}>
               <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">
                 Program Budget
@@ -199,24 +192,24 @@ export default function ProgramDetails({
             </View>
           )}
 
-          {rewardPercent && status !== EProgramStatus.ACTIVE && (
+          {Boolean(spentAmount) && (
             <View style={styles.detailRow}>
               <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">
                 Rewarded points
               </Typography>
               <Typography fontVariant="regular" fontSize={14} color="#FFFFFF">
-                {formatCurrency(rewardPercent)}
+                {formatCurrency(spentAmount)}
               </Typography>
             </View>
           )}
 
-          {Boolean(spentAmount) && status !== EProgramStatus.ACTIVE && (
+          {Boolean(stopDistributionPoints) && (
             <View style={styles.detailRow}>
               <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">
                 Points users have progress on
               </Typography>
               <Typography fontVariant="regular" fontSize={14} color="#FFFFFF">
-                {formatCurrency(spentAmount)}
+                {formatCurrency(stopDistributionPoints)}
               </Typography>
             </View>
           )}

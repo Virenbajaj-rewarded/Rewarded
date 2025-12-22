@@ -130,6 +130,7 @@ export default function RequestPoints({
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <ScrollView
+            keyboardDismissMode="on-drag"
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContent}
             keyboardShouldPersistTaps="handled"
@@ -138,12 +139,12 @@ export default function RequestPoints({
             <View style={styles.contentContainer}>
               <View style={styles.formContainer}>
                 <TextField
+                  variant="points"
                   value={values.points}
                   onChangeText={handleChange('points')}
                   onBlur={handleBlur('points')}
                   keyboardType="number-pad"
                   error={touched.points && errors.points ? errors.points : undefined}
-                  style={styles.pointsInput}
                 />
 
                 <TextField

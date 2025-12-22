@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useState } from 'react';
 import {
   Typography,
@@ -77,6 +77,8 @@ export default function ProgramForm({
         setProgramToActivate(null);
         handleGoBack();
       } catch (error) {
+        setIsActivateModalVisible(false);
+        handleGoBack();
         console.error(error);
       }
     }
@@ -226,108 +228,120 @@ export default function ProgramForm({
   return (
     <FormikProvider value={formik}>
       <SafeScreen style={styles.container}>
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.cardContainer}>
-            <Typography fontVariant="medium" fontSize={24} color="#FFFFFF">
-              General
-            </Typography>
-            <TextField
-              required
-              label="Offer Name"
-              value={name}
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
-              placeholder="Enter program name"
-              error={touched.name && errors.name ? errors.name : undefined}
-            />
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingView}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        >
+          <ScrollView
+            keyboardDismissMode="on-drag"
+            style={styles.scrollView}
+            contentContainerStyle={styles.contentContainer}
+          >
+            <View style={styles.cardContainer}>
+              <Typography fontVariant="medium" fontSize={24} color="#FFFFFF">
+                General
+              </Typography>
+              <TextField
+                required
+                label="Offer Name"
+                value={name}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                placeholder="Enter program name"
+                error={touched.name && errors.name ? errors.name : undefined}
+              />
 
-            <CircularRadioGroup
-              value={strategy}
-              onValueChange={handleStrategyChange}
-              options={[
-                {
-                  value: EProgramStrategy.PERCENT_BACK,
-                  label: EProgramStrategyDisplayNames.PERCENT_BACK,
-                },
-                {
-                  value: EProgramStrategy.SPEND_TO_EARN,
-                  label: EProgramStrategyDisplayNames.SPEND_TO_EARN,
-                },
-              ]}
-              color="#3c83f6"
-              uncheckedColor="#FFFFFF"
-            />
-            <View style={styles.budgetContainer}>
+              <CircularRadioGroup
+                value={strategy}
+                onValueChange={handleStrategyChange}
+                options={[
+                  {
+                    value: EProgramStrategy.PERCENT_BACK,
+                    label: EProgramStrategyDisplayNames.PERCENT_BACK,
+                  },
+                  {
+                    value: EProgramStrategy.SPEND_TO_EARN,
+                    label: EProgramStrategyDisplayNames.SPEND_TO_EARN,
+                  },
+                ]}
+                color="#3c83f6"
+                uncheckedColor="#FFFFFF"
+              />
+              <View style={styles.budgetContainer}>
+                <TextField
+                  required
+                  keyboardType="numeric"
+                  label="Budget"
+                  value={budget?.toString()}
+                  onChangeText={handleChange('budget')}
+                  onBlur={handleBlur('budget')}
+                  placeholder="Enter Budget"
+                  mask="CAD"
+                  error={touched.budget && errors.budget ? errors.budget : undefined}
+                />
+                <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">
+                  Set a budget higher than 0
+                </Typography>
+              </View>
               <TextField
                 required
                 keyboardType="numeric"
-                label="Budget"
-                value={budget?.toString()}
-                onChangeText={handleChange('budget')}
-                onBlur={handleBlur('budget')}
-                placeholder="Enter Budget"
+                label="Max Daily Budget"
+                value={maxDailyBudget?.toString()}
+                onChangeText={handleChange('maxDailyBudget')}
+                onBlur={handleBlur('maxDailyBudget')}
+                placeholder="Enter Max Daily Budget"
                 mask="CAD"
-                error={touched.budget && errors.budget ? errors.budget : undefined}
+                error={
+                  touched.maxDailyBudget && errors.maxDailyBudget
+                    ? errors.maxDailyBudget
+                    : undefined
+                }
               />
-              <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">
-                Set a budget higher than 0
-              </Typography>
             </View>
-            <TextField
-              required
-              keyboardType="numeric"
-              label="Max Daily Budget"
-              value={maxDailyBudget?.toString()}
-              onChangeText={handleChange('maxDailyBudget')}
-              onBlur={handleBlur('maxDailyBudget')}
-              placeholder="Enter Max Daily Budget"
-              mask="CAD"
-              error={
-                touched.maxDailyBudget && errors.maxDailyBudget ? errors.maxDailyBudget : undefined
-              }
+            <View style={styles.cardContainer}>
+              <Typography fontVariant="medium" fontSize={24} color="#FFFFFF">
+                Offer Type
+              </Typography>
+              <CircularRadioGroup
+                value={offerType}
+                onValueChange={handleOfferTypeChange}
+                options={[
+                  {
+                    value: EOfferType.POINTS_CASHBACK,
+                    label: EOfferTypeDisplayNames.POINTS_CASHBACK,
+                  },
+                  {
+                    value: EOfferType.FIXED_AMOUNT_POINTS,
+                    label: EOfferTypeDisplayNames.FIXED_AMOUNT_POINTS,
+                  },
+                ]}
+                color="#3c83f6"
+                uncheckedColor="#FFFFFF"
+              />
+              {renderOfferTypeFields()}
+            </View>
+            <PrimaryButton
+              label="Pay"
+              disabled={!isValid || !dirty || Number(initialBudget) === Number(values.budget)}
+              onPress={showPaymentMethodModal}
             />
-          </View>
-          <View style={styles.cardContainer}>
-            <Typography fontVariant="medium" fontSize={24} color="#FFFFFF">
-              Offer Type
-            </Typography>
-            <CircularRadioGroup
-              value={offerType}
-              onValueChange={handleOfferTypeChange}
-              options={[
-                {
-                  value: EOfferType.POINTS_CASHBACK,
-                  label: EOfferTypeDisplayNames.POINTS_CASHBACK,
-                },
-                {
-                  value: EOfferType.FIXED_AMOUNT_POINTS,
-                  label: EOfferTypeDisplayNames.FIXED_AMOUNT_POINTS,
-                },
-              ]}
-              color="#3c83f6"
-              uncheckedColor="#FFFFFF"
+            <PrimaryButton
+              label={loading ? 'Saving...' : 'Save as Draft'}
+              disabled={!isValid || !dirty}
+              style={styles.draftButton}
+              textStyle={styles.draftButtonText}
+              onPress={handleSubmit}
             />
-            {renderOfferTypeFields()}
-          </View>
-          <PrimaryButton
-            label="Pay"
-            disabled={!isValid || !dirty || Number(initialBudget) === Number(values.budget)}
-            onPress={showPaymentMethodModal}
-          />
-          <PrimaryButton
-            label={loading ? 'Saving...' : 'Save as Draft'}
-            disabled={!isValid || !dirty}
-            style={styles.draftButton}
-            textStyle={styles.draftButtonText}
-            onPress={handleSubmit}
-          />
-          <PrimaryButton
-            label="Cancel"
-            style={styles.cancelButton}
-            textStyle={styles.cancelButtonText}
-            onPress={handleGoBack}
-          />
-        </ScrollView>
+            <PrimaryButton
+              label="Cancel"
+              style={styles.cancelButton}
+              textStyle={styles.cancelButtonText}
+              onPress={handleGoBack}
+            />
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeScreen>
       <PaymentMethodModal
         visible={isPaymentMethodModalVisible}

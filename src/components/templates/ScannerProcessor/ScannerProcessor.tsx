@@ -95,8 +95,9 @@ export default function ScannerProcessor({ navigation }: RootScreenProps<Paths.Q
           });
           break;
         case 'store_profile':
-          navigation.replace(Paths.SCAN_STORE, {
+          navigation.replace(Paths.STORE, {
             businessCode: qrCode.value,
+            isFromQrScanner: true,
           });
           break;
         default:

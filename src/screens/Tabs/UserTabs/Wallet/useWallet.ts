@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { isToday, isYesterday, format, parseISO, startOfDay } from 'date-fns';
 import { useFetchBalanceQuery, useFetchTransactionHistoryQuery } from '@/services/user/useUser';
 import { useAuth } from '@/services/auth/useAuth';
@@ -82,6 +83,12 @@ export const useWallet = () => {
     if (transaction.type === ETransactionType.EARNED) return 'Balance Top Up';
     return 'Transaction';
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   return {
     balance,

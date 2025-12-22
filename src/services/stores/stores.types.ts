@@ -4,6 +4,7 @@ import { IActiveRewardProgram } from '@/interfaces/IStore';
 export interface IStoreListItem {
   id: string;
   name: string;
+  isLiked: boolean;
   logoUrl: string | undefined;
   rewardPoints: number;
   businessCode: string;
@@ -17,9 +18,4 @@ export interface IGetStoresResponse {
   page: number;
   limit: number;
   total: number;
-}
-
-export interface ISavingsResponse {
-  lifetimeSavingsUsd: number;
-  rewardPointsBalance: number;
 }

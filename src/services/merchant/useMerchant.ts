@@ -1,4 +1,10 @@
-import { InvalidateOptions, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import {
+  InvalidateOptions,
+  useQuery,
+  useQueryClient,
+  useMutation,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 import { getAuthState } from '@/services/auth/authStorage';
 import { MerchantServices } from './merchantServices';
 import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
@@ -6,6 +12,8 @@ import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
 export const enum MerchantQueryKey {
   fetchMerchantProfile = 'fetchMerchantProfile',
   fetchMerchantByBusinessCode = 'fetchMerchantByBusinessCode',
+  fetchCustomerStats = 'fetchCustomerStats',
+  fetchCustomers = 'fetchCustomers',
 }
 
 export const useFetchMerchantProfileQuery = () => {
@@ -72,6 +80,30 @@ export const useUploadMerchantLogoMutation = () => {
   });
 };
 
+export const useFetchCustomerStatsQuery = () => {
+  return useQuery({
+    queryFn: () => MerchantServices.fetchCustomerStats(),
+    // TODO: Remove this after push notifications are implemented
+    refetchInterval: 5000,
+    queryKey: [MerchantQueryKey.fetchCustomerStats],
+  });
+};
+
+export const useFetchCustomersQuery = () =>
+  useInfiniteQuery({
+    queryKey: [MerchantQueryKey.fetchCustomers],
+    queryFn: ({ pageParam = 1 }) => MerchantServices.fetchCustomers({ pageParam }),
+    getNextPageParam: lastPage => {
+      const { page, limit, total } = lastPage;
+      const hasMore = page < Math.ceil(total / limit);
+      return hasMore ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+    // TODO: Remove this after push notifications are implemented
+    refetchInterval: 5000,
+    staleTime: 180000,
+  });
+
 export const useMerchant = () => {
   const client = useQueryClient();
 
@@ -93,5 +125,7 @@ export const useMerchant = () => {
     setQueryData,
     useUpdateMerchantMutation,
     useUploadMerchantLogoMutation,
+    useFetchCustomerStatsQuery,
+    useFetchCustomersQuery,
   };
 };

@@ -15,7 +15,11 @@ const ConfirmEmail = ({ route }: RootScreenProps<Paths.CONFIRM_EMAIL>) => {
   return (
     <FormikProvider value={formik}>
       <SafeScreen style={styles.container}>
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+          keyboardDismissMode="on-drag"
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+        >
           <Typography fontVariant="bold" fontSize={24} color="#FFFFFF" textAlign="center">
             Check your email
           </Typography>

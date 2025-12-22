@@ -17,15 +17,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  pointsInput: {
-    borderWidth: 0,
-    backgroundColor: 'transparent',
-    width: '100%',
-    fontSize: 38,
-    lineHeight: 46,
-    height: 200,
-    textAlign: 'center',
-  },
+
   formContainer: {
     gap: 200,
     paddingBottom: 20,
@@ -33,6 +25,8 @@ export const styles = StyleSheet.create({
   commentInput: {
     minHeight: 100,
     textAlignVertical: 'top',
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   buttonContainer: {
     paddingHorizontal: 20,

@@ -22,7 +22,11 @@ const ConfirmForgotPassword = ({ route }: RootScreenProps<Paths.CONFIRM_FORGOT_P
   return (
     <FormikProvider value={formik}>
       <SafeScreen style={styles.container}>
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+          keyboardDismissMode="on-drag"
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+        >
           <Typography fontVariant="regular" fontSize={14} color="#BFBFBF">
             {email ? (
               <>

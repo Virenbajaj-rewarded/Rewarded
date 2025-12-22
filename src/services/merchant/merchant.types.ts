@@ -1,6 +1,5 @@
 import { EIndustry, ERole } from '@/enums';
-import { ILocation } from '@/interfaces/ILocation';
-import { IActiveRewardProgram } from '@/interfaces/IStore';
+import { ILocation, IActiveRewardProgram, ICustomer } from '@/interfaces';
 
 export interface IGetMerchantResponse {
   id: string;
@@ -37,4 +36,18 @@ export interface IUpdateMerchantPayload {
   description?: string;
   tgUsername?: string | null;
   whatsppUsername?: string | null;
+}
+
+export interface ICustomerStatsResponse {
+  totalCustomers: number;
+  newCustomersLastMonth: number;
+  totalPointsCredited: number;
+  totalPointsRedeemed: number;
+}
+
+export interface ICustomersResponse {
+  items: ICustomer[];
+  total: number;
+  page: number;
+  limit: number;
 }

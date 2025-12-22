@@ -12,7 +12,7 @@ import {
   getProgramStrategyTextColor,
   getProgramStrategyBackground,
 } from '../../utils';
-import { capitalize } from '@/utils/helpers';
+import { capitalize, getRemainingBudget } from '@/utils/helpers';
 import { StopProgramModal } from '../StopProgramModal/StopProgramModal';
 
 type ProgramItemProps = {
@@ -132,7 +132,7 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
             {program.name}
           </Typography>
           <Typography fontVariant="semibold" fontSize={20} color="#FFFFFF">
-            ${program.budget}
+            CAD {getRemainingBudget(program)}
           </Typography>
         </View>
         <View style={styles.programItemTags}>

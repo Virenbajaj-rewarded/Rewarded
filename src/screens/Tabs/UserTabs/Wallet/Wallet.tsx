@@ -1,4 +1,5 @@
-import { ActivityIndicator, View, RefreshControl, ScrollView } from 'react-native';
+import { ActivityIndicator, View, RefreshControl } from 'react-native';
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { UserTabCombinedScreenProps } from '@/navigation/types.ts';
 import { UserTabPaths } from '@/navigation/paths.ts';
 import { QrCodeSvg } from 'react-native-qr-svg';
@@ -8,7 +9,7 @@ import { Typography } from '@/components';
 import { styles } from './Wallet.styles';
 import { ERole } from '@/enums';
 import { useWallet, TransactionListItem } from './useWallet';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
 export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLET>) {
   const {
@@ -26,10 +27,10 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
     balance,
   } = useWallet();
 
-  const renderTransactionItem = (item: TransactionListItem, index: number) => {
+  const renderItem = ({ item }: ListRenderItemInfo<TransactionListItem>) => {
     if (item.type === 'date') {
       return (
-        <View key={`date-${item.date}`} style={styles.dateHeader}>
+        <View style={styles.dateHeader}>
           <Typography fontVariant="regular" fontSize={12} color="#595959">
             {item.formattedDate}
           </Typography>
@@ -45,7 +46,7 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
     const formattedAmount = `${amount.toFixed(2)} CAD`;
 
     return (
-      <View key={`transaction-${transaction.id || index}`} style={styles.transactionItem}>
+      <View style={styles.transactionItem}>
         <Typography
           fontVariant="regular"
           fontSize={16}
@@ -75,27 +76,120 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
     );
   };
 
-  const handleScroll = useCallback(
-    (event: any) => {
-      const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-      const paddingToBottom = 20;
-      const isCloseToBottom =
-        layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+  const keyExtractor = (item: TransactionListItem, index: number) => {
+    if (item.type === 'date') {
+      return `date-${item.date}`;
+    }
+    return `transaction-${item.transaction?.id || index}`;
+  };
 
-      if (isCloseToBottom && hasNextPage && !isFetchingNextPage && fetchNextPage) {
-        fetchNextPage();
-      }
-    },
-    [hasNextPage, isFetchingNextPage, fetchNextPage]
+  const ListHeaderComponent = useMemo(
+    () => (
+      <>
+        <Typography fontVariant="bold" fontSize={24} color="#FFFFFF">
+          Wallet Overview
+        </Typography>
+        <View style={styles.earnedPointsContainer}>
+          <Typography fontVariant="regular" fontSize={24} color="#FFFFFF">
+            Earned Points
+          </Typography>
+          {isBalanceLoading || isBalanceRefetching ? (
+            <ActivityIndicator size="small" color="#3c83f6" />
+          ) : (
+            <View style={styles.balanceContainer}>
+              <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
+                {balance || 0}
+              </Typography>
+              <IconByVariant path="coins" width={16} height={16} />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.purchasedPointsContainer}>
+          <Typography fontVariant="regular" fontSize={24} color="#FFFFFF">
+            Purchased Points
+          </Typography>
+          {isBalanceLoading || isBalanceRefetching ? (
+            <ActivityIndicator size="small" color="#3c83f6" />
+          ) : (
+            <View style={styles.balanceContainer}>
+              <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
+                {balance || 0}
+              </Typography>
+              <IconByVariant path="coins" width={16} height={16} />
+            </View>
+          )}
+        </View>
+
+        <Typography
+          fontVariant="regular"
+          fontSize={24}
+          color="#FFFFFF"
+          textAlign="center"
+          style={styles.qrCodeTitle}
+        >
+          My Profile QR Code
+        </Typography>
+        <QrCodeSvg
+          value={JSON.stringify({
+            value: user?.id || '',
+            type: 'customer_profile',
+            role: ERole.MERCHANT,
+          } satisfies QR_CODE)}
+          frameSize={200}
+          backgroundColor={'transparent'}
+          dotColor={'#ffffff'}
+          style={styles.qrCode}
+        />
+
+        <View style={styles.transactionHistoryContainer}>
+          <Typography fontVariant="bold" fontSize={20} color="#FFFFFF">
+            Transaction history
+          </Typography>
+        </View>
+      </>
+    ),
+    [balance, isBalanceLoading, isBalanceRefetching, user?.id]
+  );
+
+  const ListEmptyComponent = useMemo(
+    () => (
+      <View style={styles.stateContainer}>
+        <Typography fontVariant="regular" fontSize={16} color="#666666">
+          No transactions found
+        </Typography>
+      </View>
+    ),
+    []
+  );
+
+  const ListFooterComponent = useMemo(
+    () =>
+      isFetchingNextPage ? (
+        <View style={styles.stateContainer}>
+          <ActivityIndicator color={'#3c83f6'} />
+        </View>
+      ) : null,
+    [isFetchingNextPage]
   );
 
   return (
-    <ScrollView
+    <FlashList<TransactionListItem>
+      data={transactionListItems}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      ListHeaderComponent={ListHeaderComponent}
+      ListEmptyComponent={ListEmptyComponent}
+      ListFooterComponent={ListFooterComponent}
+      showsVerticalScrollIndicator={false}
       style={styles.container}
       contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-      onScroll={handleScroll}
-      scrollEventThrottle={400}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage && fetchNextPage) {
+          fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.3}
       refreshControl={
         <RefreshControl
           refreshing={isRefetchingTransactions || false}
@@ -104,84 +198,6 @@ export default function Wallet({}: UserTabCombinedScreenProps<UserTabPaths.WALLE
           tintColor={'#3c83f6'}
         />
       }
-    >
-      <Typography fontVariant="bold" fontSize={24} color="#FFFFFF">
-        Wallet Overview
-      </Typography>
-      <View style={styles.earnedPointsContainer}>
-        <Typography fontVariant="regular" fontSize={24} color="#FFFFFF">
-          Earned Points
-        </Typography>
-        {isBalanceLoading || isBalanceRefetching ? (
-          <ActivityIndicator size="small" color="#3c83f6" />
-        ) : (
-          <View style={styles.balanceContainer}>
-            <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balance || 0}
-            </Typography>
-            <IconByVariant path="coins" width={16} height={16} />
-          </View>
-        )}
-      </View>
-
-      <View style={styles.purchasedPointsContainer}>
-        <Typography fontVariant="regular" fontSize={24} color="#FFFFFF">
-          Purchased Points
-        </Typography>
-        {isBalanceLoading || isBalanceRefetching ? (
-          <ActivityIndicator size="small" color="#3c83f6" />
-        ) : (
-          <View style={styles.balanceContainer}>
-            <Typography fontVariant="bold" fontSize={16} color="#FFFFFF">
-              {balance || 0}
-            </Typography>
-            <IconByVariant path="coins" width={16} height={16} />
-          </View>
-        )}
-      </View>
-
-      <Typography
-        fontVariant="regular"
-        fontSize={24}
-        color="#FFFFFF"
-        textAlign="center"
-        style={styles.qrCodeTitle}
-      >
-        My Profile QR Code
-      </Typography>
-      <QrCodeSvg
-        value={JSON.stringify({
-          value: user?.id || '',
-          type: 'customer_profile',
-          role: ERole.MERCHANT,
-        } satisfies QR_CODE)}
-        frameSize={200}
-        backgroundColor={'transparent'}
-        dotColor={'#ffffff'}
-        style={styles.qrCode}
-      />
-
-      <View style={styles.transactionHistoryContainer}>
-        <Typography fontVariant="bold" fontSize={20} color="#FFFFFF">
-          Transaction history
-        </Typography>
-        {transactionListItems.length === 0 ? (
-          <View style={styles.stateContainer}>
-            <Typography fontVariant="regular" fontSize={16} color="#666666">
-              No transactions found
-            </Typography>
-          </View>
-        ) : (
-          <>
-            {transactionListItems.map((item, index) => renderTransactionItem(item, index))}
-            {isFetchingNextPage && (
-              <View style={styles.stateContainer}>
-                <ActivityIndicator color={'#3c83f6'} />
-              </View>
-            )}
-          </>
-        )}
-      </View>
-    </ScrollView>
+    />
   );
 }

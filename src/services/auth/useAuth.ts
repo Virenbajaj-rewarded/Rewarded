@@ -7,6 +7,8 @@ import { IUserSignupFormValues } from '@/screens/Auth/signup/user/SignupUser.typ
 import { IMerchantSignupFormValues } from '@/screens/Auth/signup/merchant/SignupMerchant.types';
 import { showToast } from '@/utils';
 import { clearAuthState, setAuthState } from './authStorage';
+import { navigate } from '@/navigation/navigationRef';
+import { Paths } from '@/navigation/paths';
 
 export const enum AuthQueryKey {
   login = 'login',
@@ -36,10 +38,22 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       AuthServices.login(email, password),
-    onSuccess: data => {
-      refetch();
-      client.setQueryData([AuthQueryKey.login], data);
-      setAuthState(true, profile?.role);
+    onSuccess: async data => {
+      const email = data.email || '';
+      try {
+        const refetchResult = await refetch({ throwOnError: true });
+        const userRole = refetchResult.data?.role || profile?.role;
+        client.setQueryData([AuthQueryKey.login], data);
+        setAuthState(true, userRole);
+      } catch (error: any) {
+        if (error?.status === 403 || error?.response?.status === 403) {
+          if (email) {
+            navigate(Paths.CONFIRM_EMAIL, { email });
+            return;
+          }
+        }
+        throw error;
+      }
     },
     onError: error => {
       console.error('error', error);

@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   scrollView: {
     flex: 1,
     padding: 16,
