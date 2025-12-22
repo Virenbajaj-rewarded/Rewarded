@@ -4,6 +4,7 @@ import { IMerchant } from './IMerchant';
 import { IProgram } from './IProgram';
 import { IStore, IActiveRewardProgram } from './IStore';
 import { ITransaction } from './ITransaction';
+import { ICustomer } from './ICustomer';
 
 export type {
   IUser,
@@ -13,4 +14,5 @@ export type {
   IActiveRewardProgram,
   ILocation,
   ITransaction,
+  ICustomer,
 };

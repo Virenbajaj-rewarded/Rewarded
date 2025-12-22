@@ -69,15 +69,10 @@ export const useCreateProgram = () => {
   const handlePayProgram = async (
     _selectedPaymentMethod: EPaymentMethod
   ): Promise<IProgram | undefined> => {
-    try {
-      const program = await handleCreateProgram(formik.values);
-      if (program && program.id) {
-        await fundProgram(program.id);
-        return program;
-      }
-    } catch (error) {
-      toast.error('Failed to create program');
-      console.error(error);
+    const program = await handleCreateProgram(formik.values);
+    if (program && program.id) {
+      await fundProgram(program.id);
+      return program;
     }
   };
 

@@ -1,5 +1,10 @@
 import { api } from '@/lib/api';
-import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
+import {
+  ICustomerStatsResponse,
+  IGetMerchantResponse,
+  IUpdateMerchantPayload,
+  ICustomersResponse,
+} from './merchant.types';
 import { IStore } from '@/interfaces';
 
 export const MerchantServices = {
@@ -16,6 +21,25 @@ export const MerchantServices = {
   },
   updateMerchant: async (data: IUpdateMerchantPayload) => {
     const response = await api.patch<{ success: boolean }>(`/merchants`, data);
+    return response.data;
+  },
+
+  fetchCustomerStats: async () => {
+    const response =
+      await api.get<ICustomerStatsResponse>('merchants/me/stats');
+    return response.data;
+  },
+
+  fetchCustomers: async ({ pageParam = 1 }: { pageParam?: number }) => {
+    const response = await api.get<ICustomersResponse>(
+      `/merchants/me/customers`,
+      {
+        params: {
+          page: pageParam,
+          limit: 12,
+        },
+      }
+    );
     return response.data;
   },
 

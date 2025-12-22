@@ -4,7 +4,7 @@ import PublicRoute from '@/components/auth/PublicRoute';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import Root from '../pages/Root';
 import Profile from '../pages/profile/Profile';
-import Customers from '../pages/Customers';
+import Customers from '../pages/customers/Customers';
 import Login from '../pages/login/Login';
 import SignupUser from '../pages/signup/user/SignupUser';
 import NotFound from '../pages/NotFound';

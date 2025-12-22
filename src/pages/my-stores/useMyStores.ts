@@ -9,7 +9,7 @@ import { ROUTES } from '@/routes';
 
 export const useMyStores = () => {
   const navigate = useNavigate();
-  const { useFetchStoresQuery, unlikeStore, unlikeStoreLoading } =
+  const { useFetchMyStoresQuery, unlikeStore, unlikeStoreLoading } =
     useStoresService();
   const [isLeaveProgramModalOpen, setIsLeaveProgramModalOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState<IStoreListItem | null>(
@@ -33,7 +33,7 @@ export const useMyStores = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchStoresQuery(selectedIndustry);
+  } = useFetchMyStoresQuery(selectedIndustry);
 
   const stores = useMemo(
     () => data?.pages.flatMap(page => page.items) || [],
@@ -59,7 +59,7 @@ export const useMyStores = () => {
     const store = stores.find(store => store.id === storeId);
     setSelectedStore(store);
 
-    if (store?.rewardPoints && store.rewardPoints > 0) {
+    if (store?.activeRewardProgram) {
       openLeaveProgramModal();
     } else {
       await unlikeStore(storeId);

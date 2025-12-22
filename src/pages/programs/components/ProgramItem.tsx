@@ -13,6 +13,7 @@ import USDIcon from '@/assets/usd.svg?react';
 import StopIcon from '@/assets/stop.svg?react';
 import RenewIcon from '@/assets/renew.svg?react';
 import { useNavigate } from 'react-router-dom';
+import { formatStrategyLabel, getRemainingBudget } from '@/utils';
 
 const capitalize = (str: string): string => {
   return str.charAt(0) + str.slice(1).toLowerCase();
@@ -53,10 +54,9 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
     name,
     budget,
     strategy,
-    percentBack,
+    spentAmount,
+    stopDistributionPoints,
     maxDailyBudget,
-    spendThreshold,
-    rewardPercent,
     id,
   } = program;
 
@@ -209,7 +209,9 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
       <CardHeader className="pb-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <h3 className="text-2xl font-normal text-white">{name}</h3>
-          <span className="text-2xl font-semibold text-white">${budget}</span>
+          <span className="text-2xl font-semibold text-white">
+            CAD {getRemainingBudget(program)}
+          </span>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-1 min-h-0 p-6 pt-0">
@@ -245,46 +247,52 @@ export const ProgramItem = ({ program, ...props }: ProgramItemProps) => {
           </div>
 
           <div className="space-y-2 text-white">
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-[#BFBFBF]">
-                {EProgramStrategyDisplayNames[strategy]}
-              </span>{' '}
-              <span className="font-medium text-white ">
-                {percentBack ? `${percentBack}` : 'N/A'}
-              </span>
-            </div>
+            {strategy && (
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-[#BFBFBF]">
+                  {EProgramStrategyDisplayNames[strategy]}
+                </span>{' '}
+                <span className="font-medium text-white ">
+                  {formatStrategyLabel(program)}
+                </span>
+              </div>
+            )}
             {maxDailyBudget && (
               <div className="flex items-center justify-between">
                 <span className="font-medium text-[#BFBFBF]">
                   Max Daily Budget
                 </span>
                 <span className="font-medium text-white ">
-                  ${maxDailyBudget}
+                  CAD {maxDailyBudget}
                 </span>
               </div>
             )}
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-[#BFBFBF]">
-                Target Audience
-              </span>
-              <span className="font-medium text-white ">All Customers</span>
-            </div>
-            {strategy === EProgramStrategy.SPEND_TO_EARN && (
+            {budget && (
               <div className="flex items-center justify-between">
                 <span className="font-medium text-[#BFBFBF]">
-                  Amount to Spend
+                  Program Budget
+                </span>
+                <span className="font-medium text-white ">CAD {budget}</span>
+              </div>
+            )}
+            {Boolean(spentAmount) && (
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-[#BFBFBF]">
+                  Rewarded Points
                 </span>
                 <span className="font-medium text-white ">
-                  ${spendThreshold}
+                  CAD {spentAmount}
                 </span>
               </div>
             )}
-            {strategy === EProgramStrategy.SPEND_TO_EARN && (
+            {Boolean(stopDistributionPoints) && (
               <div className="flex items-center justify-between">
                 <span className="font-medium text-[#BFBFBF]">
-                  Amount of Points
+                  Points users have progress on
                 </span>
-                <span className="font-medium text-white ">{rewardPercent}</span>
+                <span className="font-medium text-white ">
+                  {stopDistributionPoints}
+                </span>
               </div>
             )}
           </div>

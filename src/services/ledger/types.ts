@@ -1,6 +1,6 @@
 export interface ICreditPointRequest {
   points: number;
   toUserId: string;
-  amountCents?: number;
+  amount?: number;
   comment?: string;
 }

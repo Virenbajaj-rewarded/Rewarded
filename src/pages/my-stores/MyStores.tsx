@@ -19,7 +19,7 @@ import { useMyStores } from './useMyStores';
 import { EIndustry, EIndustryDisplayNames } from '@/enums';
 import { Skeleton } from '@/components/ui/skeleton';
 import HeartFilledIcon from '@/assets/heart-filled.svg?react';
-import { formatStrategyLabel } from '@/utils/utils';
+import { formatStrategyLabel, formatDistance } from '@/utils';
 
 const MyStores = () => {
   const {
@@ -95,11 +95,14 @@ const MyStores = () => {
                 className="bg-[#1A1A1A] border-border relative cursor-pointer hover:opacity-90 transition-opacity"
               >
                 <CardContent className="p-4">
-                  <div className="absolute top-4 right-4">
+                  <div className="absolute top-4 right-4 z-10">
                     <Button
                       variant="ghost"
-                      onClick={() => handleUnlikeStore(store.id)}
-                      className="h-6 w-6 p-0 hover:bg-transparent [&_svg]:!size-6"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleUnlikeStore(store.id);
+                      }}
+                      className="h-6 w-6 p-0 hover:bg-transparent [&_svg]:!size-6 pointer-events-auto"
                     >
                       <HeartFilledIcon className="h-6 w-6 text-[#639CF8]" />
                     </Button>
@@ -131,6 +134,11 @@ const MyStores = () => {
                       <span className="text-[#8c8c8c] text-sm mr-1">
                         {EIndustryDisplayNames[store.storeType]}
                       </span>
+                      {store.distance !== undefined && (
+                        <span className="text-[#8c8c8c] text-sm">
+                          {formatDistance(store.distance)}
+                        </span>
+                      )}
 
                       {store.rewardPoints > 0 ? (
                         <p className="text-white font-medium">
@@ -178,7 +186,7 @@ const MyStores = () => {
                 <>
                   If you leave{' '}
                   {selectedStore?.activeRewardProgram &&
-                    formatStrategyLabel(selectedStore.activeRewardProgram)}
+                    formatStrategyLabel(selectedStore.activeRewardProgram)}{' '}
                   program now, you might lose your{' '}
                   <strong>
                     {selectedStore.rewardPoints.toLocaleString()} points

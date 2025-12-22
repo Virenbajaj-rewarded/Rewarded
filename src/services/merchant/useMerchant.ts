@@ -3,6 +3,7 @@ import {
   useQuery,
   useQueryClient,
   useMutation,
+  useInfiniteQuery,
 } from '@tanstack/react-query';
 import { MerchantServices } from './merchantServices';
 import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
@@ -13,6 +14,8 @@ export const enum MerchantQueryKey {
   fetchMerchantProfile = 'fetchMerchantProfile',
   fetchMerchantBalance = 'fetchMerchantBalance',
   fetchMerchantByBusinessCode = 'fetchMerchantByBusinessCode',
+  fetchCustomerStats = 'fetchCustomerStats',
+  fetchCustomers = 'fetchCustomers',
 }
 
 export const useFetchMerchantProfileQuery = () => {
@@ -85,6 +88,27 @@ export const useUploadMerchantLogoMutation = () => {
   });
 };
 
+export const useFetchCustomerStatsQuery = () => {
+  return useQuery({
+    queryFn: () => MerchantServices.fetchCustomerStats(),
+    queryKey: [MerchantQueryKey.fetchCustomerStats],
+  });
+};
+
+export const useFetchCustomersQuery = () =>
+  useInfiniteQuery({
+    queryKey: [MerchantQueryKey.fetchCustomers],
+    queryFn: ({ pageParam = 1 }) =>
+      MerchantServices.fetchCustomers({ pageParam }),
+    getNextPageParam: lastPage => {
+      const { page, limit, total } = lastPage;
+      const hasMore = page < Math.ceil(total / limit);
+      return hasMore ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+    staleTime: 180000,
+  });
+
 export const useMerchant = () => {
   const client = useQueryClient();
 
@@ -109,5 +133,7 @@ export const useMerchant = () => {
     setQueryData,
     useUpdateMerchantMutation,
     useUploadMerchantLogoMutation,
+    useFetchCustomerStatsQuery,
+    useFetchCustomersQuery,
   };
 };

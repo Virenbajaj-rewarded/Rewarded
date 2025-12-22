@@ -35,6 +35,6 @@ export const ROUTES = {
   DISCOVER: '/discover',
   EXPENSES: '/expenses',
   MY_STORES: '/my-stores',
-  STORE_PROFILE: '/my-stores/:businessCode',
+  STORE_PROFILE: '/store/:businessCode',
   WALLET: '/wallet',
 };

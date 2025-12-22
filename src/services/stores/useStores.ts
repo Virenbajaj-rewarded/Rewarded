@@ -10,13 +10,31 @@ import { EIndustry } from '@/enums';
 import { toast } from 'sonner';
 
 export const enum StoreQueryKey {
+  fetchAllStores = 'fetchAllStores',
   fetchMyStores = 'fetchMyStores',
   fetchDeletedStores = 'fetchDeletedStores',
   fetchStore = 'fetchStore',
   fetchSavings = 'fetchSavings',
 }
 
-const useFetchStoresQuery = (storeType?: EIndustry | null) =>
+const useFetchAllStoresQuery = (
+  storeType?: EIndustry | null,
+  search?: string
+) =>
+  useInfiniteQuery({
+    queryKey: [StoreQueryKey.fetchAllStores, storeType, search],
+    queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
+      StoreServices.fetchAllStores({ pageParam, storeType, search }),
+    getNextPageParam: lastPage => {
+      const { page, limit, total } = lastPage;
+      const hasMore = page < Math.ceil(total / limit);
+      return hasMore ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+    staleTime: 180000,
+  });
+
+const useFetchMyStoresQuery = (storeType?: EIndustry | null) =>
   useInfiniteQuery({
     queryKey: [StoreQueryKey.fetchMyStores, storeType ?? null],
     queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
@@ -55,13 +73,6 @@ const useFetchStoreQuery = (id: string) =>
     staleTime: 180000,
   });
 
-const useFetchSavingsQuery = () =>
-  useQuery({
-    queryKey: [StoreQueryKey.fetchSavings],
-    queryFn: () => StoreServices.fetchSavings(),
-    staleTime: 300000,
-  });
-
 export const useMyStores = () => {
   const client = useQueryClient();
 
@@ -70,6 +81,9 @@ export const useMyStores = () => {
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: [StoreQueryKey.fetchMyStores],
+      });
+      client.invalidateQueries({
+        queryKey: [StoreQueryKey.fetchAllStores],
       });
       toast.success('Added to my stores');
     },
@@ -83,6 +97,9 @@ export const useMyStores = () => {
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: [StoreQueryKey.fetchMyStores],
+      });
+      client.invalidateQueries({
+        queryKey: [StoreQueryKey.fetchAllStores],
       });
       toast.success('Removed from my stores');
     },
@@ -104,10 +121,10 @@ export const useMyStores = () => {
 
   return {
     invalidateQuery,
-    useFetchStoresQuery,
+    useFetchAllStoresQuery,
+    useFetchMyStoresQuery,
     useFetchRemovedStoresQuery,
     useFetchStoreQuery,
-    useFetchSavingsQuery,
     unlikeStore: unlikeStoreMutation.mutateAsync,
     unlikeStoreLoading: unlikeStoreMutation.isPending,
     likeStore: likeStoreMutation.mutateAsync,

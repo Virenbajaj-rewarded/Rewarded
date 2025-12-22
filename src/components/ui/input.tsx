@@ -6,6 +6,7 @@ interface InputProps
   error?: string;
   label?: string;
   leftMask?: string;
+  rightMask?: React.ReactNode;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -20,6 +21,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       error,
       label,
       leftMask,
+      rightMask,
       value,
       onChange,
       required,
@@ -64,6 +66,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onChange={handleChange}
             {...props}
           />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            {rightMask && rightMask}
+          </div>
         </div>
         {error && <p className="text-[14px] text-[#F5222D]">{error}</p>}
       </div>

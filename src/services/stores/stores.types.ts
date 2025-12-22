@@ -6,6 +6,7 @@ export interface IStoreListItem {
   name: string;
   logoUrl: string | undefined;
   rewardPoints: number;
+  isLiked: boolean;
   businessCode: string;
   distance: number;
   storeType: EIndustry;
@@ -17,9 +18,4 @@ export interface IGetStoresResponse {
   page: number;
   limit: number;
   total: number;
-}
-
-export interface ISavingsResponse {
-  lifetimeSavingsUsd: number;
-  rewardPointsBalance: number;
 }

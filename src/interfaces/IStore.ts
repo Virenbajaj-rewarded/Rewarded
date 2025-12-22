@@ -1,28 +1,27 @@
 import { EIndustry, EProgramStrategy, EOfferType } from '@/enums';
-import { ILocation } from './ILocation';
+import { ILocation } from '@/interfaces';
 
 export interface IStore {
   id: string;
   userId: string;
   businessName: string;
+  businessCode: string | null;
   businessEmail: string;
   businessPhoneNumber: string;
-  businessCode?: string | null;
-  location: ILocation;
-  storeType: EIndustry;
-  logoUrl: string;
-  distance: number;
-  businessAddress: string;
   tgUsername: string;
   whatsppUsername: string;
-  status: string;
+  distance: number;
   isLiked: boolean;
-  createdAt: string;
-  updatedAt: string;
-  activeRewardProgram: IActiveRewardProgram;
-  lifetimeSavings: number;
+  location: ILocation | null;
+  storeType: EIndustry;
+  logoUrl: string;
+  description: string;
   rewardPoints: number;
   spent: number;
+  activeRewardProgram: IActiveRewardProgram;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IActiveRewardProgram {
