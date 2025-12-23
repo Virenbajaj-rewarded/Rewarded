@@ -1,0 +1,15 @@
+model CustomerProgress {
+  merchantId  String @db.Uuid
+  consumerId  String @db.Uuid
+  programId   String @db.Uuid
+
+  accumulatedAmount Decimal @default(0) @db.Decimal(14, 2)
+  updatedAt         DateTime @updatedAt
+
+  merchant Merchant      @relation(fields: [merchantId], references: [id])
+  consumer User          @relation(fields: [consumerId], references: [id])
+  program  RewardProgram @relation(fields: [programId], references: [id])
+
+  @@id([merchantId, consumerId, programId])
+  @@map("customer-progresses")
+}

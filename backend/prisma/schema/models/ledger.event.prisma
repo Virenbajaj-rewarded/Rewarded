@@ -1,0 +1,29 @@
+enum LedgerEventType {
+  EARN
+  REDEEM
+  REFUND // For merchant when he withdraw the rest of funds from reward program
+  PROGRAM_REPLENISHMENT
+}
+
+model LedgerEvent {
+  id             String            @id @default(uuid()) @db.Uuid
+  type           LedgerEventType
+  comment        String?
+  points         Decimal          @db.Decimal(14, 2)
+  amount         Decimal?         @db.Decimal(14, 2)
+  idempotencyKey String?           @unique
+  createdAt      DateTime          @default(now())
+
+  fromUserId     String?           @db.Uuid
+  toUserId       String?           @db.Uuid
+
+  fromUser       User?             @relation("LedgerFromUser", fields: [fromUserId], references: [id])
+  toUser         User?             @relation("LedgerToUser", fields: [toUserId], references: [id])
+
+  programId      String?           @db.Uuid
+  program        RewardProgram?    @relation(fields: [programId], references: [id])
+
+  @@index([fromUserId, toUserId, createdAt])
+  @@index([fromUserId, programId, createdAt, toUserId])
+  @@map("ledger_events")
+}

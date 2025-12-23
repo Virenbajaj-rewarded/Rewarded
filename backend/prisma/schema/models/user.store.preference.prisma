@@ -1,0 +1,11 @@
+model UserStorePreference {
+  id         String   @id @default(uuid())
+  userId     String   @db.Uuid
+  merchantId String   @db.Uuid
+  removed    Boolean  @default(false)
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, merchantId])
+}

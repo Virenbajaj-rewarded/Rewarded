@@ -1,0 +1,23 @@
+enum VerificationType {
+  EMAIL_VERIFICATION
+  FORGOT_PASSWORD
+}
+
+model EmailVerification {
+  id         String           @id @default(uuid()) @db.Uuid
+  code       String           @db.VarChar(100)
+
+  createdAt  DateTime         @default(now())
+  expiresAt  DateTime
+  consumedAt DateTime?
+
+  type       VerificationType @default(EMAIL_VERIFICATION)
+
+  userId     String           @db.Uuid
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@index([userId, consumedAt])
+  @@unique([userId, code])
+  @@map("email-verifications")
+}

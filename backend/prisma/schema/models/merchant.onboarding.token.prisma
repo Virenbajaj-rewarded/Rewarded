@@ -1,0 +1,11 @@
+model MerchantOnboardingToken {
+  id           String   @id @default(uuid()) @db.Uuid
+  token        String   @unique @db.VarChar(64)
+  used         Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  merchantId   String   @unique @db.Uuid
+  merchant     Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  @@map("merchant_onboarding_tokens")
+}

@@ -1,0 +1,86 @@
+enum MerchantStatus {
+  PENDING
+  APPROVED
+  SUSPENDED
+}
+
+enum StoreType {
+  HAIR_SALON_BARBER_SHOP
+  NAIL_SALON_SPA
+  MASSAGE_THERAPY
+  TATTOO_PIERCING_STUDIO
+  PERSONAL_TRAINER_FITNESS_COACH
+  LIFE_COACH_BUSINESS_COACH
+  YOGA_PILATES_STUDIO
+  GYM_FITNESS_CENTER
+  PHOTOGRAPHY_VIDEOGRAPHY
+  EVENT_PLANNING_WEDDING_SERVICES
+  CLEANING_SERVICES
+  PEST_CONTROL
+  TAILORING_ALTERATIONS
+  LAUNDRY_DRY_CLEANING
+  PET_GROOMING_PET_SITTING
+  AUTO_DETAILING_CAR_WASH
+  MECHANICS_AUTO_REPAIR
+  MOVERS_TRANSPORTATION_SERVICES
+  MEDICAL_CLINIC_DOCTOR_OFFICE
+  DENTAL_CLINIC
+  PHYSIOTHERAPY_CHIROPRACTIC
+  OPTOMETRY_EYE_CLINIC
+  NUTRITIONIST_DIETITIAN
+  COUNSELING_MENTAL_HEALTH_SERVICES
+  TUTORING_TEST_PREP
+  LANGUAGE_SCHOOL
+  DRIVING_SCHOOL
+  MUSIC_DANCE_ART_LESSONS
+  VOCATIONAL_TRAINING
+  ONLINE_COURSES_E_LEARNING
+  PLUMBING
+  ELECTRICAL_SERVICES
+  LANDSCAPING_GARDENING
+  CONSTRUCTION_RENOVATION
+  INTERIOR_DESIGN
+  HOME_INSPECTION
+  REAL_ESTATE_AGENCY
+  PROPERTY_MANAGEMENT
+  IT_SUPPORT_COMPUTER_REPAIR
+  WEB_DEVELOPMENT_DESIGN
+  MARKETING_ADVERTISING_AGENCY
+  ACCOUNTING_BOOKKEEPING
+}
+
+model Merchant {
+  id                  String          @id @default(uuid()) @db.Uuid
+  fullName            String          @default("Full Name") @db.VarChar(255)
+  businessName        String          @db.VarChar(255)
+  businessEmail       String?          @db.VarChar(255) @unique
+  businessPhoneNumber String?          @db.VarChar(20)
+  businessAddress     String
+  businessCode        String?         @unique
+  location            Unsupported("geometry(Point,4326)")?
+
+  tgUsername          String?         @db.VarChar(50)
+  whatsppUsername     String?         @db.VarChar(50)
+
+  storeType           StoreType
+  description         String?
+  logoKey             String?
+
+  status              MerchantStatus  @default(PENDING)
+  suspendReason       String?
+
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt @default(now())
+
+  userId              String?         @unique @db.Uuid
+  user                User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  onboardingTokens    MerchantOnboardingToken[]
+  rewardPrograms      RewardProgram[]
+  storePreferences    UserStorePreference[]
+  consumerProgresses  CustomerProgress[]
+  paymentRequests     PaymentRequest[]
+
+  @@index([status])
+  @@map("merchants")
+}

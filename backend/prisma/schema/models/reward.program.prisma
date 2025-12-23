@@ -1,0 +1,49 @@
+enum RewardProgramStatus {
+  ACTIVE
+  DRAFT
+  STOPPED
+}
+
+enum RewardStrategy {
+  PERCENT_BACK
+  SPEND_TO_EARN
+}
+
+enum OfferType {
+  POINTS_CASHBACK
+  FIXED_AMOUNT_POINTS
+}
+
+model RewardProgram {
+  id                String               @id @default(uuid()) @db.Uuid
+
+  merchantId        String               @db.Uuid
+  merchant          Merchant             @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  name              String               @db.VarChar(120)
+  strategy          RewardStrategy       @default(PERCENT_BACK)
+
+  percentBack       Decimal?             @db.Decimal(5, 2)
+  spendThreshold    Decimal?             @db.Decimal(12, 2)
+  rewardPercent     Decimal?             @db.Decimal(5, 2)
+
+  maxDailyBudget    Decimal              @db.Decimal(12, 2)
+  budget            Decimal              @db.Decimal(14, 2)
+  fundedAmount      Decimal              @default(0) @db.Decimal(14, 2)
+  spentAmount       Decimal              @default(0) @db.Decimal(14, 2)
+
+  offerType         OfferType            @default(POINTS_CASHBACK)
+
+  status            RewardProgramStatus  @default(DRAFT)
+
+  strategyUpdatedAt DateTime             @default(now())
+
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  ledgerEvents       LedgerEvent[]
+  consumerProgresses CustomerProgress[]
+
+  @@index([merchantId, status])
+  @@map("reward_programs")
+}
