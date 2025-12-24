@@ -143,7 +143,7 @@ export default function Store({ route }: RootScreenProps<Paths.STORE>) {
               {distance ? `${distance} miles from you` : 'Address not available'}
             </Typography>
           </View>
-          <PrimaryButton label="Pay" onPress={handlePay} />
+          <PrimaryButton label="Pay" onPress={handlePay} disabled={!activeRewardProgram} />
 
           {isQRCodeVisible && (
             <View style={styles.qrCodeContainer}>
