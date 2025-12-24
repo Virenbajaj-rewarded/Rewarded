@@ -36,17 +36,3 @@ export interface IUpdateMerchantPayload {
   tgUsername?: string | null;
   whatsppUsername?: string | null;
 }
-
-export interface ICustomerStatsResponse {
-  totalCustomers: number;
-  newCustomersLastMonth: number;
-  totalPointsCredited: number;
-  totalPointsRedeemed: number;
-}
-
-export interface ICustomersResponse {
-  items: ICustomer[];
-  total: number;
-  page: number;
-  limit: number;
-}

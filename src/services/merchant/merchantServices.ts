@@ -24,25 +24,6 @@ export const MerchantServices = {
     return response.data;
   },
 
-  fetchCustomerStats: async () => {
-    const response =
-      await api.get<ICustomerStatsResponse>('merchants/me/stats');
-    return response.data;
-  },
-
-  fetchCustomers: async ({ pageParam = 1 }: { pageParam?: number }) => {
-    const response = await api.get<ICustomersResponse>(
-      `/merchants/me/customers`,
-      {
-        params: {
-          page: pageParam,
-          limit: 12,
-        },
-      }
-    );
-    return response.data;
-  },
-
   uploadMerchantLogo: async (
     logoUri: string,
     fileName: string,
