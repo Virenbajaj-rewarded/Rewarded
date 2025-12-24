@@ -44,7 +44,7 @@ export const PaymentModal = ({
           <div className="flex flex-col items-center gap-6 py-4">
             <div className="flex items-center gap-2 px-4 py-2 bg-[#0C1A31] text-[#639CF8] rounded-md text-sm font-medium">
               <WalletIcon className="h-4 w-4" />
-              CAD {balance.toFixed(2)} balance
+              CAD {balance?.toFixed(2)} balance
             </div>
 
             <div className="w-full [&>div]:gap-0 [&_input[type='number']]:appearance-none [&_input[type='number']::-webkit-inner-spin-button]:appearance-none [&_input[type='number']::-webkit-outer-spin-button]:appearance-none [&_input[type='number']]:[-moz-appearance:textfield] [&_input:focus-visible]:!ring-0 [&_input:focus-visible]:!ring-transparent">
