@@ -5,28 +5,6 @@ import { IStore } from '@/interfaces';
 import { EIndustry } from '@/enums';
 
 export const StoreServices = {
-  fetchAllStores: async ({
-    pageParam = 1,
-    storeType,
-    search,
-  }: {
-    pageParam?: number;
-    storeType?: EIndustry | null;
-    search?: string;
-  }) => {
-    const response = await instance
-      .get(`users/me/discover`, {
-        searchParams: {
-          page: pageParam,
-          limit: 12,
-          ...(storeType && { storeType }),
-          ...(search && { search }),
-        },
-      })
-      .json<IGetStoresResponse>();
-    return response;
-  },
-
   fetchMyStores: async ({
     pageParam = 1,
     storeType,

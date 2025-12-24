@@ -10,26 +10,11 @@ import { EIndustry } from '@/enums';
 import { showToast } from '@/utils';
 
 export const enum StoreQueryKey {
-  fetchAllStores = 'fetchAllStores',
   fetchMyStores = 'fetchMyStores',
   fetchDeletedStores = 'fetchDeletedStores',
   fetchStore = 'fetchStore',
   fetchSavings = 'fetchSavings',
 }
-
-const useFetchAllStoresQuery = (storeType?: EIndustry | null, search?: string) =>
-  useInfiniteQuery({
-    queryKey: [StoreQueryKey.fetchAllStores, storeType, search],
-    queryFn: ({ pageParam = 1 }: { pageParam?: number }) =>
-      StoreServices.fetchAllStores({ pageParam, storeType, search }),
-    getNextPageParam: lastPage => {
-      const { page, limit, total } = lastPage;
-      const hasMore = page < Math.ceil(total / limit);
-      return hasMore ? page + 1 : undefined;
-    },
-    initialPageParam: 1,
-    staleTime: 180000,
-  });
 
 const useFetchMyStoresQuery = (storeType?: EIndustry | null) =>
   useInfiniteQuery({
@@ -79,9 +64,7 @@ export const useMyStores = () => {
       client.invalidateQueries({
         queryKey: [StoreQueryKey.fetchMyStores],
       });
-      client.invalidateQueries({
-        queryKey: [StoreQueryKey.fetchAllStores],
-      });
+
       client.invalidateQueries({
         queryKey: [StoreQueryKey.fetchStore],
       });
@@ -100,9 +83,6 @@ export const useMyStores = () => {
     onSuccess: () => {
       client.invalidateQueries({
         queryKey: [StoreQueryKey.fetchMyStores],
-      });
-      client.invalidateQueries({
-        queryKey: [StoreQueryKey.fetchAllStores],
       });
       client.invalidateQueries({
         queryKey: [StoreQueryKey.fetchStore],
@@ -127,7 +107,6 @@ export const useMyStores = () => {
 
   return {
     invalidateQuery,
-    useFetchAllStoresQuery,
     useFetchMyStoresQuery,
     useFetchRemovedStoresQuery,
     useFetchStoreQuery,

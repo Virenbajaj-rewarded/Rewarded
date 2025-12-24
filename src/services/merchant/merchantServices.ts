@@ -1,10 +1,5 @@
 import { instance } from '@/services/instance';
-import {
-  ICustomerStatsResponse,
-  IGetMerchantResponse,
-  IUpdateMerchantPayload,
-  ICustomersResponse,
-} from './merchant.types';
+import { IGetMerchantResponse, IUpdateMerchantPayload } from './merchant.types';
 import { IStore } from '@/interfaces/IStore';
 
 export const MerchantServices = {
@@ -20,23 +15,6 @@ export const MerchantServices = {
 
   updateMerchant: async (data: IUpdateMerchantPayload) => {
     const response = await instance.patch<{ success: boolean }>(`merchants`, { json: data }).json();
-    return response;
-  },
-
-  fetchCustomerStats: async () => {
-    const response = await instance.get<ICustomerStatsResponse>(`merchants/me/stats`).json();
-    return response;
-  },
-
-  fetchCustomers: async ({ pageParam = 1 }: { pageParam?: number }) => {
-    const response = await instance
-      .get<ICustomersResponse>(`merchants/me/customers`, {
-        searchParams: {
-          page: pageParam,
-          limit: 12,
-        },
-      })
-      .json();
     return response;
   },
 
