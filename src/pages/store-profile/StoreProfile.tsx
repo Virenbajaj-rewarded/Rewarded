@@ -219,7 +219,7 @@ export const StoreProfile = () => {
                       {store.activeRewardProgram.name} Active
                     </h3>
                     <p className="text-[#8C8C8C] text-sm mb-4">
-                      {spendToEarnProgress.percentage.toFixed(0)}% completed.{' '}
+                      {spendToEarnProgress.percentage?.toFixed(0)}% completed.{' '}
                       {spendToEarnProgress.remaining > 0 && (
                         <>
                           Spend CAD{' '}
