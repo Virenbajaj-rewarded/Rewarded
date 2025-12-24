@@ -167,6 +167,7 @@ export const StoreProfile = () => {
               <div className="flex gap-4 mt-6">
                 <Button
                   onClick={openPayModal}
+                  disabled={!store?.activeRewardProgram}
                   className="flex-1 bg-[#3C83F6] hover:bg-[#3C83F6]/90"
                 >
                   Pay
@@ -353,7 +354,7 @@ export const StoreProfile = () => {
         store={store}
         formik={formik}
         isLoading={creditPointLoading}
-        balance={balance}
+        balance={balance.points}
       />
 
       <QRModal
